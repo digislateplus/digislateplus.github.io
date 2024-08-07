@@ -1,3 +1,11 @@
+/*
+ TIMECODE class
+
+ author: Thomas Winkler
+ e-mail: thomas.winkler@iggmp.net
+ copyright: 2024
+ */
+
 #include "tc.h"
 
 
@@ -17,14 +25,14 @@ void TC::set(uint8_t h, uint8_t m, uint8_t s, uint8_t f, uint8_t fr) {
 	fps(fr);
 }
 
-// get timecode struct
-TIMECODE TC::get(void) {
-	return _tc;
-}
-
 // set framerate
 void TC::fps(uint8_t fr) {
 	_tc.fps = fr;
+}
+
+// get timecode struct
+TIMECODE TC::get(void) {
+	return _tc;
 }
 
 // get framerate
@@ -35,7 +43,8 @@ uint8_t TC::fps(void) {
 
 // =============================================================
 // inc TC
-// return true if start of second
+// do not increment when tick is false
+// tick is set to true, if the rtc second interrupt occured
 TC::inc(bool tick) {
 
 	_tc.f++;

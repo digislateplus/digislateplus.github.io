@@ -1,5 +1,8 @@
 #include <Arduino.h>
 #include <SPI.h>
+
+#include "setup.h"
+
 #include "led.h"
 #include "tc.h"
 
@@ -41,19 +44,19 @@ void LED::set(uint8_t h, uint8_t m, uint8_t s, uint8_t f) {
 
 
 void LED::frames(uint8_t val) {
-	_digits(val, F10, F1);
+	_digits(val, LED_F10, LED_F1);
 }
 
 void LED::seconds(uint8_t val) {
-	_digits(val, S10, S1);
+	_digits(val, LED_S10, LED_S1);
 }
 
 void LED::minutes(uint8_t val) {
-	_digits(val, M10, M1);
+	_digits(val, LED_M10, LED_M1);
 }
 
 void LED::hours(uint8_t val) {
-	_digits(val, H10, H1);
+	_digits(val, LED_H10, LED_H1);
 }
 
 

@@ -11,7 +11,7 @@
  to the provided timecode.
 
  When no timecode is found on the BNC connector, the internal
- generated timecode is available on the BNC instead.
+ generated timecode is displayed and available on the BNC.
  */
 
 

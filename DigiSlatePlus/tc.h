@@ -1,3 +1,11 @@
+/*
+ TIMECODE class
+
+ author: Thomas Winkler
+ e-mail: thomas.winkler@iggmp.net
+ copyright: 2024
+ */
+
 #ifndef TC_H
 #define TC_H
 
