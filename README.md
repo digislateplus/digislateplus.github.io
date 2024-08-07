@@ -1,6 +1,6 @@
 # DigiSlate-Plus
 
-The project is in a early developement state.
+The project is in an early developement state.
 
 DigiSlatePlus is based on the [DigiSlate](https://www.youtube.com/watch?v=TnaWQZtmPek) and is inspired by the DIY timecode generator from [mitkunz](https://github.com/mitkunz/diy_timecode_generator). The aim for the DigiSlate is not only to be able to read and display timecode, but also to generate it itself. To make this possible, the hardware is extended by a real time clock with high running accuracy. The RTC module DS3231 with temperature-compensated quartz offers the possibility.
 
