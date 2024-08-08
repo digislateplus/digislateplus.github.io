@@ -12,12 +12,13 @@ void LED::begin(uint8_t load_pin) {
 	_load_pin = load_pin;
 
 	pinMode(_load_pin, OUTPUT);
-	digitalWrite(_load_pin, LOW);
+	digitalWrite(_load_pin, HIGH);
 
 	// =============================================================
 	// INIT LED-Display
 	SPI.setBitOrder(MSBFIRST);  //MSB first
 	SPI.begin();
+
 
 	//test by turning on, then off
 	_write(0x0F, 0x01);

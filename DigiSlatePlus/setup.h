@@ -5,6 +5,8 @@
 // IO definitions
 #define FLASH_LED A0	// flash led output
 #define BUTTON A1		// clap reed button input
+
+#define SIGNAL_OUTPUT 0 // TC output to BNC
 #define SIGNAL_INPUT 2	// INT0 / for audio input
 #define RTC_INT_PORT 3  // INT1 / RTC sync input
 

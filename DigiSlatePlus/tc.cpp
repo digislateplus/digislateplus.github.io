@@ -9,6 +9,44 @@
 #include "tc.h"
 
 
+// =============================================================
+// init timecode
+void TC::begin(void) {
+
+	// reset counters
+	_start = true;
+	_level = false;
+
+	_bit_counter = 0;
+	_byte_counter = 0;
+
+	// set standards
+	_tc.dropframe = false;
+	_tc.colorframe = false;
+
+	// set sync word
+	_binary[8] = 0b00111111;
+	_binary[9] = 0b11111101;
+
+	// clear userbits
+	for (uint8_t i = 0; i < 8; i++) {
+		_ub.bit[i] = 0x00;
+	}
+}
+
+
+// =============================================================
+// timecode
+void TC::set(TIMECODE tc) {
+	set(tc.h, tc.m, tc.s, tc.f, tc.fps);
+}
+
+// set timecode with framerate
+void TC::set(uint8_t h, uint8_t m, uint8_t s, uint8_t f, uint8_t fr) {
+	set (h, m, s, f);
+	fps(fr);
+}
+
 // set timecode
 void TC::set(uint8_t h, uint8_t m, uint8_t s, uint8_t f) {
 	_tc.h = h;
@@ -19,20 +57,74 @@ void TC::set(uint8_t h, uint8_t m, uint8_t s, uint8_t f) {
 	_tc.changed = true;
 }
 
-// set timecode with framerate
-void TC::set(uint8_t h, uint8_t m, uint8_t s, uint8_t f, uint8_t fr) {
-	set (h, m, s, f);
-	fps(fr);
-}
-
-// set framerate
-void TC::fps(uint8_t fr) {
-	_tc.fps = fr;
-}
-
 // get timecode struct
 TIMECODE TC::get(void) {
 	return _tc;
+}
+
+
+void TC::update_binary(void) {
+
+	// SMPTE/EBU timecode structure (https://www.wikiaudio.org/smpte-time-code/)
+
+	// ** byte 0
+	//  0-3	frame units
+	//  4-7	user bits 1
+	_binary[0] = ((_tc.f % 10) & 0b1111) | ((_ub.bit[0] & 0xF) << 4);
+	
+	// ** byte 1
+	//  8-9	frame tens
+	//  10		dropframe bit 	1=drop frame (frame 0 and 1 omitted from first second of each minute, but included when minutes divides by ten; approximates 29.97 frame/s)
+	//  11 	colorframe bit 	i.e. the time code is intentionally synchronised with a color TV field sequence.
+	//  12-15	user bits 2
+	_binary[1] = ((_tc.f / 10) &0b0011) | (_tc.dropframe << 2) | (_tc.colorframe << 3) | ((_ub.bit[1] & 0xF) << 4);
+
+	// ** byte 2
+	//  16-19	secs units
+	//  20-23	user bits 3
+	_binary[2] = ((_tc.s & 10) & 0b1111) | ((_ub.bit[2] & 0xF) << 4);
+
+	// ** byte 3
+	//  24-26	secs tens
+	//  27		bi phase mark correction bit 
+	//  28-31	user bits 4
+	_binary[3] = ((_tc.s / 10) & 0b0111) | (_tc.biphase << 3) | ((_ub.bit[3] & 0xF) << 4);
+
+	// ** byte 4
+	//  32-35	mins units
+	//  36-39	user bits 5
+	_binary[4] = ((_tc.m / 10) & 0b1111) | ((_ub.bit[4] & 0xF) << 4);
+
+	// ** byte 5
+	//  40-42	mins tens
+	//  43		binary group flag bit (with bit 59, 43,59 = 00 = no format for user bits, 10 = eight bit format, 01, 11 are unassigned and reserved).
+	//  44-47	user bits 6
+	_binary[5] = ((_tc.m / 10) & 0b0111) | (_tc.flag0 << 3) | ((_ub.bit[5] & 0xF) << 4);
+
+	// ** byte 6
+	//  48-51	hours units
+	//  52-55	user bits 7
+	_binary[6] = ((_tc.h / 10) & 0b1111) | ((_ub.bit[6] & 0xF) << 4);
+
+	// ** byte 7
+	//  56-57	hour tens
+	//  58		unused, reserved, should transmit zero and ignore on receive for compatibility
+	//  59		binary group flag bit (see bit 43 for encoding)
+	//  60-63	user bits 8
+	_binary[7] = ((_tc.h / 10) &0b0011) | 0b000000100 | (_tc.flag1 << 3) | ((_ub.bit[7] & 0xF) << 4);
+
+	// ** byte 8 - 9
+	//  64-79	sync word (should be 0011 1111 1111 1101)
+	// set in timecode init
+}
+
+
+
+// =============================================================
+// framerate
+// set framerate
+void TC::fps(uint8_t fr) {
+	_tc.fps = fr;
 }
 
 // get framerate
@@ -42,48 +134,142 @@ uint8_t TC::fps(void) {
 
 
 // =============================================================
+// user bits
+// set userbits from char array
+void TC::ubits(USERBITS* ub) {
+	for (uint8_t i = 0; i < 8; i++) {
+		ubit(i, ub->bit[i]);
+	}
+}
+
+// set userbits by 4 bit values
+void TC::ubits(uint8_t ub0, uint8_t ub1, uint8_t ub2, uint8_t ub3, uint8_t ub4, uint8_t ub5, uint8_t ub6, uint8_t ub7) {
+	ubit(0, ub0 & 0xF);
+	ubit(1, ub1 & 0xF);
+	ubit(2, ub2 & 0xF);
+	ubit(3, ub3 & 0xF);
+	ubit(4, ub4 & 0xF);
+	ubit(5, ub5 & 0xF);
+	ubit(6, ub6 & 0xF);
+	ubit(7, ub7 & 0xF);
+}
+
+// set userbit by index
+void TC::ubit(uint8_t nr, uint8_t ub) {
+	if (nr < 8) {
+		_ub.bit[nr] = ub;
+	}
+}
+
+// get userbit struct
+USERBITS TC::ubits(void) {
+	return _ub;
+}
+
+// get userbit by index
+uint8_t TC::ubit(uint8_t nr) {
+	if (nr < 8) {
+		return _ub.bit[nr];
+	}
+	return false;
+}
+
+
+// =============================================================
 // inc TC
 // do not increment when tick is false
 // tick is set to true, if the rtc second interrupt occured
-TC::inc(bool tick) {
+void TC::inc(bool tick) {
 
-	_tc.f++;
 
-	// frames overflow
-	if (_tc.f >= _tc.fps) {
+	// =======================================
+	// send_bit(_bit_count);
+	bool bit = _binary[_byte_counter] >> (7 - _bit_counter);
 
-		// only if tick
-		if (tick) {
-			_tc.f = 0;
-			_tc.s++;
 
-			tick = false;
+	// bit start => change porality
+	if (_start) {
+		_level = !_level;
+	}
+
+	// is 1 and mit bit => change polarity
+	if (bit && !_start) {
+		_level = !_level;
+	}
+
+
+	// ist bit start => next bit
+	if (_start) {
+		_bit_counter++;
+	}
+
+	_start = !_start;
+
+
+	// =======================================
+	// write to signal output
+	digitalWrite(SIGNAL_OUTPUT, _level);
+
+
+
+	// =======================================
+	// bit overflow => next byte
+	if (_bit_counter >= GEN_MAX_BITS) {
+
+		_bit_counter = 0;
+		_byte_counter++;
+
+
+		// =======================================
+		// last byte => start from begin
+		if (_byte_counter >= GET_MAX_BYTES) {
+			_byte_counter = 0;
+
+// Debug => write frame sync to flash led
+digitalWrite(FLASH_LED, HIGH);
+delay(1);
+digitalWrite(FLASH_LED, LOW);
+
+			_tc.f++;
+
+			// frames overflow
+			if (_tc.f >= _tc.fps) {
+
+				// only if tick
+				if (tick) {
+					_tc.f = 0;
+					_tc.s++;
+
+					tick = false;
+				}
+
+				// wait for tick
+				else {
+					return;
+				}
+			}
+
+			if (_tc.s > 59) {
+				_tc.s = 0;
+				_tc.m++;
+			}
+
+			if (_tc.m > 59) {
+				_tc.m = 0;
+				_tc.h++;
+			}
+
+			if (_tc.h > 23) {
+				_tc.f = 0;
+				_tc.s = 0;
+				_tc.m = 0;
+				_tc.h = 0;
+			}
+
+			_tc.changed = true;
+			update_binary();
 		}
-
-		// wait for tick
-		else {
-			return;
-		}
 	}
-
-	if (_tc.s > 59) {
-		_tc.s = 0;
-		_tc.m++;
-	}
-
-	if (_tc.m > 59) {
-		_tc.m = 0;
-		_tc.h++;
-	}
-
-	if (_tc.h > 23) {
-		_tc.f = 0;
-		_tc.s = 0;
-		_tc.m = 0;
-		_tc.h = 0;
-	}
-
-	_tc.changed = true;
 }
 
 

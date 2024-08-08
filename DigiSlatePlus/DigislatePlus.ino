@@ -115,13 +115,18 @@ void setup() {
 
 	// =============================================================
 	// INIT timecode
+	tc.begin();
 	tc.set(1,0,0,0);
 	tc.fps(25);
+
+	// tc.ubits(2, 0, 2, 4, 0, 8, 0, 8);
 
 
 	// =============================================================
 	// INIT IO
-	pinMode(BUTTON,INPUT_PULLUP); 
+	pinMode(SIGNAL_OUTPUT,OUTPUT);
+
+	pinMode(BUTTON,INPUT_PULLUP);
 	digitalWrite(BUTTON,0);
 
 
@@ -232,21 +237,27 @@ void setup() {
 	// TCNT1 = 0;              // start at 0
 
 
-	noInterrupts();
+
+	// =========================================
+	// 25 * 80 Hz Interrupt
+	cli();
+
 	// Clear registers
 	TCCR1A = 0;
 	TCCR1B = 0;
 	TCNT1 = 0;
 
-	// 25 Hz (16000000/((624+1)*1024))
-	OCR1A = 624;
+	// 4000 Hz (16000000/((499+1)*8))
+	OCR1A = 499;
 	// CTC
 	TCCR1B |= (1 << WGM12);
-	// Prescaler 1024
-	TCCR1B |= (1 << CS12) | (1 << CS10);
+	// Prescaler 8
+	TCCR1B |= (1 << CS11);
 	// Output Compare Match A Interrupt Enable
 	TIMSK1 |= (1 << OCIE1A);
-	interrupts();
+
+	sei();
+	// =========================================
 }
 
 
@@ -430,8 +441,8 @@ void loop() {
 
 // =========================================
 //
-void tcISR() {
-
+/*void tcISR() {
+*/
 	/*
 		The shell of the ISR is a state machine with three states:
 
@@ -444,7 +455,7 @@ void tcISR() {
 
 		 isrRead - reads edges and fills the shift register with '1's and '0's
 	*/
-
+/*
 	const uint8_t sampleSize = 40;    // number of cells to sample
 
 	static uint8_t shiftReg[10];      // shift register for incoming bits
@@ -597,7 +608,7 @@ void tcISR() {
 		default:
 			break;
 	}
-}	// end of tcISR
+}	// end of tcISR*/
 
 
 // create timecode
@@ -613,11 +624,9 @@ void syncISR() {
 	// rled.flash(30);
 }
 
-// timer 1 interrupt
+// timer 1 interrupt => framerate * 80
 ISR(TIMER1_COMPA_vect) {
 
-	// inc
-	// on frame overflow, wait till second has started
 	tc.inc(tick);
 }
 
