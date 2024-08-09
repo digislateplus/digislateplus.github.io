@@ -113,6 +113,8 @@ private:
 
 	bool _start;
 	bool _level;
+
+	uint16_t _i;
 };
 
 

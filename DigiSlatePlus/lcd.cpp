@@ -24,8 +24,6 @@ void LCD::status(char* status) {
 
 
 void LCD::dir(bool dir) {
-	// const char *arroz[2] = {arr0, arr1};
-
 	_disp->setCursor(0, 0);
 	_disp->write(_arroz[dir]);
 }

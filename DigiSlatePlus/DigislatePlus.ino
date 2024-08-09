@@ -512,7 +512,6 @@ void syncISR() {
 // RTC interrupt
 // timer 1 interrupt => framerate * 80
 ISR(TIMER1_COMPA_vect) {
-
 	tc.inc(tick);
 }
 
