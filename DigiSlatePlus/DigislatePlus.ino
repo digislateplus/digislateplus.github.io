@@ -114,8 +114,6 @@ void setup() {
 	tc.set(1,0,0,0);
 	tc.fps(25);
 
-	// tc.ubits(2, 0, 2, 4, 0, 8, 0, 8);
-
 
 	// =============================================================
 	// INIT IO
@@ -181,6 +179,7 @@ void setup() {
 
 		case 1:
 			lcd.status(" RTC");
+
 			break;
 
 		case 0:
@@ -197,9 +196,25 @@ void setup() {
 // h,m,s,d,m,y 
 // rtc.set(7,30,0,9,8,2024);
 
-	// display rtc on LCD
-	DateTime time = rtc.get();
-	tc.set(time.hour(), time.minute(), time.second(), 0);
+
+	// read rtc and set time code
+	if (rtc.status() != false) {
+
+		// init time of slate to rtc
+		DateTime time = rtc.get();
+		tc.set(time.hour(), time.minute(), time.second(), 0);
+
+		// set date in user bits
+		// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
+
+		// display userbits on LCD
+	}
+
+
+
+
+
+
 
 	// lcd.print(time.day(), 0, 1);
 	// lcd.print(time.month(), 3, 1);
