@@ -20,7 +20,7 @@ int8_t RTC::begin(uint16_t int_port) {
   else {
     // power loss?
     if (_rtc->lostPower()) {
-      _rtc->adjust(DateTime(F(__DATE__), F(__TIME__)));
+      // _rtc->adjust(DateTime(F(__DATE__), F(__TIME__)));
       _status = -1;
     }
 
@@ -35,6 +35,12 @@ int8_t RTC::begin(uint16_t int_port) {
 // get DateTime
 DateTime RTC::get(void) {
   return _rtc->now();
+}
+
+// set time to rtc
+// h, m, s, d, m, y
+void RTC::set(uint16_t  hr, uint16_t  min, uint16_t  sec, uint16_t  day, uint16_t  month, uint16_t  yr) {
+    set(DateTime(yr, month, day, hr, min, sec));
 }
 
 // set DateTime

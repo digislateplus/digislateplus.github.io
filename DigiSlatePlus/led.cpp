@@ -19,6 +19,7 @@ void LED::begin(uint8_t load_pin) {
 	SPI.setBitOrder(MSBFIRST);  //MSB first
 	SPI.begin();
 
+	delay(200);
 
 	//test by turning on, then off
 	_write(0x0F, 0x01);

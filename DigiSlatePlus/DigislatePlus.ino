@@ -52,7 +52,7 @@ RLED rled;
 TC tc;
 RTC rtc;
 
-
+bool clap;
 
 // =========================================
 // timecode timing
@@ -96,8 +96,6 @@ bool m_tcDF;                          // DF flag was seen in raw bits
 // 		false => free run
 // 		true => read
 bool runMode;
-long curr_time;
-long old_time;
 
 
 // =========================================
@@ -107,10 +105,7 @@ void setup() {
 
 	// set runMode to read
 	runMode = false;
-
-	// DEVEL
-	curr_time = millis();
-	old_time = curr_time;
+	clap = false;
 
 
 	// =============================================================
@@ -125,9 +120,7 @@ void setup() {
 	// =============================================================
 	// INIT IO
 	pinMode(SIGNAL_OUTPUT,OUTPUT);
-
 	pinMode(BUTTON,INPUT_PULLUP);
-	digitalWrite(BUTTON,0);
 
 
 	// =============================================================
@@ -200,6 +193,9 @@ void setup() {
 	}
 
 
+// debug => set time
+// h,m,s,d,m,y 
+// rtc.set(7,30,0,9,8,2024);
 
 	// display rtc on LCD
 	DateTime time = rtc.get();
@@ -283,159 +279,19 @@ void loop() {
 		// update time if timecode has changed
 		if (tc.changed()) {
 			tc.unchange();
-			led.set(tc.get());
+
+			// check for clap button
+			if (digitalRead(BUTTON)) {
+				clap = false;
+				led.set(tc.get());
+			}
+
+			else if (!clap) {
+				clap = true;
+				rled.flash(30);
+			}
 		}
 	}
-
-
-	// =============================================================
-	// TC on input
-	// read mode
-/*	else {
-
-		// check button
-		btnpressed = !digitalRead(BUTTON);
-
-		if(btncount < 1000) {
-			if(btnpressed == 1) {
-				btncount++;
-			}
-		}
-
-		if(btncount >= 1) {
-			if(btnpressed == 0) {
-				btncount--;
-			}
-		}
-
-		if (btncount < 1000) {
-			if( btnpressed == 1 ) {
-				if(btnpressed !=  btnold  ){
-					btncount =  10000;
-
-					digitalWrite(RLED, 1); delay(30);
-					digitalWrite(RLED,0);
-				}
-			}
-		}
-
-		//  if( btnpressed == 0 ){
-		//   digitalWrite(RLED,0);
-		// }
-
-
-		if(btnpressed == 1) {
-			if(btncount >= 1000) {
-				btnold = 1;
-			}
-		}
-
-		if(btncount < 10) {
-			if(btnpressed == 0) {
-				btnold = 0;
-			}
-		}
-
-
-		// =============================================================
-		int idx;
-
-		if (v_tcReady) {                      // move TC bits from the buffer
-			if (!v_tcRvs) {                     //  correctly for fwd or rvs
-				for (idx = 0; idx < 8; idx++) {
-					rawTC[idx] = (v_tcBuff[idx]);
-				}
-			}
-			else {
-				for (idx = 0; idx < 8; idx++) {           // for reverse timecode,
-					rawTC[idx] = flip8(v_tcBuff[9 - idx]);  //  also reverse the bits
-				}
-			}
-
-			// now rawTC[] has the bits in forward order
-			// whether the code was read forward or reverse
-
-			v_tcReady = false;                          // tell ISR it's handled
-
-			m_tcDF = (rawTC[6] & dfFlag);               // test the DF bit
-
-			tCode[8] = m_tcDF ? ';' : ':';              // choose sec/frm separator
-
-			tCode[0] =  (rawTC[0] & 0x03) | '0';        // hours tens
-			tCode[1] =  (rawTC[1] & 0x0F) | '0';        // hours units
-			tCode[3] =  (rawTC[2] & 0x07) | '0';        // minutes tens
-			tCode[4] =  (rawTC[3] & 0x0F) | '0';        // minutes units
-			tCode[6] =  (rawTC[4] & 0x07) | '0';        // seconds tens
-			tCode[7] =  (rawTC[5] & 0x0F) | '0';        // seconds units
-			tCode[9] =  (rawTC[6] & 0x03) | '0';        // frames tens
-			tCode[10] = (rawTC[7] & 0x0F) | '0';        // frames units
-
-
-			// =============================================================
-			// display TC on LED
-			uint8_t bb = (rawTC[7] & 0x0F) | '0';  
-			display_write(0x02,bb); //enable decimal point on LSB  //frame
-
-			bb = (rawTC[6] & 0x03) | '0';
-			display_write(0x06, bb);             // frame
-			bb = (rawTC[5] & 0x0F) | '0';   
-			display_write(0x08, bb);               // sec
-			bb = (rawTC[4] & 0x07) | '0';   
-			display_write(0x04, bb);                 // sec
-			bb = (rawTC[3] & 0x0F) | '0';   
-			display_write(0x03, bb);                 // min             
-			bb = (rawTC[2] & 0x07) | '0';  
-			display_write(0x07, bb);                 // mib
-			bb = (rawTC[1] & 0x0F) | '0';    
-			display_write(0x05, bb);                 // hour
-			bb =  (rawTC[0] & 0x03) | '0'; 
-			display_write(0x01, bb);                 // hour
-
-			//  //recalculate timecode once FRAMES LSB quarter-frame received
-			//   h = (buf_temp[7] & 0x01)*16 + buf_temp[6];
-			//   m = buf_temp[5]*16 + buf_temp[4];
-			//   s = buf_temp[3]*16 + buf_temp[2];
-			//   f = buf_temp[1]*16 + buf_temp[0];
-			//   display_timecode();
-		
-
-			for (idx = 0; idx < 8; idx++) {
-				uBits[idx + 4] = hexchar[rawTC[idx] >> 4];  // user bits little endian
-			}
-
-			uint8_t frVal = ((tCode[9] & 0x03) * 10)
-											+ (tCode[10] & 0x0F);       // impute the frame rate
-			if (frVal > v_tcFrameMax) {                 //  by finding the highest
-				v_tcFrameMax = frVal;                     //  frame number seen in
-			}
-			if (++v_tcFrameCtr > 31) {                  //  the last 31 frames
-				tcRate = v_tcFrameMax + 1;
-				v_tcFrameMax = 0;
-				v_tcFrameCtr = 0;                         // do this every 31 frames
-			}
-
-
-			// =============================================================
-			//display TC on LCD
-			disp.home();
-
-			disp.print(tCode);
-			disp.write(arroz[v_tcRvs]);
-
-			if (m_tcDF) {
-				disp.print("DF");
-			}
-			else {
-				disp.print(tcRate);
-			}
-
-			disp.setCursor(0, 1);
-			disp.print(uBits);
-		}
-	}
-*/
-
-
 }    // end of loop()
 
 
@@ -611,8 +467,21 @@ void loop() {
 }	// end of tcISR*/
 
 
-// create timecode
-// RTC interrupt
+// =========================================
+// flip byte order for backwards reading
+uint8_t flip8(uint8_t b) {
+
+	// reverses the bit order within a byte
+
+	b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+	b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+	b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+	return b;
+}
+
+
+// =========================================
+// create timecode second synchronisation
 void syncISR() {
 
 	tick = true;
@@ -624,21 +493,11 @@ void syncISR() {
 	// rled.flash(30);
 }
 
+
+// RTC interrupt
 // timer 1 interrupt => framerate * 80
 ISR(TIMER1_COMPA_vect) {
 
 	tc.inc(tick);
 }
 
-
-// =========================================
-//
-uint8_t flip8(uint8_t b) {
-
-	// reverses the bit order within a byte
-
-	b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-	b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-	b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-	return b;
-}

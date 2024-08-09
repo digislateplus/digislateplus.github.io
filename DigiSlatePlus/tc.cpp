@@ -226,9 +226,9 @@ void TC::inc(bool tick) {
 			_byte_counter = 0;
 
 // Debug => write frame sync to flash led
-digitalWrite(FLASH_LED, HIGH);
-delay(1);
-digitalWrite(FLASH_LED, LOW);
+// digitalWrite(FLASH_LED, HIGH);
+// delay(1);
+// digitalWrite(FLASH_LED, LOW);
 
 			_tc.f++;
 

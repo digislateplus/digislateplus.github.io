@@ -20,7 +20,9 @@ class RTC {
 public:
 	int8_t begin(uint16_t int_port);
 	DateTime get(void);
+	void set(uint16_t hr, uint16_t min, uint16_t sec, uint16_t day, uint16_t month, uint16_t yr);
 	void set(DateTime);
+
 	float temperature(void);
 	int8_t status(void);
 
