@@ -99,7 +99,7 @@ public:
 	uint8_t ubit(uint8_t nr);
 	USERBITS ubits(void);
 
-	void inc(bool);
+	long inc(bool);
 	bool changed(void);
 	void unchange(void);
 
@@ -115,6 +115,10 @@ private:
 	bool _level;
 
 	uint16_t _i;
+
+	long _time;
+	long _old_time;
+	long _length;
 };
 
 

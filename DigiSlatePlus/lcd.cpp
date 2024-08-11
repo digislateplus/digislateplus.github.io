@@ -18,8 +18,9 @@ void LCD::begin(uint8_t rs, uint8_t en, uint8_t d4, uint8_t d5, uint8_t d6, uint
 }
 
 void LCD::status(char* status) {
-	_disp->setCursor(12, 0);
-	_disp->print(status);
+	// _disp->setCursor(12, 0);
+	// _disp->print(status);
+	print(status, 12, 0);
 }
 
 
@@ -29,8 +30,7 @@ void LCD::dir(bool dir) {
 }
 
 void LCD::fps(uint8_t fps) {
-	_disp->setCursor(3, 0);
-	_disp->print(fps);
+	val8(fps, 3, 0);
 	_disp->print(" fps");
 }
 
@@ -41,12 +41,32 @@ void LCD::ubits(char* uBits) {
 }
 
 
+// display text at x, y
 void LCD::print(char* text, uint8_t x, uint8_t y) {
 	_disp->setCursor(x, y);
 	_disp->print(text);
 }
 
+// display byte value at x, y
+void LCD::val8(uint8_t val, uint8_t x, uint8_t y) {
+	_disp->setCursor(x, y);
+	_disp->print(val);
+}
 
+// display long value at x, y
+void LCD::val16(uint16_t val, uint8_t x, uint8_t y) {
+	_disp->setCursor(x, y);
+	_disp->print(val);
+}
+
+// display int value at x, y
+void LCD::val32(uint32_t val, uint8_t x, uint8_t y) {
+	_disp->setCursor(x, y);
+	_disp->print(val);
+}
+
+
+// clear display
 void LCD::clear(void) {
 	_disp->clear();
 }

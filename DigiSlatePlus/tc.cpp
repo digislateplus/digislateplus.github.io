@@ -17,6 +17,8 @@ void TC::begin(void) {
 	_start = true;
 	_level = false;
 
+	_length = 0;
+
 	_bit_counter = 0;
 	_byte_counter = 0;
 
@@ -197,8 +199,12 @@ uint8_t TC::ubit(uint8_t nr) {
 // inc TC
 // do not increment when tick is false
 // tick is set to true, if the rtc second interrupt occured
-void TC::inc(bool tick) {
+long TC::inc(bool tick) {
 
+
+	// set length to 0
+	// is only returned when frame starts
+	// _length = 0;
 
 	// =======================================
 	// send_bit(_bit_count);
@@ -235,35 +241,37 @@ void TC::inc(bool tick) {
 		_byte_counter++;
 
 
-		// =======================================
 		// last byte => start from begin
+		// =======================================
 		if (_byte_counter >= GET_MAX_BYTES) {
+
+
+			// =======================================
+			// FRAME BEGIN
+			// =======================================
+
 			_byte_counter = 0;
 
+
 // Debug => write frame sync to flash led
-digitalWrite(FLASH_LED, HIGH);
-// delay(1);
-digitalWrite(FLASH_LED, LOW);
+// digitalWrite(FLASH_LED, HIGH);
+// // delay(1);
+// digitalWrite(FLASH_LED, LOW);
 
 			_tc.f++;
 
 			// frames overflow
+			// second is over
 			if (_tc.f >= _tc.fps) {
 
-// debug
-				// tick deactivated to remove gap in signal
-				// only if tick
-				if (tick) {
-					_tc.f = 0;
-					_tc.s++;
+				_tc.f = 0;
+				_tc.s++;
 
-					tick = false;
-				}
+				// calculate frame time
+				_time = micros();
+				_length = _time - _old_time;
+				_old_time = _time;
 
-				// // wait for tick
-				else {
-					return;
-				}
 			}
 
 			if (_tc.s > 59) {
@@ -287,6 +295,8 @@ digitalWrite(FLASH_LED, LOW);
 			update_binary();
 		}
 	}
+
+	return _length;
 }
 
 

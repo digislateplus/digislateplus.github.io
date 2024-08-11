@@ -58,9 +58,15 @@ bool clap;
 // timecode timing
 long realtime;
 long old_realtime;
-uint16_t cycletime;
+long cycletime;
+
+long timertime;
+
 bool tick;
 
+
+// DEBUG
+long offset;
 
 // =========================================
 int btnpressed, btnold, btncount;
@@ -106,6 +112,9 @@ void setup() {
 	// set runMode to read
 	runMode = false;
 	clap = false;
+
+	realtime = micros();
+	old_realtime = realtime;
 
 
 	// =============================================================
@@ -208,6 +217,10 @@ void setup() {
 		// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
 
 		// display userbits on LCD
+
+		// lcd.print(time.day(), 0, 1);
+		// lcd.print(time.month(), 3, 1);
+		// lcd.print(time.year(), 6, 1);
 	}
 
 
@@ -216,59 +229,8 @@ void setup() {
 
 
 
-	// lcd.print(time.day(), 0, 1);
-	// lcd.print(time.month(), 3, 1);
-	// lcd.print(time.year(), 6, 1);
 
-
-
-
-
-/*	// INIT TC-input
-	pinMode(SIGNAL_INPUT, INPUT_PULLUP);  // conditioned TC input
-
-	// =============================================================
-	// INIT timer for interrupt
-	cli();
-
-	TCCR1A = 0;             // normal count-up mode
-	TCCR1B = bit(CS11);     // prescaler / 8
-	TCNT1 = 0;              // start at 0
-
-	sei();
-
-	v_isrState = isrInit;
-
-	attachInterrupt(digitalPinToInterrupt(SIGNAL_INPUT), tcISR, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(SYNC_INPUT), syncISR, CHANGE);
-*/
-
-	// TCCR1A = 0;             // normal count-up mode
-	// TCCR1B = bit(CS11);     // prescaler / 8
-	// TCNT1 = 0;              // start at 0
-
-
-
-	// =========================================
-	// 25 * 80 Hz Interrupt
-	cli();
-
-	// Clear registers
-	TCCR1A = 0;
-	TCCR1B = 0;
-	TCNT1 = 0;
-
-	// 4000 Hz (16000000/((499+1)*8))
-	OCR1A = 499;
-	// CTC
-	TCCR1B |= (1 << WGM12);
-	// Prescaler 8
-	TCCR1B |= (1 << CS11);
-	// Output Compare Match A Interrupt Enable
-	TIMSK1 |= (1 << OCIE1A);
-
-	sei();
-	// =========================================
+	start_timer1();
 }
 
 
@@ -304,6 +266,32 @@ void loop() {
 			else if (!clap) {
 				clap = true;
 				rled.flash(30);
+			}
+
+
+			// display time offset on lcd
+			lcd.clear();
+			lcd.val32(cycletime, 0, 0);
+			lcd.val32(timertime, 0, 1);
+			lcd.val16(OCR1A, 8,1);
+
+
+			// second started
+			// correct timer every second
+			if (tick) {
+
+				tick = false;
+
+				// rtc time smaller
+				// speed um timer
+				if (cycletime < timertime) {
+					OCR1A--;
+				}
+
+				// slow down timer
+				else if (cycletime > timertime) {
+					OCR1A++;
+				}
 			}
 		}
 	}
@@ -496,22 +484,81 @@ uint8_t flip8(uint8_t b) {
 
 
 // =========================================
-// create timecode second synchronisation
+// INTERRUPT ROUTINES
+// =========================================
+
+// start bit timer interrupt
+void start_timer1(void) {
+	// =========================================
+	// 25 * 80 Hz Interrupt
+	cli();
+
+	// Clear registers
+	TCCR1A = 0;
+	TCCR1B = 0;
+	TCNT1 = 0;
+
+	// 4000 Hz (16000000/(3999+1)*1)
+
+	// OCR1A = 4166; // 24 fpx
+	OCR1A = 4000; // 25 fps
+	// OCR1A = 3332; // 30 fps
+
+	// CTC
+	TCCR1B |= (1 << WGM12);
+	// Prescaler 8
+	TCCR1B |= (1 << CS10);
+	// Output Compare Match A Interrupt Enable
+	TIMSK1 |= (1 << OCIE1A);
+
+	sei();
+	// =========================================
+}
+
+
+// stop timer
+// write 0 to clock select bits
+void stop_timer1(void) {
+	TCCR1B &= ~(1 << CS10);
+	TCCR1B &= ~(1 << CS11);
+	TCCR1B &= ~(1 << CS12);
+}
+
+
+// =========================================
+// RTC interrupt every exact second
 void syncISR() {
 
 	tick = true;
 
 	// micros for 1 second
-	cycletime = realtime - old_realtime;
 	realtime = micros();
-
-	// rled.flash(30);
+	cycletime = realtime - old_realtime;
+	old_realtime = realtime;
 }
 
 
-// RTC interrupt
-// timer 1 interrupt => framerate * 80
+// =========================================
+// timer 1 interrupt (16 bit) => 1/2 bit timecode
+// framerate * 80
+// timer 1
+// 	24 fps => 3840 Hz; cmr = 4166
+// 	25 fps => 4000 Hz; cmr = 4000
+// 	30 fps => 4800 Hz; cmr = 3332
 ISR(TIMER1_COMPA_vect) {
-	tc.inc(tick);
+
+	long time;
+
+	// tick signals the second from the rtc
+	// the timecode can run in an frame offset
+	timertime = tc.inc(tick);
 }
 
+
+
+/* Check for micros() rollover
+if (currentMicros < lastMicros) {
+elapsedMicros = (18446744073709551615ULL - lastMicros) + currentMicros + 1;
+} else {
+elapsedMicros = currentMicros - lastMicros;
+}*/
