@@ -1,14 +1,42 @@
 /*
  DigiSlatePlus
+ */
 
- based on code by Jim Mack
+/*
+This Source Code Form is subject to the terms of the
+Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed
+with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+Copyright (c) 2024 Thomas Winkler
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+
+/*
  The DigiSlatePlus creates timecode synchronized with a
- DS3231 high precision RTC clock.
+ DS3231 high precision RTC clock and sent to the 3,5mm Jack.
 
  The time is set by maintaining a LTC timecode to the input
  and powering up the slate. The RTC time is set according
  to the provided timecode.
+ !!! (NOT YET IMPLEMENTED)
 
  When no timecode is found on the BNC connector, the internal
  generated timecode is displayed and available on the BNC.
@@ -53,6 +81,9 @@ TC tc;
 RTC rtc;
 
 bool clap;
+uint32_t claptime;
+uint32_t old_claptime;
+
 
 // =========================================
 // timecode timing
@@ -164,7 +195,7 @@ void setup() {
 
 	// =============================================================
 	// start function
-	lcd.dir(false);
+	// lcd.dir(false);
 	lcd.fps(tc.fps());
 	lcd.status("free");
 
@@ -216,11 +247,14 @@ void setup() {
 		// set date in user bits
 		// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
 
-		// display userbits on LCD
+		// snprintf("%0d:%0d:%0d", tc.ubit[0], tc.ubit[2], tc.ubit[3]);
 
-		// lcd.print(time.day(), 0, 1);
-		// lcd.print(time.month(), 3, 1);
-		// lcd.print(time.year(), 6, 1);
+		// display date as userbits on LCD
+		lcd.val8(time.day(), 0, 1);
+		lcd.print(".", 2, 1);
+		lcd.val8(time.month(), 3, 1);
+		lcd.print(".", 5, 1);
+		lcd.val16(time.year(), 6, 1);
 	}
 
 
@@ -230,7 +264,7 @@ void setup() {
 
 
 
-	start_timer1();
+	start_timer1(tc.fps());
 }
 
 
@@ -238,13 +272,16 @@ void setup() {
 //
 void loop() {
 
+	// get button state
+	// true = closed
+	bool button = !digitalRead(BUTTON);
+
 
 	// =============================================================
 	const char hexchar[] = "0123456789ABCDEF";    // for uBits
 	static uint8_t rawTC[8];                      // snapshot of tc/ubits data
 	char tCode[12] = {"00:00:00:00"};      		// readable text
 	static char uBits[17] = {"UB:             "}; // 8 hex chars centered
-
 
 
 	// =============================================================
@@ -257,24 +294,34 @@ void loop() {
 		if (tc.changed()) {
 			tc.unchange();
 
+
+			// ===================================
+			// slate is open
 			// check for clap button
-			if (digitalRead(BUTTON)) {
+			if (!button) {
 				clap = false;
-				led.set(tc.get());
 			}
 
+
+			// ===================================
+			// slate is closed
+			// clapped
 			else if (!clap) {
 				clap = true;
+				claptime = millis();
+
 				rled.flash(30);
 			}
 
 
-			// display time offset on lcd
-			lcd.clear();
-			lcd.val32(cycletime, 0, 0);
-			lcd.val32(timertime, 0, 1);
-			lcd.val16(OCR1A, 8,1);
+			// ===================================
+			// slate is closed for CLAP_LONG_CLOSED ms
+			if (millis() > (claptime + CLAP_LONG_CLOSED)) {
 
+				if (tc.enable()) {
+					led.set(tc.get());
+				}
+			}
 
 			// second started
 			// correct timer every second
@@ -282,6 +329,8 @@ void loop() {
 
 				tick = false;
 
+				// =========================================
+				// sync timer by rtc
 				// rtc time smaller
 				// speed um timer
 				if (cycletime < timertime) {
@@ -292,7 +341,31 @@ void loop() {
 				else if (cycletime > timertime) {
 					OCR1A++;
 				}
+
+
+				// enable if different is low enough
+				if (abs(cycletime - timertime) < ENABLE_LIMIT) {
+					tc.enable(true);
+				}
+				else {
+					tc.enable(false);
+				}
 			}
+		}
+
+
+		// show status
+		if (tc.enable()) {
+
+			if (clap) {
+				lcd.status("clap");
+			}
+			else {
+				lcd.status("sync");
+			}
+		}
+		else {
+			lcd.status("init");
 		}
 	}
 }    // end of loop()
@@ -488,7 +561,8 @@ uint8_t flip8(uint8_t b) {
 // =========================================
 
 // start bit timer interrupt
-void start_timer1(void) {
+void start_timer1(uint8_t fps) {
+
 	// =========================================
 	// 25 * 80 Hz Interrupt
 	cli();
@@ -498,11 +572,19 @@ void start_timer1(void) {
 	TCCR1B = 0;
 	TCNT1 = 0;
 
-	// 4000 Hz (16000000/(3999+1)*1)
+	// set inital cmr by framerate
+	switch(fps) {
+		case 24:
+			OCR1A = 4166; // 24 fpx
+			break;
+		case 25:
+			OCR1A = 4000; // 25 fps
+			break;
+		case 30:
+			OCR1A = 3332; // 30 fps
+			break;
+	}
 
-	// OCR1A = 4166; // 24 fpx
-	OCR1A = 4000; // 25 fps
-	// OCR1A = 3332; // 30 fps
 
 	// CTC
 	TCCR1B |= (1 << WGM12);
