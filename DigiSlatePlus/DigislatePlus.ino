@@ -1,14 +1,42 @@
 /*
  DigiSlatePlus
+ */
 
- based on code by Jim Mack
+/*
+This Source Code Form is subject to the terms of the
+Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed
+with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+Copyright (c) 2024 Thomas Winkler
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+
+/*
  The DigiSlatePlus creates timecode synchronized with a
- DS3231 high precision RTC clock.
+ DS3231 high precision RTC clock and sent to the 3,5mm Jack.
 
  The time is set by maintaining a LTC timecode to the input
  and powering up the slate. The RTC time is set according
  to the provided timecode.
+ !!! (NOT YET IMPLEMENTED)
 
  When no timecode is found on the BNC connector, the internal
  generated timecode is displayed and available on the BNC.
@@ -52,15 +80,24 @@ RLED rled;
 TC tc;
 RTC rtc;
 
+bool clap;
+uint32_t claptime;
+uint32_t old_claptime;
 
 
 // =========================================
 // timecode timing
 long realtime;
 long old_realtime;
-uint16_t cycletime;
+long cycletime;
+
+long timertime;
+
 bool tick;
 
+
+// DEBUG
+long offset;
 
 // =========================================
 int btnpressed, btnold, btncount;
@@ -96,8 +133,6 @@ bool m_tcDF;                          // DF flag was seen in raw bits
 // 		false => free run
 // 		true => read
 bool runMode;
-long curr_time;
-long old_time;
 
 
 // =========================================
@@ -107,22 +142,23 @@ void setup() {
 
 	// set runMode to read
 	runMode = false;
+	clap = false;
 
-	// DEVEL
-	curr_time = millis();
-	old_time = curr_time;
+	realtime = micros();
+	old_realtime = realtime;
 
 
 	// =============================================================
 	// INIT timecode
+	tc.begin();
 	tc.set(1,0,0,0);
 	tc.fps(25);
 
 
 	// =============================================================
 	// INIT IO
-	pinMode(BUTTON,INPUT_PULLUP); 
-	digitalWrite(BUTTON,0);
+	pinMode(SIGNAL_OUTPUT,OUTPUT);
+	pinMode(BUTTON,INPUT_PULLUP);
 
 
 	// =============================================================
@@ -159,7 +195,7 @@ void setup() {
 
 	// =============================================================
 	// start function
-	lcd.dir(false);
+	// lcd.dir(false);
 	lcd.fps(tc.fps());
 	lcd.status("free");
 
@@ -183,6 +219,7 @@ void setup() {
 
 		case 1:
 			lcd.status(" RTC");
+
 			break;
 
 		case 0:
@@ -195,58 +232,39 @@ void setup() {
 	}
 
 
-
-	// display rtc on LCD
-	DateTime time = rtc.get();
-	tc.set(time.hour(), time.minute(), time.second(), 0);
-
-	// lcd.print(time.day(), 0, 1);
-	// lcd.print(time.month(), 3, 1);
-	// lcd.print(time.year(), 6, 1);
+// debug => set time
+// h,m,s,d,m,y 
+// rtc.set(7,30,0,9,8,2024);
 
 
+	// read rtc and set time code
+	if (rtc.status() != false) {
+
+		// init time of slate to rtc
+		DateTime time = rtc.get();
+		tc.set(time.hour(), time.minute(), time.second(), 0);
+
+		// set date in user bits
+		// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
+
+		// snprintf("%0d:%0d:%0d", tc.ubit[0], tc.ubit[2], tc.ubit[3]);
+
+		// display date as userbits on LCD
+		lcd.val8(time.day(), 0, 1);
+		lcd.print(".", 2, 1);
+		lcd.val8(time.month(), 3, 1);
+		lcd.print(".", 5, 1);
+		lcd.val16(time.year(), 6, 1);
+	}
 
 
 
-/*	// INIT TC-input
-	pinMode(SIGNAL_INPUT, INPUT_PULLUP);  // conditioned TC input
-
-	// =============================================================
-	// INIT timer for interrupt
-	cli();
-
-	TCCR1A = 0;             // normal count-up mode
-	TCCR1B = bit(CS11);     // prescaler / 8
-	TCNT1 = 0;              // start at 0
-
-	sei();
-
-	v_isrState = isrInit;
-
-	attachInterrupt(digitalPinToInterrupt(SIGNAL_INPUT), tcISR, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(SYNC_INPUT), syncISR, CHANGE);
-*/
-
-	// TCCR1A = 0;             // normal count-up mode
-	// TCCR1B = bit(CS11);     // prescaler / 8
-	// TCNT1 = 0;              // start at 0
 
 
-	noInterrupts();
-	// Clear registers
-	TCCR1A = 0;
-	TCCR1B = 0;
-	TCNT1 = 0;
 
-	// 25 Hz (16000000/((624+1)*1024))
-	OCR1A = 624;
-	// CTC
-	TCCR1B |= (1 << WGM12);
-	// Prescaler 1024
-	TCCR1B |= (1 << CS12) | (1 << CS10);
-	// Output Compare Match A Interrupt Enable
-	TIMSK1 |= (1 << OCIE1A);
-	interrupts();
+
+
+	start_timer1(tc.fps());
 }
 
 
@@ -254,13 +272,16 @@ void setup() {
 //
 void loop() {
 
+	// get button state
+	// true = closed
+	bool button = !digitalRead(BUTTON);
+
 
 	// =============================================================
 	const char hexchar[] = "0123456789ABCDEF";    // for uBits
 	static uint8_t rawTC[8];                      // snapshot of tc/ubits data
 	char tCode[12] = {"00:00:00:00"};      		// readable text
 	static char uBits[17] = {"UB:             "}; // 8 hex chars centered
-
 
 
 	// =============================================================
@@ -272,166 +293,88 @@ void loop() {
 		// update time if timecode has changed
 		if (tc.changed()) {
 			tc.unchange();
-			led.set(tc.get());
-		}
-	}
 
 
-	// =============================================================
-	// TC on input
-	// read mode
-/*	else {
-
-		// check button
-		btnpressed = !digitalRead(BUTTON);
-
-		if(btncount < 1000) {
-			if(btnpressed == 1) {
-				btncount++;
+			// ===================================
+			// slate is open
+			// check for clap button
+			if (!button) {
+				clap = false;
 			}
-		}
 
-		if(btncount >= 1) {
-			if(btnpressed == 0) {
-				btncount--;
+
+			// ===================================
+			// slate is closed
+			// clapped
+			else if (!clap) {
+				clap = true;
+				claptime = millis();
+
+				rled.flash(30);
 			}
-		}
 
-		if (btncount < 1000) {
-			if( btnpressed == 1 ) {
-				if(btnpressed !=  btnold  ){
-					btncount =  10000;
 
-					digitalWrite(RLED, 1); delay(30);
-					digitalWrite(RLED,0);
+			// ===================================
+			// slate is closed for CLAP_LONG_CLOSED ms
+			if (millis() > (claptime + CLAP_LONG_CLOSED)) {
+
+				if (tc.enable()) {
+					led.set(tc.get());
+				}
+			}
+
+			// second started
+			// correct timer every second
+			if (tick) {
+
+				tick = false;
+
+				// =========================================
+				// sync timer by rtc
+				// rtc time smaller
+				// speed um timer
+				if (cycletime < timertime) {
+					OCR1A--;
+				}
+
+				// slow down timer
+				else if (cycletime > timertime) {
+					OCR1A++;
+				}
+
+
+				// enable if different is low enough
+				if (abs(cycletime - timertime) < ENABLE_LIMIT) {
+					tc.enable(true);
+				}
+				else {
+					tc.enable(false);
 				}
 			}
 		}
 
-		//  if( btnpressed == 0 ){
-		//   digitalWrite(RLED,0);
-		// }
 
+		// show status
+		if (tc.enable()) {
 
-		if(btnpressed == 1) {
-			if(btncount >= 1000) {
-				btnold = 1;
-			}
-		}
-
-		if(btncount < 10) {
-			if(btnpressed == 0) {
-				btnold = 0;
-			}
-		}
-
-
-		// =============================================================
-		int idx;
-
-		if (v_tcReady) {                      // move TC bits from the buffer
-			if (!v_tcRvs) {                     //  correctly for fwd or rvs
-				for (idx = 0; idx < 8; idx++) {
-					rawTC[idx] = (v_tcBuff[idx]);
-				}
+			if (clap) {
+				lcd.status("clap");
 			}
 			else {
-				for (idx = 0; idx < 8; idx++) {           // for reverse timecode,
-					rawTC[idx] = flip8(v_tcBuff[9 - idx]);  //  also reverse the bits
-				}
+				lcd.status("sync");
 			}
-
-			// now rawTC[] has the bits in forward order
-			// whether the code was read forward or reverse
-
-			v_tcReady = false;                          // tell ISR it's handled
-
-			m_tcDF = (rawTC[6] & dfFlag);               // test the DF bit
-
-			tCode[8] = m_tcDF ? ';' : ':';              // choose sec/frm separator
-
-			tCode[0] =  (rawTC[0] & 0x03) | '0';        // hours tens
-			tCode[1] =  (rawTC[1] & 0x0F) | '0';        // hours units
-			tCode[3] =  (rawTC[2] & 0x07) | '0';        // minutes tens
-			tCode[4] =  (rawTC[3] & 0x0F) | '0';        // minutes units
-			tCode[6] =  (rawTC[4] & 0x07) | '0';        // seconds tens
-			tCode[7] =  (rawTC[5] & 0x0F) | '0';        // seconds units
-			tCode[9] =  (rawTC[6] & 0x03) | '0';        // frames tens
-			tCode[10] = (rawTC[7] & 0x0F) | '0';        // frames units
-
-
-			// =============================================================
-			// display TC on LED
-			uint8_t bb = (rawTC[7] & 0x0F) | '0';  
-			display_write(0x02,bb); //enable decimal point on LSB  //frame
-
-			bb = (rawTC[6] & 0x03) | '0';
-			display_write(0x06, bb);             // frame
-			bb = (rawTC[5] & 0x0F) | '0';   
-			display_write(0x08, bb);               // sec
-			bb = (rawTC[4] & 0x07) | '0';   
-			display_write(0x04, bb);                 // sec
-			bb = (rawTC[3] & 0x0F) | '0';   
-			display_write(0x03, bb);                 // min             
-			bb = (rawTC[2] & 0x07) | '0';  
-			display_write(0x07, bb);                 // mib
-			bb = (rawTC[1] & 0x0F) | '0';    
-			display_write(0x05, bb);                 // hour
-			bb =  (rawTC[0] & 0x03) | '0'; 
-			display_write(0x01, bb);                 // hour
-
-			//  //recalculate timecode once FRAMES LSB quarter-frame received
-			//   h = (buf_temp[7] & 0x01)*16 + buf_temp[6];
-			//   m = buf_temp[5]*16 + buf_temp[4];
-			//   s = buf_temp[3]*16 + buf_temp[2];
-			//   f = buf_temp[1]*16 + buf_temp[0];
-			//   display_timecode();
-		
-
-			for (idx = 0; idx < 8; idx++) {
-				uBits[idx + 4] = hexchar[rawTC[idx] >> 4];  // user bits little endian
-			}
-
-			uint8_t frVal = ((tCode[9] & 0x03) * 10)
-											+ (tCode[10] & 0x0F);       // impute the frame rate
-			if (frVal > v_tcFrameMax) {                 //  by finding the highest
-				v_tcFrameMax = frVal;                     //  frame number seen in
-			}
-			if (++v_tcFrameCtr > 31) {                  //  the last 31 frames
-				tcRate = v_tcFrameMax + 1;
-				v_tcFrameMax = 0;
-				v_tcFrameCtr = 0;                         // do this every 31 frames
-			}
-
-
-			// =============================================================
-			//display TC on LCD
-			disp.home();
-
-			disp.print(tCode);
-			disp.write(arroz[v_tcRvs]);
-
-			if (m_tcDF) {
-				disp.print("DF");
-			}
-			else {
-				disp.print(tcRate);
-			}
-
-			disp.setCursor(0, 1);
-			disp.print(uBits);
+		}
+		else {
+			lcd.status("init");
 		}
 	}
-*/
-
-
 }    // end of loop()
 
 
 // =========================================
 //
-void tcISR() {
-
+/*void tcISR() {
+*/
 	/*
 		The shell of the ISR is a state machine with three states:
 
@@ -444,7 +387,7 @@ void tcISR() {
 
 		 isrRead - reads edges and fills the shift register with '1's and '0's
 	*/
-
+/*
 	const uint8_t sampleSize = 40;    // number of cells to sample
 
 	static uint8_t shiftReg[10];      // shift register for incoming bits
@@ -597,33 +540,11 @@ void tcISR() {
 		default:
 			break;
 	}
-}	// end of tcISR
-
-
-// create timecode
-// RTC interrupt
-void syncISR() {
-
-	tick = true;
-
-	// micros for 1 second
-	cycletime = realtime - old_realtime;
-	realtime = micros();
-
-	// rled.flash(30);
-}
-
-// timer 1 interrupt
-ISR(TIMER1_COMPA_vect) {
-
-	// inc
-	// on frame overflow, wait till second has started
-	tc.inc(tick);
-}
+}	// end of tcISR*/
 
 
 // =========================================
-//
+// flip byte order for backwards reading
 uint8_t flip8(uint8_t b) {
 
 	// reverses the bit order within a byte
@@ -633,3 +554,93 @@ uint8_t flip8(uint8_t b) {
 	b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
 	return b;
 }
+
+
+// =========================================
+// INTERRUPT ROUTINES
+// =========================================
+
+// start bit timer interrupt
+void start_timer1(uint8_t fps) {
+
+	// =========================================
+	// 25 * 80 Hz Interrupt
+	cli();
+
+	// Clear registers
+	TCCR1A = 0;
+	TCCR1B = 0;
+	TCNT1 = 0;
+
+	// set inital cmr by framerate
+	switch(fps) {
+		case 24:
+			OCR1A = 4166; // 24 fpx
+			break;
+		case 25:
+			OCR1A = 4000; // 25 fps
+			break;
+		case 30:
+			OCR1A = 3332; // 30 fps
+			break;
+	}
+
+
+	// CTC
+	TCCR1B |= (1 << WGM12);
+	// Prescaler 8
+	TCCR1B |= (1 << CS10);
+	// Output Compare Match A Interrupt Enable
+	TIMSK1 |= (1 << OCIE1A);
+
+	sei();
+	// =========================================
+}
+
+
+// stop timer
+// write 0 to clock select bits
+void stop_timer1(void) {
+	TCCR1B &= ~(1 << CS10);
+	TCCR1B &= ~(1 << CS11);
+	TCCR1B &= ~(1 << CS12);
+}
+
+
+// =========================================
+// RTC interrupt every exact second
+void syncISR() {
+
+	tick = true;
+
+	// micros for 1 second
+	realtime = micros();
+	cycletime = realtime - old_realtime;
+	old_realtime = realtime;
+}
+
+
+// =========================================
+// timer 1 interrupt (16 bit) => 1/2 bit timecode
+// framerate * 80
+// timer 1
+// 	24 fps => 3840 Hz; cmr = 4166
+// 	25 fps => 4000 Hz; cmr = 4000
+// 	30 fps => 4800 Hz; cmr = 3332
+ISR(TIMER1_COMPA_vect) {
+
+	long time;
+
+	// tick signals the second from the rtc
+	// the timecode can run in an frame offset
+	timertime = tc.inc(tick);
+}
+
+
+
+/* Check for micros() rollover
+if (currentMicros < lastMicros) {
+elapsedMicros = (18446744073709551615ULL - lastMicros) + currentMicros + 1;
+} else {
+elapsedMicros = currentMicros - lastMicros;
+}*/
