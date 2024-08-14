@@ -9960,7 +9960,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0175803d-17de-4307-b752-530079168c76")
-		(property "Reference" "C13"
+		(property "Reference" "C11"
 			(at 115.316 150.876 0)
 			(effects
 				(font
@@ -10014,7 +10014,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C13")
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -10195,7 +10195,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "19dc9564-9acb-4645-a6ec-d459a49372f6")
-		(property "Reference" "U12"
+		(property "Reference" "U11"
 			(at 71.12 140.97 0)
 			(effects
 				(font
@@ -10251,7 +10251,7 @@
 		(instances
 			(project ""
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "U12")
+					(reference "U11")
 					(unit 1)
 				)
 			)
@@ -10693,7 +10693,7 @@
 	)
 	(symbol
 		(lib_id "Battery_Management:DW01A")
-		(at 208.28 120.65 0)
+		(at 234.95 121.92 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -10702,7 +10702,7 @@
 		(fields_autoplaced yes)
 		(uuid "4273171d-1bfa-4178-a732-2bb5f644fabe")
 		(property "Reference" "U14"
-			(at 208.28 110.49 0)
+			(at 234.95 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10710,7 +10710,7 @@
 			)
 		)
 		(property "Value" "DW01A"
-			(at 208.28 113.03 0)
+			(at 234.95 114.3 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10718,7 +10718,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
-			(at 208.28 120.65 0)
+			(at 234.95 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10727,7 +10727,7 @@
 			)
 		)
 		(property "Datasheet" "https://hmsemi.com/downfile/DW01A.PDF"
-			(at 208.28 120.65 0)
+			(at 234.95 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10736,7 +10736,7 @@
 			)
 		)
 		(property "Description" "Overcharge, overcurrent and overdischarge protection IC for single cell lithium-ion/polymer battery"
-			(at 208.534 119.126 0)
+			(at 235.204 120.396 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10780,7 +10780,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "491dbee7-8a4a-4b12-a2bf-a88e69ac039c")
-		(property "Reference" "C4"
+		(property "Reference" "C7"
 			(at 62.484 123.698 0)
 			(effects
 				(font
@@ -10834,7 +10834,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C4")
+					(reference "C7")
 					(unit 1)
 				)
 			)
@@ -11378,8 +11378,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "68c57827-2185-4eb1-84eb-eac6c8e36ca5")
-		(property "Reference" "C6"
-			(at 122.936 118.11 0)
+		(property "Reference" "C12"
+			(at 123.698 119.126 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11432,7 +11432,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C6")
+					(reference "C12")
 					(unit 1)
 				)
 			)
@@ -11763,7 +11763,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "76638f6a-b255-432d-bb84-25fcf77f2447")
-		(property "Reference" "C12"
+		(property "Reference" "C10"
 			(at 105.156 151.13 0)
 			(effects
 				(font
@@ -11817,7 +11817,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C12")
+					(reference "C10")
 					(unit 1)
 				)
 			)
@@ -12537,7 +12537,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "97a91b1c-260d-4803-97ab-099d4c594f94")
-		(property "Reference" "C10"
+		(property "Reference" "C8"
 			(at 83.566 151.13 0)
 			(effects
 				(font
@@ -12591,7 +12591,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C10")
+					(reference "C8")
 					(unit 1)
 				)
 			)
@@ -13110,7 +13110,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a9cd1041-4a72-46cc-ad06-6ba32df2c60e")
-		(property "Reference" "C8"
+		(property "Reference" "C6"
 			(at 61.976 150.876 0)
 			(effects
 				(font
@@ -13164,7 +13164,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C8")
+					(reference "C6")
 					(unit 1)
 				)
 			)
@@ -13245,7 +13245,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ad859197-b44b-4254-a4f8-433a005171f0")
-		(property "Reference" "C9"
+		(property "Reference" "C4"
 			(at 51.816 151.13 0)
 			(effects
 				(font
@@ -13299,7 +13299,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C9")
+					(reference "C4")
 					(unit 1)
 				)
 			)
@@ -13689,7 +13689,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b5f248a1-4c90-499f-a7f4-1851a612f82b")
-		(property "Reference" "U11"
+		(property "Reference" "U12"
 			(at 83.82 102.87 0)
 			(effects
 				(font
@@ -13752,7 +13752,7 @@
 		(instances
 			(project ""
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "U11")
+					(reference "U12")
 					(unit 1)
 				)
 			)
@@ -13845,7 +13845,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "470R"
+		(property "Value" "10K"
 			(at 26.67 31.75 90)
 			(effects
 				(font
@@ -14178,7 +14178,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d7a84789-6c33-4d0f-bfcc-686446b0a5cd")
-		(property "Reference" "C11"
+		(property "Reference" "C9"
 			(at 93.726 151.384 0)
 			(effects
 				(font
@@ -14232,7 +14232,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C11")
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -14409,8 +14409,8 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f5e3c631-afe5-40d3-b7f2-7df0fd98346c")
-		(property "Reference" "C7"
-			(at 127.254 123.698 0)
+		(property "Reference" "C13"
+			(at 132.842 119.126 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14463,7 +14463,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(reference "C7")
+					(reference "C13")
 					(unit 1)
 				)
 			)
