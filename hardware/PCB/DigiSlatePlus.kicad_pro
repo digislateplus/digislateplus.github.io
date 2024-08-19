@@ -495,7 +495,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "DigiSlatePlus.step",
       "svg": "",
       "vrml": ""
     },
@@ -616,6 +616,14 @@
     [
       "dcb9cf24-5afa-4bbe-8afa-a00529143e4d",
       "Root"
+    ],
+    [
+      "8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc",
+      "Power"
+    ],
+    [
+      "eb648e62-d1eb-4bf5-ac01-3aeb0b7a99f0",
+      "Scene Display"
     ]
   ],
   "text_variables": {}
