@@ -495,7 +495,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "DigiSlatePlus.step",
+      "step": "",
       "svg": "",
       "vrml": ""
     },
@@ -565,6 +565,78 @@
           "label": "Description",
           "name": "Description",
           "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Check_prices",
+          "name": "Check_prices",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Description_1",
+          "name": "Description_1",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MANUFACTURER",
+          "name": "MANUFACTURER",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MAXIMUM_PACKAGE_HEIGHT",
+          "name": "MAXIMUM_PACKAGE_HEIGHT",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MF",
+          "name": "MF",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MP",
+          "name": "MP",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "PARTREV",
+          "name": "PARTREV",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Package",
+          "name": "Package",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Price",
+          "name": "Price",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "STANDARD",
+          "name": "STANDARD",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "SnapEDA_Link",
+          "name": "SnapEDA_Link",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Availability",
+          "name": "Availability",
+          "show": false
         }
       ],
       "filter_string": "",
@@ -618,12 +690,12 @@
       "Root"
     ],
     [
-      "8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc",
-      "Power"
+      "8aad025e-4bc0-4907-b517-9a6d83f1b6c4",
+      "Timecode Display"
     ],
     [
-      "eb648e62-d1eb-4bf5-ac01-3aeb0b7a99f0",
-      "Scene Display"
+      "8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc",
+      "Power"
     ]
   ],
   "text_variables": {}

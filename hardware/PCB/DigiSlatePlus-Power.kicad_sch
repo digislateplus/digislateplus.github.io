@@ -4836,7 +4836,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "02c4f335-3c88-40b7-8f80-cafbb39bffbb")
-		(property "Reference" "C6"
+		(property "Reference" "C14"
 			(at 35.306 69.596 0)
 			(effects
 				(font
@@ -4890,7 +4890,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C6")
+					(reference "C14")
 					(unit 1)
 				)
 			)
@@ -4906,7 +4906,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "065dff37-1774-4a08-b571-2d3e8617e8ff")
-		(property "Reference" "#PWR04"
+		(property "Reference" "#PWR026"
 			(at 97.79 87.63 0)
 			(effects
 				(font
@@ -4956,7 +4956,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "#PWR04")
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
@@ -4971,7 +4971,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "11e325af-49b5-4bb4-af4a-9088335f3fbe")
-		(property "Reference" "C9"
+		(property "Reference" "C16"
 			(at 67.056 70.104 0)
 			(effects
 				(font
@@ -5025,7 +5025,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C9")
+					(reference "C16")
 					(unit 1)
 				)
 			)
@@ -5041,7 +5041,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "18b8c896-1854-4795-9ceb-37519770ef11")
-		(property "Reference" "U11"
+		(property "Reference" "U24"
 			(at 44.45 59.69 0)
 			(effects
 				(font
@@ -5097,7 +5097,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "U11")
+					(reference "U24")
 					(unit 1)
 				)
 			)
@@ -5113,7 +5113,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1c2838bc-2d52-41cf-bb35-0dc53b8fa76b")
-		(property "Reference" "U12"
+		(property "Reference" "U21"
 			(at 57.15 21.59 0)
 			(effects
 				(font
@@ -5176,7 +5176,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "U12")
+					(reference "U21")
 					(unit 1)
 				)
 			)
@@ -5192,7 +5192,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2568fd0d-f2c2-4a46-990b-61ba1e5712df")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR024"
 			(at 119.38 68.58 0)
 			(effects
 				(font
@@ -5242,7 +5242,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "#PWR013")
+					(reference "#PWR024")
 					(unit 1)
 				)
 			)
@@ -5258,7 +5258,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2aa3bc1a-67ba-4ce9-ac9b-4eae307a37ac")
-		(property "Reference" "RV2"
+		(property "Reference" "RV4"
 			(at 86.106 26.162 90)
 			(effects
 				(font
@@ -5315,7 +5315,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "RV2")
+					(reference "RV4")
 					(unit 1)
 				)
 			)
@@ -5330,7 +5330,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "304cb95d-b288-4e6f-ac1f-94ba50655ba2")
-		(property "Reference" "C12"
+		(property "Reference" "C10"
 			(at 97.028 37.846 90)
 			(effects
 				(font
@@ -5384,7 +5384,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C12")
+					(reference "C10")
 					(unit 1)
 				)
 			)
@@ -5399,7 +5399,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "30ddc017-9792-4158-9606-f6353fc51267")
-		(property "Reference" "R11"
+		(property "Reference" "R22"
 			(at 173.99 52.324 0)
 			(effects
 				(font
@@ -5453,7 +5453,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "R11")
+					(reference "R22")
 					(unit 1)
 				)
 			)
@@ -5468,7 +5468,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "31431b41-2dbf-4caf-b14f-31e95a0f7f98")
-		(property "Reference" "D8"
+		(property "Reference" "D9"
 			(at 138.176 21.336 0)
 			(effects
 				(font
@@ -5523,7 +5523,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "D8")
+					(reference "D9")
 					(unit 1)
 				)
 			)
@@ -5538,7 +5538,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5c75fead-1986-4f65-b8bc-ac9dc55887ec")
-		(property "Reference" "C13"
+		(property "Reference" "C11"
 			(at 106.172 37.846 90)
 			(effects
 				(font
@@ -5592,7 +5592,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C13")
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -5607,7 +5607,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5d8742b8-1c5e-48c4-85e2-28739af9f604")
-		(property "Reference" "C10"
+		(property "Reference" "C17"
 			(at 78.486 69.85 0)
 			(effects
 				(font
@@ -5661,7 +5661,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C10")
+					(reference "C17")
 					(unit 1)
 				)
 			)
@@ -5677,7 +5677,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "63495f47-3ca0-4679-a397-32f17abb6ac5")
-		(property "Reference" "#PWR02"
+		(property "Reference" "#PWR021"
 			(at 57.15 58.42 0)
 			(effects
 				(font
@@ -5727,7 +5727,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "#PWR02")
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)
@@ -5742,7 +5742,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6fa6c493-4cde-4a0e-8aa0-daef1f15a38a")
-		(property "Reference" "C7"
+		(property "Reference" "C9"
 			(at 35.814 42.418 0)
 			(effects
 				(font
@@ -5796,7 +5796,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C7")
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -5811,7 +5811,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7103fdc5-2de3-49ea-afce-0b8aa5639f61")
-		(property "Reference" "R10"
+		(property "Reference" "R17"
 			(at 173.99 26.924 0)
 			(effects
 				(font
@@ -5864,7 +5864,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "R10")
+					(reference "R17")
 					(unit 1)
 				)
 			)
@@ -5879,7 +5879,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7a1c85b7-789a-4c09-861c-640a7adc48cb")
-		(property "Reference" "R7"
+		(property "Reference" "R20"
 			(at 87.63 40.894 0)
 			(effects
 				(font
@@ -5933,7 +5933,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "R7")
+					(reference "R20")
 					(unit 1)
 				)
 			)
@@ -5949,7 +5949,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "82f1d016-3697-4584-b6cb-537d3e969554")
-		(property "Reference" "D7"
+		(property "Reference" "D10"
 			(at 73.66 40.3224 90)
 			(effects
 				(font
@@ -6003,7 +6003,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "D7")
+					(reference "D10")
 					(unit 1)
 				)
 			)
@@ -6019,7 +6019,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "88b0f546-61f3-420a-b878-138f887ff605")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR023"
 			(at 66.04 68.58 0)
 			(effects
 				(font
@@ -6069,7 +6069,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "#PWR03")
+					(reference "#PWR023")
 					(unit 1)
 				)
 			)
@@ -6084,7 +6084,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8a8d4e1c-4ca9-4c62-a9c5-68d1c89f081c")
-		(property "Reference" "C15"
+		(property "Reference" "C20"
 			(at 120.396 70.104 0)
 			(effects
 				(font
@@ -6138,7 +6138,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C15")
+					(reference "C20")
 					(unit 1)
 				)
 			)
@@ -6154,7 +6154,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "97d9a1b8-6a04-4863-8663-e903f298ae2e")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR022"
 			(at 154.94 68.58 0)
 			(effects
 				(font
@@ -6204,7 +6204,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "#PWR014")
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -6286,7 +6286,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b12c9b0c-80b6-4ad9-8a46-1856d2f99b62")
-		(property "Reference" "C5"
+		(property "Reference" "C8"
 			(at 31.496 36.83 0)
 			(effects
 				(font
@@ -6340,7 +6340,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C5")
+					(reference "C8")
 					(unit 1)
 				)
 			)
@@ -6355,7 +6355,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b96eb25c-8e1b-4fcc-bd8b-3ebf40a60d24")
-		(property "Reference" "C16"
+		(property "Reference" "C12"
 			(at 170.942 40.894 90)
 			(effects
 				(font
@@ -6409,7 +6409,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C16")
+					(reference "C12")
 					(unit 1)
 				)
 			)
@@ -6424,7 +6424,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ca6c269e-4632-4ace-9fe8-73fec697dded")
-		(property "Reference" "C8"
+		(property "Reference" "C15"
 			(at 56.896 69.85 0)
 			(effects
 				(font
@@ -6478,7 +6478,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C8")
+					(reference "C15")
 					(unit 1)
 				)
 			)
@@ -6493,7 +6493,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "cb09d930-ce48-4081-a47d-237790b239f5")
-		(property "Reference" "U15"
+		(property "Reference" "U22"
 			(at 184.404 30.226 0)
 			(effects
 				(font
@@ -6557,7 +6557,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "U15")
+					(reference "U22")
 					(unit 1)
 				)
 			)
@@ -6572,7 +6572,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d2694d06-fea2-44da-ba5d-620fce461afd")
-		(property "Reference" "Q2"
+		(property "Reference" "Q3"
 			(at 182.88 48.006 90)
 			(effects
 				(font
@@ -6765,7 +6765,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "Q2")
+					(reference "Q3")
 					(unit 1)
 				)
 			)
@@ -6780,7 +6780,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d585b7b1-286f-47a0-983f-f9eafabb45e6")
-		(property "Reference" "C14"
+		(property "Reference" "C19"
 			(at 110.236 69.85 0)
 			(effects
 				(font
@@ -6834,7 +6834,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C14")
+					(reference "C19")
 					(unit 1)
 				)
 			)
@@ -6849,7 +6849,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "dcd14a6f-0578-4c99-94f7-f506507571ab")
-		(property "Reference" "R12"
+		(property "Reference" "R21"
 			(at 203.708 40.386 0)
 			(effects
 				(font
@@ -6903,7 +6903,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "R12")
+					(reference "R21")
 					(unit 1)
 				)
 			)
@@ -6918,7 +6918,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e797cb3b-4587-4f65-ae77-4e1c4c96b47c")
-		(property "Reference" "R9"
+		(property "Reference" "R19"
 			(at 160.02 32.004 0)
 			(effects
 				(font
@@ -6972,7 +6972,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "R9")
+					(reference "R19")
 					(unit 1)
 				)
 			)
@@ -6988,7 +6988,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e8067881-7b2c-492c-97a6-cfb38082f8a6")
-		(property "Reference" "U13"
+		(property "Reference" "U25"
 			(at 97.79 59.69 0)
 			(effects
 				(font
@@ -7043,7 +7043,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "U13")
+					(reference "U25")
 					(unit 1)
 				)
 			)
@@ -7058,7 +7058,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ee43a9ca-7ccd-4499-9ba6-f1d32c25276e")
-		(property "Reference" "C4"
+		(property "Reference" "C13"
 			(at 25.146 69.85 0)
 			(effects
 				(font
@@ -7112,7 +7112,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C4")
+					(reference "C13")
 					(unit 1)
 				)
 			)
@@ -7128,7 +7128,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f4185d9c-bf52-43a2-93a3-1a40dc0f376d")
-		(property "Reference" "#PWR01"
+		(property "Reference" "#PWR025"
 			(at 44.45 87.63 0)
 			(effects
 				(font
@@ -7178,7 +7178,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "#PWR01")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
@@ -7193,7 +7193,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f861a606-26f4-4d76-b758-c7203c055c3a")
-		(property "Reference" "C11"
+		(property "Reference" "C18"
 			(at 88.646 69.596 0)
 			(effects
 				(font
@@ -7247,7 +7247,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "C11")
+					(reference "C18")
 					(unit 1)
 				)
 			)
@@ -7262,7 +7262,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fc17ee45-c5d1-4eb7-98de-b2f2a6685d5a")
-		(property "Reference" "R8"
+		(property "Reference" "R18"
 			(at 152.4 32.004 0)
 			(effects
 				(font
@@ -7316,7 +7316,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "R8")
+					(reference "R18")
 					(unit 1)
 				)
 			)
@@ -7331,7 +7331,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fda60774-0ac3-421a-895b-21da9b8eb3f1")
-		(property "Reference" "U14"
+		(property "Reference" "U23"
 			(at 157.1341 58.42 0)
 			(effects
 				(font
@@ -7405,7 +7405,7 @@
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc"
-					(reference "U14")
+					(reference "U23")
 					(unit 1)
 				)
 			)
