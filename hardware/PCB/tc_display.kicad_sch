@@ -7435,7 +7435,7 @@
 			)
 		)
 	)
-	(global_label "CLAP-LED"
+	(global_label "FLASH-LED"
 		(shape input)
 		(at 220.98 104.14 90)
 		(fields_autoplaced yes)
@@ -7447,7 +7447,7 @@
 		)
 		(uuid "6f5b2e58-2328-4a9b-b90a-9b85f654eb1d")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 220.98 91.4786 90)
+			(at 220.98 90.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
