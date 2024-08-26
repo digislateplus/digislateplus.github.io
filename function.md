@@ -1,5 +1,7 @@
 # Functions
 
+[Home](README.md)
+
 ## Standard
 The standard on the LC display on the back of the DigiSlate+ shows the settings of the scene and take display. Both values have a range from 1 to 999 and an optional trailing character.
 
