@@ -1,4 +1,4 @@
-# DigiSlate-Plus
+# DigiSlate+
 
 The project is in an early developement state.
 
