@@ -1,10 +1,12 @@
 # Functions
 
 ## Standard
-The four buttons beneath the LC display on the back of the DigiSlate+ change the scene and take settings. If the scene number is changed, the take number jumps to 1.
+The standard on the LC display on the back of the DigiSlate+ shows the settings of the scene and take display. Both values have a range from 1 to 999 and an optional trailing character.
+
+The four buttons beneath the LC display change the scene and take settings. If the scene number is changed, the take number jumps to 1.
 
     ┌─────────────────┐
-    │ ░░0000░░░░0000░░ |───┐rotary
+    │ ░░░000░x░░000░x░ |───┐rotary
     │ ░-░SC░+░░-░TK░+░ │───┘button
     └─────────────────┘
       B1   B2   B3   B4
