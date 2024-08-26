@@ -1,5 +1,7 @@
 # Hardware
 
+[Home](README.md)
+
 The hardware is based on an ESP32S3 microcontroller, which supplies the time code, controls the displays and can connect to other devices via WiFi and Bluetooth.
 
 All components are combined on a central circuit board, only the switch for recognising the flap, the main switch and the battery are connected via JST-XH connectors.
