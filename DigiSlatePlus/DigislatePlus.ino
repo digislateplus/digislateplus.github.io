@@ -73,14 +73,17 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "rled.h"
 #include "tc.h"
 #include "rtc.h"
+#include "reader.h"
 
 LCD lcd;
 LED led;
 RLED rled;
 TC tc;
 RTC rtc;
+READER reader;
 
 bool clap;
+bool run;
 uint32_t claptime;
 uint32_t old_claptime;
 
@@ -92,6 +95,8 @@ long old_realtime;
 long cycletime;
 
 long timertime;
+
+long lastreadtime;
 
 bool tick;
 
@@ -151,7 +156,7 @@ void setup() {
 	// =============================================================
 	// INIT timecode
 	tc.begin();
-	tc.set(1,0,0,0);
+	tc.set(0,0,0,0);
 	tc.fps(25);
 
 
@@ -197,20 +202,23 @@ void setup() {
 	// start function
 	// lcd.dir(false);
 	lcd.fps(tc.fps());
-	lcd.status("free");
+	lcd.status(" run");
 
 	// disp.print(uBits);
 
 
 	// =============================================================
 	// activate interrupts
-	// pinMode(SIGNAL, INPUT_PULLUP);  // sync input
-	pinMode(RTC_INT_PORT, INPUT_PULLUP);  // sync input
+	pinMode(RTC_INT_PORT, INPUT_PULLUP);  	// rtc sync input
+
+
+	// start reader class
+	reader.begin(SIGNAL_INPUT);
 
 	tick = false;
 
 	cli();
-	// attachInterrupt(digitalPinToInterrupt(SIGNAL_INPUT), tcISR, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(SIGNAL_INPUT), readISR, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(RTC_INT_PORT), syncISR, FALLING);
 	sei();
 
@@ -258,12 +266,6 @@ void setup() {
 	}
 
 
-
-
-
-
-
-
 	start_timer1(tc.fps());
 }
 
@@ -272,16 +274,16 @@ void setup() {
 //
 void loop() {
 
-	// get button state
+	// get clapbar state
 	// true = closed
-	bool button = !digitalRead(BUTTON);
+	bool clapbar = !digitalRead(BUTTON);
 
 
 	// =============================================================
-	const char hexchar[] = "0123456789ABCDEF";    // for uBits
-	static uint8_t rawTC[8];                      // snapshot of tc/ubits data
-	char tCode[12] = {"00:00:00:00"};      		// readable text
-	static char uBits[17] = {"UB:             "}; // 8 hex chars centered
+	// const char hexchar[] = "0123456789ABCDEF";    // for uBits
+	// static uint8_t rawTC[8];                      // snapshot of tc/ubits data
+	// char tCode[12] = {"00:00:00:00"};      		// readable text
+	// static char uBits[17] = {"UB:             "}; // 8 hex chars centered
 
 
 	// =============================================================
@@ -298,8 +300,9 @@ void loop() {
 			// ===================================
 			// slate is open
 			// check for clap button
-			if (!button) {
+			if (!clapbar) {
 				clap = false;
+				run = true;
 			}
 
 
@@ -307,16 +310,28 @@ void loop() {
 			// slate is closed
 			// clapped
 			else if (!clap) {
-				clap = true;
-				claptime = millis();
 
+				run = false;
+				clap = true;
 				rled.flash(30);
+
+				claptime = millis();
+			}
+
+			// clap is closed
+			else {
+
+				// check for timeout
+				if (millis() > (claptime + CLAP_LONG_CLOSED)) {
+					run = true;
+				}
+
 			}
 
 
 			// ===================================
 			// slate is closed for CLAP_LONG_CLOSED ms
-			if (millis() > (claptime + CLAP_LONG_CLOSED)) {
+			if (run) {
 
 				if (tc.enable()) {
 					led.set(tc.get());
@@ -357,15 +372,37 @@ void loop() {
 		// show status
 		if (tc.enable()) {
 
-			if (clap) {
-				lcd.status("clap");
+			if (run) {
+				lcd.status(" run");
 			}
 			else {
-				lcd.status("sync");
+				lcd.status("clap");
 			}
 		}
 		else {
 			lcd.status("init");
+		}
+	}
+
+
+
+
+	// =========================================
+	// READ MODE
+	// =========================================
+	else {
+
+		lcd.status("read");
+
+		// return to run mode
+		if (millis() > (lastreadtime + READ_TIMEOUT)) {
+			runMode = false;
+
+			start_timer1(tc.fps());
+		}
+
+		else {
+			rled.set(reader.read());
 		}
 	}
 }    // end of loop()
@@ -617,6 +654,25 @@ void syncISR() {
 	realtime = micros();
 	cycletime = realtime - old_realtime;
 	old_realtime = realtime;
+}
+
+
+// =========================================
+// timecode read interrupt
+void readISR(void) {
+
+	// init read mode
+	runMode = true;
+	stop_timer1();
+
+	lastreadtime = millis();
+
+	// read bit
+	if (reader.read()) {
+
+		// complete frame read
+		// display timecode
+	}
 }
 
 

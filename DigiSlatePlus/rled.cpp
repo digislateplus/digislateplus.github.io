@@ -40,16 +40,20 @@ void RLED::begin(uint16_t port) {
 }
 
 
+void RLED::set(bool val) {
+	digitalWrite(_port, val);
+}
+
 void RLED::on(void) {
-	digitalWrite(_port, HIGH);
+	set(HIGH);
 }
 
 void RLED::off(void) {
-	digitalWrite(_port, LOW);
+	set(LOW);
 }
 
 void RLED::toggle(void) {
-	digitalWrite(_port, !digitalRead(_port));
+	set(!digitalRead(_port));
 }
 
 void RLED::flash(void) {

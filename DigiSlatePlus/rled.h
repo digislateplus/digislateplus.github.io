@@ -48,6 +48,7 @@ public:
 	void on(void);						// switch on
 	void off(void);						// switch off
 
+	void set(bool);						// set led on or off
 	void toggle(void);					// toggle the led
 	void flash(void);					// flash for 30ms
 	void flash(uint16_t x);				// flass x ms
