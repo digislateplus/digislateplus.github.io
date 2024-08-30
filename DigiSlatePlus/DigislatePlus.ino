@@ -265,6 +265,8 @@ void setup() {
 		lcd.val16(time.year(), 6, 1);
 	}
 
+// DEBUG
+lcd.clear();
 
 	start_timer1(tc.fps());
 }
@@ -392,7 +394,6 @@ void loop() {
 	// =========================================
 	else {
 
-		lcd.status("read");
 
 		// return to run mode
 		if (millis() > (lastreadtime + READ_TIMEOUT)) {
@@ -402,8 +403,21 @@ void loop() {
 		}
 
 		else {
-			rled.set(reader.read());
+
+			if (reader.sync()) {
+				rled.set(reader.sync());
+
+				lcd.status("sync");
+			}
+			else {
+				lcd.status("read");
+			}
+
 		}
+
+		// DEBUG
+		// lcd.val16(reader.debug, 0, 1);
+
 	}
 }    // end of loop()
 
@@ -673,6 +687,8 @@ void readISR(void) {
 		// complete frame read
 		// display timecode
 	}
+
+	// rled.set(true);
 }
 
 

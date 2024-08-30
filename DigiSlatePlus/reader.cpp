@@ -19,12 +19,17 @@ void READER::begin(uint16_t port) {
 // input value changed
 bool READER::read(void) {
 
+	long current = micros();
+	long delta = current - _last_time;
+	_last_time = current;
+
 	bool val = digitalRead(_port);
-	
-	long delta = millis() - _last_time;
-	_last_time = millis();
 
+// create peak
+// digitalWrite(SIGNAL_OUTPUT, !digitalRead(SIGNAL_OUTPUT));
+// digitalWrite(SIGNAL_OUTPUT, !digitalRead(SIGNAL_OUTPUT));
 
+	// long time
 	// is logic 0
 	if (delta > TIMECODE_THRESHOLD) {
 
@@ -33,33 +38,49 @@ bool READER::read(void) {
 		_add(0);
 	}
 
+
+	// short time
 	// half bit
 	else {
 
 		// is mid bit > add logic 1
 		if (_start) {
-			_add(1);
+			_start = false;
 		}
 
-		// toggle start
-		_start != _start;
+		else {
+			_add(1);
+			_start = true;
+		}
 	}
 
-	// increment counter
-	_inc();
-
+	// return sync status
 	return _sync;
 }
 
 
-// set bit
+// ===========================================
+// return sync status
+bool READER::sync(void) {
+	return _sync;
+}
+
+
+// ===========================================
+// True if a new value is available
+bool READER::available(void) {
+	return true;
+}
+
+
+// ===========================================
+// add bit to buffer
 void READER::_add(bool bit) {
 
-	// sync word found
-	if (_check_sync_word(bit)) {
-		_reset();
-		_sync = true;
-	}
+// DEBUG
+// create peak
+// digitalWrite(SIGNAL_OUTPUT, !digitalRead(SIGNAL_OUTPUT));
+// digitalWrite(SIGNAL_OUTPUT, !digitalRead(SIGNAL_OUTPUT));
 
 
 	// is synced > write data
@@ -74,11 +95,18 @@ void READER::_add(bool bit) {
 		else {
 			_timecode[_byte_counter] &= (1<<_bit_counter);
 		}
+
+		// increment bit counter
+		_inc();
 	}
 
 
-	// increment bit counter
-	_inc();
+	// check sync word
+	if (_check_sync_word(bit)) {
+		_sync = true;
+		// is in sync > reset and set sync to true
+		_reset();
+	}
 }
 
 
@@ -95,10 +123,19 @@ uint8_t READER::_inc(void) {
 	}
 
 	// overflow (no reset from sync word)
+	// 8 byte data (the sync word is not stored)
 	if (_byte_counter >= 10) {
 		_reset();
+		_sync = false;
 	}
 
+	return _index();
+}
+
+
+// ===========================================
+// get bit index
+uint8_t READER::_index(void) {
 	return (_byte_counter * 8) + _bit_counter;
 }
 
@@ -107,35 +144,40 @@ uint8_t READER::_inc(void) {
 // reset counter
 void READER::_reset(void) {
 
-	_sync = false;
-	_start = true;
-
 	_bit_counter = 0;
 	_byte_counter = 0;
 
-	_sync_word_counter = 0;
-
 	// reset timecode raw data
-	for (_i = 0; _i < 10; _i++) {
-		_timecode[_i] = 0;
-	}
+	// for (_i = 0; _i < 10; _i++) {
+	// 	_timecode[_i] = 0;
+	// }
 }
 
 
+// ===========================================
 // add bit to sync word and check
 // return true, if sync word found
-// sync word: 0b1011111111111100
+// sync word: 0b0011111111111101
 bool READER::_check_sync_word(bool bit) {
 
 	bool sync = false;
 
+// DEBUG
+// debug = _sync_word_counter;
+
+
 	// check sync word bit (from left to right)
 	// increment counter
-	if (bit == (_sync_word & (1<<(15-bit)))) {
+	if (bit == (0b1011111111111100>>_sync_word_counter & 0x01)) {
+
+for (_i=0;_i<_sync_word_counter+1;_i++) {
+	digitalWrite(SIGNAL_OUTPUT, HIGH);
+	digitalWrite(SIGNAL_OUTPUT, LOW);
+}
 
 		_sync_word_counter++;
 
-		if (_sync_word_counter > 15) {
+		if (_sync_word_counter >= 15) {
 			_sync_word_counter = 0;
 			sync = true;
 		}
@@ -145,6 +187,10 @@ bool READER::_check_sync_word(bool bit) {
 	else {
 		_sync_word_counter = 0;
 	}
+
+// DEBUG
+// set value
+// digitalWrite(SIGNAL_OUTPUT, _sync);
 
 	return sync;
 }

@@ -38,7 +38,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 #ifndef LCD_H
-#define LDC_H
+#define LCD_H
 
 #include <LiquidCrystal.h>  // for our 16x2 display
 #include <SPI.h>
