@@ -5,7 +5,8 @@
 	(uuid "dcb9cf24-5afa-4bbe-8afa-a00529143e4d")
 	(paper "A4")
 	(title_block
-		(title "DigiSlatePlus")
+		(title "DigiSlate+")
+		(date "2024-09-05")
 		(rev "1.0")
 	)
 	(lib_symbols
@@ -8578,7 +8579,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Button_Switch_THT:SW_PUSH-12mm"
+		(property "Footprint" "Button_Switch_THT:SW_Tactile_Straight_KSA0Axx1LFTR"
 			(at 114.3 152.4 0)
 			(effects
 				(font
@@ -9940,7 +9941,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Button_Switch_THT:SW_PUSH-12mm"
+		(property "Footprint" "Button_Switch_THT:SW_Tactile_Straight_KSA0Axx1LFTR"
 			(at 124.46 152.4 0)
 			(effects
 				(font
@@ -11351,7 +11352,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Button_Switch_THT:SW_PUSH-12mm"
+		(property "Footprint" "Button_Switch_THT:SW_Tactile_Straight_KSA0Axx1LFTR"
 			(at 104.14 152.4 0)
 			(effects
 				(font
@@ -11694,7 +11695,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Button_Switch_THT:SW_PUSH-12mm"
+		(property "Footprint" "Button_Switch_THT:SW_Tactile_Straight_KSA0Axx1LFTR"
 			(at 134.62 152.4 0)
 			(effects
 				(font
@@ -12019,7 +12020,7 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "8aad025e-4bc0-4907-b517-9a6d83f1b6c4")
-		(property "Sheetname" "Timecode Display"
+		(property "Sheetname" "Display"
 			(at 17.78 173.2784 0)
 			(effects
 				(font
@@ -12057,7 +12058,7 @@
 		)
 		(uuid "8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc")
 		(property "Sheetname" "Power"
-			(at 38.1 169.4684 0)
+			(at 48.006 172.974 0)
 			(effects
 				(font
 					(size 1.27 1.27)

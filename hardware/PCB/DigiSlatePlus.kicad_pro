@@ -502,7 +502,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "DigiSlatePlus.step",
       "svg": "",
       "vrml": ""
     },
@@ -698,7 +698,7 @@
     ],
     [
       "8aad025e-4bc0-4907-b517-9a6d83f1b6c4",
-      "Timecode Display"
+      "Display"
     ],
     [
       "8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc",
