@@ -29,6 +29,12 @@ bool READER::read(void) {
 // digitalWrite(SIGNAL_OUTPUT, !digitalRead(SIGNAL_OUTPUT));
 // digitalWrite(SIGNAL_OUTPUT, !digitalRead(SIGNAL_OUTPUT));
 
+
+	// ToDo
+	// calculate frame time?
+
+
+
 	// long time
 	// is logic 0
 	if (delta > TIMECODE_THRESHOLD) {
@@ -166,15 +172,15 @@ bool READER::_check_sync_word(bool bit) {
 // debug = _sync_word_counter;
 
 
-	// check sync word bit (from left to right)
-	// increment counter
-	if (bit == (0b1011111111111100>>_sync_word_counter & 0x01)) {
+	// check sync word bit (from right to left)
+	if (bit == ((0b1011111111111100>>_sync_word_counter) & 0x01)) {
 
 for (_i=0;_i<_sync_word_counter+1;_i++) {
 	digitalWrite(SIGNAL_OUTPUT, HIGH);
 	digitalWrite(SIGNAL_OUTPUT, LOW);
 }
 
+		// increment counter
 		_sync_word_counter++;
 
 		if (_sync_word_counter >= 15) {

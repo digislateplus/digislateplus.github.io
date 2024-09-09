@@ -508,7 +508,7 @@ void loop() {
 
 			}
 			else {
-				if (cellTime >= cellOne) {
+				if (cellTime >=                                       ) {
 					if (++zeroCount > 1) {
 						accum += cellTime;          // add up the longer intervals
 					}
