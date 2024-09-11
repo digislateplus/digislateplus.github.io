@@ -1,0 +1,6 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "TC15_38X38_KNB")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/footprints.pretty")(options "")(descr ""))
+  (lib (name "TA12-11EWA")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/TA12-11EWA/footprints.pretty")(options "")(descr ""))
+  (lib (name "FMY-12883")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/FYM-12883A/FMY-12883.pretty")(options "")(descr ""))
+)

@@ -27,7 +27,7 @@
 			)
 		)
 	)
-	(property "Footprint" ""
+	(property "Footprint" "FMY-12883:FMY-12883"
 		(at 0 0 0)
 		(unlocked yes)
 		(layer "F.Fab")
@@ -921,5 +921,16 @@
 		(layers "*.Cu" "*.Mask")
 		(remove_unused_layers no)
 		(uuid "db7bec2f-6c40-41ce-a9a4-ae6b662e4cb7")
+	)
+	(model "${KIPRJMOD}/libraries/dot matrix/FYM-12883A/Dot-Matrix-8x8-31.7 v2.step"
+		(offset
+			(xyz 0 0 1)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
 	)
 )
