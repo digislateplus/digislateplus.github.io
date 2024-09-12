@@ -1,0 +1,143 @@
+
+(rules PCB freerouting
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 14753)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 2.9)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.5)
+    )
+  )
+  (rule
+    (width 200.0)
+    (clearance 200.0)
+    (clearance 100.0 (type smd_to_turn_gap))
+    (clearance 50.0 (type smd))
+    (clearance 200.0 (type "kicad_default"))
+    (clearance 200.0 (type Power))
+  )
+  (padstack "Via[0-1]_600:300_um"
+    (shape
+      (circle F.Cu 600.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 600.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_1000:500_um"
+    (shape
+      (circle F.Cu 1000.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 1000.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_600:300_um" "Via[0-1]_600:300_um" default
+  )
+  (via 
+    "Via[0-1]_1000:500_um" "Via[0-1]_1000:500_um" default
+  )
+  (via 
+    "Via[0-1]_600:300_um-kicad_default" "Via[0-1]_600:300_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_1000:500_um-kicad_default" "Via[0-1]_1000:500_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_600:300_um-Power" "Via[0-1]_600:300_um" Power
+  )
+  (via 
+    "Via[0-1]_1000:500_um-Power" "Via[0-1]_1000:500_um" Power
+  )
+  (via_rule
+    default "Via[0-1]_600:300_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_600:300_um-kicad_default"
+  )
+  (via_rule
+    Power "Via[0-1]_1000:500_um-Power"
+  )
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 200.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    "Net-(D1-A)" "Net-(D1-K)" "Net-(D2-K)" "Net-(D3-K)" "Net-(D3-A)" "Net-(D4-K)" MISO RST
+    "Net-(Q1-B)" DOTS "Net-(U22-VCC)" SLATE "LOAD-TC" "TC-IN" "TC-OUT" SDA
+    SCL "FLASH-LED" M1 S2 F1 H1 M2 H2
+    B F S1 F2 "RTC-INT" IO7 "D-" D+
+    "Net-(D7-A)" "Net-(Q2-B)" "unconnected-(U1-IO36-Pad29)" "unconnected-(U1-IO37-Pad30)" "unconnected-(U1-IO35-Pad28)" "Net-(U1-IO0)" SW3 RX0
+    TX0 "unconnected-(SW7A-A-Pad1)" "Net-(D9-K2)" "-BATT" "Net-(D9-K1)" "Net-(U22-OD)" "Net-(BT1-+)" "unconnected-(DS1-D3-Pad10)"
+    D5 RS D6 "unconnected-(DS1-D1-Pad8)" "unconnected-(DS1-D2-Pad9)" "unconnected-(DS1-D0-Pad7)" D4 CE
+    "ROT-SW" "ROT-CLK" "ROT-DT" "unconnected-(Q3-Pad1)" "unconnected-(Q3-Pad1)_1" "unconnected-(U10-DOUT-Pad24)" "Net-(U22-OC)" SW4
+    SW2 "Net-(U23-*STDBY)" "Net-(U21-FB)" "Net-(U22-CS)" "Net-(D7-K)" "Net-(U23-PROG)" "Net-(U16-ISET)" "unconnected-(U2-32KHZ-Pad1)"
+    "unconnected-(U2-~{RST}-Pad4)" "unconnected-(U22-TD-Pad4)" "Net-(D11-A)" "Net-(D12-A)" "Net-(D13-A)" "Net-(C21-Pad1)" "Net-(C21-Pad2)" "Net-(D14-K)"
+    "unconnected-(J7-PadR)" "Net-(J8-PadT)" "Net-(D14-A)" "Net-(D8-A)" "Net-(D8-K)" "Net-(D2-A)" "Net-(D10-K)" "Net-(DS1-VO)"
+    D7 "Net-(U23-*CHRG)" SW1 SCK MOSI E A DP
+    D G C "unconnected-(U16-DOUT-Pad24)" "Net-(C24-Pad2)" "Net-(C26-Pad2)" "LED-BN" "C1-8"
+    "Net-(U3-DIN)" "R7-8" "R8-8" "C7-8" "R5-8" "unconnected-(U3-DOUT-Pad24)" "C6-8" "R6-8"
+    "C3-8" "C4-8" "R1-8" "C8-8" "C5-8" "C2-8" "R3-8" "R4-8"
+    "R2-8" "C7-7" "C4-7" "R5-7" "R3-7" "R2-7" "Net-(U4-DIN)" "R8-7"
+    "R7-7" "R4-7" "C1-7" "R6-7" "C8-7" "C6-7" "C2-7" "C3-7"
+    "C5-7" "R1-7" "C7-6" "R1-6" "R7-6" "C4-6" "C8-6" "C1-6"
+    "C6-6" "R3-6" "R4-6" "R6-6" "C2-6" "R2-6" "Net-(U6-DIN)" "C5-6"
+    "R5-6" "C3-6" "C3-5" "C2-5" "R8-5" "R1-5" "R7-5" "C8-5"
+    "C4-5" "C5-5" "R6-5" "R5-5" "C1-5" "R4-5" "C6-5" "R3-5"
+    "C7-5" "R2-5" "Net-(C32-Pad2)" "Net-(C34-Pad2)" "R2-4" "C4-4" "R5-4" "C6-4"
+    "C5-4" "R8-4" "C8-4" "Net-(U10-DIN)" "C2-4" "R7-4" "R1-4" "C1-4"
+    "R3-4" "R4-4" "R6-4" "C7-4" "C3-4" "Net-(U27-DIN)" "C5-3" "R7-3"
+    "C1-3" "C3-3" "R2-3" "C8-3" "R8-3" "R5-3" "C4-3" "R4-3"
+    "C6-3" "C7-3" "R1-3" "R3-3" "R6-3" "C2-3" "R8-2" "R3-2"
+    "C6-2" "R4-2" "C2-2" "C5-2" "C7-2" "R1-2" "C8-2" "R5-2"
+    "Net-(U29-DIN)" "C3-2" "C4-2" "C1-2" "R7-2" "R6-2" "R2-2" "R8-1"
+    "C6-1" "R1-1" "C1-1" "R2-1" "C7-1" "R7-1" "C4-1" "R3-1"
+    "R5-1" "C5-1" "R6-1" "C3-1" "C2-1" "R4-1" "C8-1" "LOAD-2"
+    "LOAD-1"
+    (clearance_class "kicad_default")
+    (via_rule "kicad_default")
+    (rule
+      (width 200.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class Power
+    GND +5V +BATT +12V CHARGER "VCC-INT" +3.3V
+    (clearance_class Power)
+    (via_rule Power)
+    (rule
+      (width 500.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)

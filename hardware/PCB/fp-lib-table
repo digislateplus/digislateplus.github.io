@@ -3,4 +3,6 @@
   (lib (name "TC15_38X38_KNB")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/footprints.pretty")(options "")(descr ""))
   (lib (name "TA12-11EWA")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/TA12-11EWA/footprints.pretty")(options "")(descr ""))
   (lib (name "FMY-12883")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/FYM-12883A/FMY-12883.pretty")(options "")(descr ""))
+  (lib (name "rotary")(type "KiCad")(uri "${KIPRJMOD}/libraries/rotary encoder/rotary.pretty")(options "")(descr ""))
+  (lib (name "battery holder")(type "KiCad")(uri "${KIPRJMOD}/libraries/battery holder")(options "")(descr ""))
 )

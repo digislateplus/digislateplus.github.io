@@ -4782,7 +4782,7 @@
 		(uuid "ea0ecd2a-b068-4021-8f89-d5f825bc8956")
 	)
 	(junction
-		(at 228.6 132.08)
+		(at 227.33 132.08)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f62d5434-bbda-4eda-9ab5-05406934b02f")
@@ -5107,7 +5107,7 @@
 	)
 	(wire
 		(pts
-			(xy 226.06 132.08) (xy 228.6 132.08)
+			(xy 224.79 132.08) (xy 227.33 132.08)
 		)
 		(stroke
 			(width 0)
@@ -5257,7 +5257,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 132.08) (xy 228.6 133.35)
+			(xy 227.33 132.08) (xy 227.33 133.35)
 		)
 		(stroke
 			(width 0)
@@ -6037,7 +6037,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 140.97) (xy 228.6 142.24)
+			(xy 227.33 140.97) (xy 227.33 142.24)
 		)
 		(stroke
 			(width 0)
@@ -6427,7 +6427,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 132.08) (xy 247.65 132.08)
+			(xy 227.33 132.08) (xy 247.65 132.08)
 		)
 		(stroke
 			(width 0)
@@ -6437,7 +6437,7 @@
 	)
 	(wire
 		(pts
-			(xy 228.6 142.24) (xy 207.01 142.24)
+			(xy 227.33 142.24) (xy 207.01 142.24)
 		)
 		(stroke
 			(width 0)
@@ -6447,7 +6447,7 @@
 	)
 	(wire
 		(pts
-			(xy 204.47 132.08) (xy 218.44 132.08)
+			(xy 204.47 132.08) (xy 217.17 132.08)
 		)
 		(stroke
 			(width 0)
@@ -6759,7 +6759,7 @@
 			)
 		)
 	)
-	(global_label "LOAD"
+	(global_label "LOAD-TC"
 		(shape input)
 		(at 82.55 62.23 0)
 		(fields_autoplaced yes)
@@ -6771,7 +6771,7 @@
 		)
 		(uuid "112d3d44-719e-41c4-b2dc-c5afa9e8344b")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 90.2524 62.23 0)
+			(at 94.0624 62.23 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7859,7 +7859,7 @@
 			)
 		)
 	)
-	(global_label "LOAD"
+	(global_label "LOAD-1"
 		(shape input)
 		(at 82.55 82.55 0)
 		(fields_autoplaced yes)
@@ -7871,7 +7871,7 @@
 		)
 		(uuid "dfbf7927-8671-4cfa-8259-d0e1f2279e72")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 90.2524 82.55 0)
+			(at 93.0343 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7969,7 +7969,7 @@
 			)
 		)
 	)
-	(global_label "LOAD-SC"
+	(global_label "LOAD-2"
 		(shape input)
 		(at 82.55 85.09 0)
 		(fields_autoplaced yes)
@@ -7981,7 +7981,7 @@
 		)
 		(uuid "f396ba20-2b18-4f2b-b342-aacec0c1280e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 94.3043 85.09 0)
+			(at 93.0343 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8982,7 +8982,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 222.25 132.08 90)
+		(at 220.98 132.08 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -8990,16 +8990,15 @@
 		(dnp no)
 		(uuid "3e805cb9-605b-43b7-8ab1-db06393ff289")
 		(property "Reference" "R33"
-			(at 222.25 129.54 90)
+			(at 220.98 129.54 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Value" "1K8"
-			(at 222.504 132.08 90)
+			(at 221.234 132.08 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9007,7 +9006,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
-			(at 222.25 133.858 90)
+			(at 220.98 133.858 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9016,7 +9015,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 222.25 132.08 0)
+			(at 220.98 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9025,7 +9024,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 222.25 132.08 0)
+			(at 220.98 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9690,7 +9689,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Battery:BatteryHolder_ComfortableElectronic_CH273-2450_1x2450"
+		(property "Footprint" "battery holder:BatteryHolder_ComfortableElectronic_CH273-2450_1x2450"
 			(at 247.65 63.246 90)
 			(effects
 				(font
@@ -10509,7 +10508,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Rotary_Encoder:RotaryEncoder_Bourns_Horizontal_PEC12R-2x17F-Sxxxx"
+		(property "Footprint" "rotary:RotaryEncoder_Bourns_Horizontal"
 			(at 62.23 133.096 0)
 			(effects
 				(font
@@ -10911,7 +10910,6 @@
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Value" "10K"
@@ -12103,7 +12101,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 228.6 137.16 180)
+		(at 227.33 137.16 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -12111,7 +12109,7 @@
 		(dnp no)
 		(uuid "f7570401-c42c-4fba-a636-60c35bf02bb3")
 		(property "Reference" "R34"
-			(at 226.06 137.16 90)
+			(at 224.79 137.16 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12120,7 +12118,7 @@
 			)
 		)
 		(property "Value" "5K6"
-			(at 228.6 137.16 90)
+			(at 227.33 137.16 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12128,7 +12126,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
-			(at 230.378 137.16 90)
+			(at 229.108 137.16 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12137,7 +12135,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 228.6 137.16 0)
+			(at 227.33 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12146,7 +12144,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 228.6 137.16 0)
+			(at 227.33 137.16 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12459,8 +12457,8 @@
 		)
 	)
 	(sheet
-		(at 17.78 173.99)
-		(size 26.67 17.78)
+		(at 16.51 167.64)
+		(size 24.765 3.81)
 		(fields_autoplaced yes)
 		(stroke
 			(width 0.1524)
@@ -12470,8 +12468,8 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "8aad025e-4bc0-4907-b517-9a6d83f1b6c4")
-		(property "Sheetname" "Display"
-			(at 17.78 173.2784 0)
+		(property "Sheetname" "Timecode Display"
+			(at 16.51 166.9284 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12480,7 +12478,7 @@
 			)
 		)
 		(property "Sheetfile" "tc_display.kicad_sch"
-			(at 17.78 192.3546 0)
+			(at 16.51 172.0346 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12497,8 +12495,8 @@
 		)
 	)
 	(sheet
-		(at 48.26 173.99)
-		(size 26.67 17.78)
+		(at 16.51 188.595)
+		(size 26.67 3.81)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -12508,7 +12506,7 @@
 		)
 		(uuid "8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc")
 		(property "Sheetname" "Power"
-			(at 48.006 172.974 0)
+			(at 16.256 187.579 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12517,45 +12515,7 @@
 			)
 		)
 		(property "Sheetfile" "DigiSlatePlus-Power.kicad_sch"
-			(at 48.26 192.3546 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(instances
-			(project "DigiSlatePlus"
-				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
-					(page "3")
-				)
-			)
-		)
-	)
-	(sheet
-		(at 78.74 173.99)
-		(size 26.035 17.78)
-		(fields_autoplaced yes)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0.0000)
-		)
-		(uuid "9fdb67e5-5a22-4406-8105-d7910dfeff85")
-		(property "Sheetname" "Dot Display"
-			(at 78.74 173.2784 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "dot_display.kicad_sch"
-			(at 78.74 192.3546 0)
+			(at 17.018 193.421 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12567,6 +12527,44 @@
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
 					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 16.51 177.8)
+		(size 26.035 3.81)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "9fdb67e5-5a22-4406-8105-d7910dfeff85")
+		(property "Sheetname" "Dot Display"
+			(at 16.51 177.0884 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "dot_display.kicad_sch"
+			(at 16.51 182.1946 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
+					(page "3")
 				)
 			)
 		)

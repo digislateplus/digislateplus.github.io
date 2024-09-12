@@ -5098,7 +5098,7 @@
 			)
 		)
 	)
-	(global_label "LOAD"
+	(global_label "LOAD-TC"
 		(shape input)
 		(at 44.45 120.65 180)
 		(fields_autoplaced yes)
@@ -5110,7 +5110,7 @@
 		)
 		(uuid "78ca8d33-ec51-4a62-a261-84a4c6ba122e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 36.7476 120.65 0)
+			(at 32.9376 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)

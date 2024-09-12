@@ -2437,6 +2437,10 @@
 		(uuid "fe48b2d7-edac-4472-a474-b0bb6e792044")
 	)
 	(no_connect
+		(at 118.11 207.01)
+		(uuid "1fc0723f-af8a-49af-b87b-c30b2ef18db2")
+	)
+	(no_connect
 		(at 116.84 86.36)
 		(uuid "51df7316-59a5-49f3-93e6-05a7f74e8b44")
 	)
@@ -5340,6 +5344,75 @@
 		)
 		(uuid "fd6da61c-77a8-4cba-b87f-7cb1d418c4ff")
 	)
+	(rectangle
+		(start 74.93 146.431)
+		(end 278.13 264.541)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 646670aa-23b8-485b-9214-8ca27564b99d)
+	)
+	(rectangle
+		(start 74.93 25.4)
+		(end 278.13 143.51)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid adaedd90-9733-4210-a34e-0746cb14c0f3)
+	)
+	(rectangle
+		(start 33.655 24.765)
+		(end 59.69 52.07)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid f9bfd003-b608-4a74-a567-e7dac41ddf8b)
+	)
+	(text "LED brightness"
+		(exclude_from_sim no)
+		(at 35.052 27.432 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7258d948-6722-4554-85e3-dd4b1745efd6")
+	)
+	(text "Matrix 5-8"
+		(exclude_from_sim no)
+		(at 76.2 28.194 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "742ab4b2-bfd2-44b3-b36f-8395ead42ba2")
+	)
+	(text "Matrix 1-4"
+		(exclude_from_sim no)
+		(at 76.2 149.225 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "8990ecc6-0b3d-462d-ac07-1894344fdfeb")
+	)
 	(global_label "C7-4"
 		(shape input)
 		(at 114.3 231.14 90)
@@ -7672,7 +7745,7 @@
 			)
 		)
 	)
-	(global_label "DO4-DI5"
+	(global_label "MOSI"
 		(shape input)
 		(at 243.84 85.09 180)
 		(fields_autoplaced yes)
@@ -7684,7 +7757,7 @@
 		)
 		(uuid "635f4261-3fee-483a-81a2-9fed902e6570")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 232.3881 85.09 0)
+			(at 236.2586 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7804,7 +7877,7 @@
 			)
 		)
 	)
-	(global_label "LOAD-1"
+	(global_label "LOAD-2"
 		(shape input)
 		(at 243.84 80.01 180)
 		(fields_autoplaced yes)
@@ -9278,7 +9351,7 @@
 			)
 		)
 	)
-	(global_label "LOAD-1"
+	(global_label "LOAD-2"
 		(shape input)
 		(at 194.31 81.28 180)
 		(fields_autoplaced yes)
@@ -9784,7 +9857,7 @@
 			)
 		)
 	)
-	(global_label "LOAD-1"
+	(global_label "LOAD-2"
 		(shape input)
 		(at 144.78 81.28 180)
 		(fields_autoplaced yes)
@@ -10286,28 +10359,6 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
-				(hide yes)
-			)
-		)
-	)
-	(global_label "DO4-DI5"
-		(shape input)
-		(at 118.11 207.01 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d35110db-8995-4ef3-ac32-a0706ecfc25d")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 129.5619 207.01 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
 				(hide yes)
 			)
 		)

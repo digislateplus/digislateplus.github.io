@@ -1,4 +1,4 @@
-23745261172513345
+23748713421930577
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -96641,3 +96641,17 @@ Varistor VF
 0
 2
 2
+battery holder
+BatteryHolder_ComfortableElectronic_CH273-2450_1x2450
+Comfortable Electronic CR2450 battery holder, http://www.comf.com.tw/ProductDetail.asp?no=148
+Comfortable Electronic CR2450
+0
+2
+2
+rotary
+RotaryEncoder_Bourns_Horizontal
+Bourns rotary encoder, PEC12R, with switch, horizontal shaft, 17mm shaft length, https://www.bourns.com/docs/product-datasheets/pec12r.pdf
+rotary encoder
+0
+7
+6

@@ -4,4 +4,6 @@
   (lib (name "TC15_38X38_KNB")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/TC15_38X38_KNB/2024-09-11_06-35-06.kicad_sym")(options "")(descr ""))
   (lib (name "TA12-11EWA")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/TA12-11EWA/2024-09-11_07-07-22.kicad_sym")(options "")(descr ""))
   (lib (name "FYM-12833A")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/FYM-12883A/FYM-12833A.kicad_sym")(options "")(descr ""))
+  (lib (name "TP4056")(type "KiCad")(uri "${KIPRJMOD}/libraries/TP4056/TP4056.kicad_sym")(options "")(descr ""))
+  (lib (name "FS8205a")(type "KiCad")(uri "${KIPRJMOD}/libraries/FS8205a/FS8205A.kicad_sym")(options "")(descr ""))
 )
