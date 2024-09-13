@@ -1,4 +1,4 @@
-23748713421930577
+23757343746896584
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -90572,6 +90572,27 @@ TA12-11EWA
 0
 14
 14
+TP4056
+TP4056-42-ESOP8_TPW
+
+TP4056-42-ESOP8 
+0
+8
+8
+TP4056
+TP4056-42-ESOP8_TPW-L
+
+TP4056-42-ESOP8 
+0
+8
+8
+TP4056
+TP4056-42-ESOP8_TPW-M
+
+TP4056-42-ESOP8 
+0
+8
+8
 TerminalBlock
 TerminalBlock_Altech_AK300-2_P5.00mm
 Altech AK300 terminal block, pitch 5.0mm, 45 degree angled, see http://www.mouser.com/ds/2/16/PCBMETRC-24178.pdf
@@ -95857,6 +95878,13 @@ igbt diode module
 0
 25
 25
+USB-B
+USB_B_Lumberg_2411_02_Horizontal
+USB 2.0 receptacle type B, horizontal version, through-hole, https://downloads.lumberg.com/datenblaetter/en/2411_02.pdf
+USB B receptacle horizontal through-hole
+0
+6
+5
 Valve
 Valve_ECC-83-1
 Valve ECC-83-1 round pins
@@ -96641,6 +96669,13 @@ Varistor VF
 0
 2
 2
+barrel jack
+DC_Power_Jack_PCB_Mounted_2.1mm
+DC_Power_Jack_PCB_Footprint_2.1mm StepUp generated footprint
+
+0
+3
+3
 battery holder
 BatteryHolder_ComfortableElectronic_CH273-2450_1x2450
 Comfortable Electronic CR2450 battery holder, http://www.comf.com.tw/ProductDetail.asp?no=148

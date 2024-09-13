@@ -34,7 +34,7 @@
       (place R14 3025375 -935000 back 180)
     )
     (component MountingHole:MountingHole_3.2mm_M3_DIN965_Pad
-      (place 2 2070000 -700000 front 0)
+      (place HOLE-1 2070000 -700000 front 0)
     )
     (component Resistor_SMD:R_1206_3216Metric::1
       (place R31 1917700 -1763375 front 90)
@@ -64,7 +64,7 @@
       (place U2 2933500 -1020550 back 0)
     )
     (component MountingHole:MountingHole_3.2mm_M3_DIN965_Pad::1
-      (place 1 760000 -700000 front 0)
+      (place HOLE-1 760000 -700000 front 0)
     )
     (component LED_THT:LED_D3.0mm_FlatTop
       (place D2 2082550 -856500 front 90)
@@ -88,22 +88,22 @@
       (place U22 2273075 -1700600 front 0)
     )
     (component MountingHole:MountingHole_3.2mm_M3_DIN965_Pad::2
-      (place 4 760000 -2020000 front 0)
+      (place HOLE-1 760000 -2020000 front 0)
     )
     (component MountingHole:MountingHole_3.2mm_M3_DIN965_Pad::3
-      (place 6 3380000 -2020000 front 0)
+      (place HOLE-1 3380000 -2020000 front 0)
     )
     (component LED_THT:LED_D10.0mm
       (place D7 2050000 -1600000 front 0)
     )
     (component MountingHole:MountingHole_3.2mm_M3_DIN965_Pad::4
-      (place 3 3380000 -700000 front 0)
+      (place HOLE-1 3380000 -700000 front 0)
     )
     (component Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder::1
       (place R22 2481740 -1767840 front 0)
     )
     (component MountingHole:MountingHole_3.2mm_M3_DIN965_Pad::5
-      (place 5 2070000 -2020000 front 0)
+      (place HOLE-1 2070000 -2020000 front 0)
     )
     (component "Diode_SMD:D_PowerDI-123::1"
       (place D14 1822450 -1838950 front 270)

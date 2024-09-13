@@ -5,4 +5,7 @@
   (lib (name "FMY-12883")(type "KiCad")(uri "${KIPRJMOD}/libraries/dot matrix/FYM-12883A/FMY-12883.pretty")(options "")(descr ""))
   (lib (name "rotary")(type "KiCad")(uri "${KIPRJMOD}/libraries/rotary encoder/rotary.pretty")(options "")(descr ""))
   (lib (name "battery holder")(type "KiCad")(uri "${KIPRJMOD}/libraries/battery holder")(options "")(descr ""))
+  (lib (name "TP4056")(type "KiCad")(uri "${KIPRJMOD}/libraries/TP4056/footprints.pretty")(options "")(descr ""))
+  (lib (name "USB-B")(type "KiCad")(uri "${KIPRJMOD}/libraries/USB-B/USB-B.pretty")(options "")(descr ""))
+  (lib (name "barrel jack")(type "KiCad")(uri "${KIPRJMOD}/libraries/barrel jack")(options "")(descr ""))
 )

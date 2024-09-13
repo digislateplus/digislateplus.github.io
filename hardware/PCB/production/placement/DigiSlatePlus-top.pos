@@ -1,0 +1,46 @@
+### Footprint positions - created on 2024-09-13T09:32:32+0200 ###
+### Printed by KiCad version 8.0.4
+## Unit = mm, Angle = deg.
+## Side : top
+# Ref     Val          Package                                           PosX       PosY       Rot  Side
+C3        100nF/50V    C_1206_3216Metric_Pad1.33x1.80mm_HandSolder   294.4375  -176.0000    0.0000  top
+C12       100nF/50V    C_1206_3216Metric_Pad1.33x1.80mm_HandSolder   235.3200  -167.6475  -90.0000  top
+C21       100nF/50V    C_1206_3216Metric_Pad1.33x1.80mm_HandSolder   187.9600  -183.8575   90.0000  top
+D1        LED          LED_D3.0mm_FlatTop                            140.2550   -86.1100   90.0000  top
+D2        LED          LED_D3.0mm_FlatTop                            208.2550   -85.6500   90.0000  top
+D3        LED          LED_D3.0mm_FlatTop                            276.2550   -85.6500   90.0000  top
+D4        LED          LED_D3.0mm_FlatTop                            138.2550  -107.6500   90.0000  top
+D5        LED          LED_D3.0mm_FlatTop                            206.2550  -107.1100   90.0000  top
+D6        LED          LED_D3.0mm_FlatTop                            274.2550  -107.1100   90.0000  top
+D7        LED          LED_D10.0mm                                   205.0000  -160.0000    0.0000  top
+D14       1N4148       D_PowerDI-123                                 182.2450  -183.8950  -90.0000  top
+Q3        FS8205A      TSSOP-8_3x3mm_P0.65mm                         227.5700  -177.0850  180.0000  top
+Q4        2N2222       SOT-23                                        185.7350  -176.2275   90.0000  top
+R5        4K7          R_1206_3216Metric                             298.3814  -192.6600  180.0000  top
+R6        4K7          R_1206_3216Metric                             298.3814  -196.1600  180.0000  top
+R17       100          R_1206_3216Metric                             240.5700  -167.8350  -90.0000  top
+R21       1K           R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   221.6700  -172.8600  -90.0000  top
+R22       1K2          R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   248.1740  -176.7840    0.0000  top
+R31       100          R_1206_3216Metric                             191.7700  -176.3375   90.0000  top
+R32       10K          R_1206_3216Metric                             192.4050  -183.9575   90.0000  top
+R33       1K8          R_1206_3216Metric                             172.2800  -183.9575   90.0000  top
+R34       5K6          R_1206_3216Metric                             176.5300  -183.9575   90.0000  top
+U5        ~            FMY-12883                                     126.4450  -136.0000    0.0000  top
+U8        ~            FMY-12883                                     158.4450  -136.0000    0.0000  top
+U9        ~            FMY-12883                                     190.4450  -136.0000    0.0000  top
+U11       ~            FMY-12883                                     222.4900  -136.0000    0.0000  top
+U12       SA15-11SRWA  FYS-12011A                                     90.2550   -95.1100    0.0000  top
+U13       SA15-11SRWA  FYS-12011A                                    119.2550   -95.1100    0.0000  top
+U14       SA15-11SRWA  FYS-12011A                                    158.2550   -95.1100    0.0000  top
+U15       SA15-11SRWA  FYS-12011A                                    187.2550   -95.1100    0.0000  top
+U17       SA15-11SRWA  FYS-12011A                                    226.2550   -95.1100    0.0000  top
+U18       SA15-11SRWA  FYS-12011A                                    255.2550   -95.1100    0.0000  top
+U19       SA15-11SRWA  FYS-12011A                                    294.2550   -95.1100    0.0000  top
+U20       SA15-11SRWA  FYS-12011A                                    323.2550   -95.1100    0.0000  top
+U22       DW01A        SOT-23-6                                      227.3075  -170.0600    0.0000  top
+U23       TP4056       TP4056-42-ESOP8_TPW                           246.5450  -168.8011   90.0000  top
+U26       ~            FMY-12883                                      94.4450  -136.0000    0.0000  top
+U28       ~            FMY-12883                                     254.3000  -136.0000    0.0000  top
+U30       ~            FMY-12883                                     286.3800  -136.0000    0.0000  top
+U32       ~            FMY-12883                                     318.4150  -136.0000    0.0000  top
+## End
