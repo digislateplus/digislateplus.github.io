@@ -4855,16 +4855,6 @@
 	)
 	(wire
 		(pts
-			(xy 87.63 76.2) (xy 82.55 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6c5caac1-8467-4836-93e8-ae05ad18290b")
-	)
-	(wire
-		(pts
 			(xy 196.85 85.09) (xy 207.01 85.09)
 		)
 		(stroke
@@ -5122,16 +5112,6 @@
 			(type default)
 		)
 		(uuid "9df2c98a-073f-4c74-9d87-835f4b3548e8")
-	)
-	(wire
-		(pts
-			(xy 87.63 73.66) (xy 87.63 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9e6f80be-69c6-4541-81ff-4f60c0435b57")
 	)
 	(wire
 		(pts
@@ -6036,75 +6016,6 @@
 	(netclass_flag ""
 		(length 2.54)
 		(shape round)
-		(at 64.77 63.5 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1abf368d-1f86-4f4c-9d62-8421425af1a7")
-		(property "Netclass" "Power"
-			(at 65.4685 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-			)
-		)
-	)
-	(netclass_flag ""
-		(length 2.54)
-		(shape round)
-		(at 228.6 71.12 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "1c3ec5bc-97b5-47aa-a148-247fb5a5953f")
-		(property "Netclass" "Power"
-			(at 229.2985 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-			)
-		)
-	)
-	(netclass_flag ""
-		(length 2.54)
-		(shape round)
-		(at 196.85 71.12 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "25a6b0fa-9d2d-49ca-a737-5e0e8aa77a49")
-		(property "Netclass" "Power"
-			(at 197.5485 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-			)
-		)
-	)
-	(netclass_flag ""
-		(length 2.54)
-		(shape round)
 		(at 88.9 147.32 180)
 		(fields_autoplaced yes)
 		(effects
@@ -6116,29 +6027,6 @@
 		(uuid "93ecbf07-869c-497c-838d-5b64e9ccd585")
 		(property "Netclass" "Power"
 			(at 89.5985 149.86 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-			)
-		)
-	)
-	(netclass_flag ""
-		(length 2.54)
-		(shape round)
-		(at 140.97 63.5 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ca96717b-4141-4575-9489-6cb9afab6fed")
-		(property "Netclass" "Power"
-			(at 141.6685 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6552,7 +6440,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_BarrelJack:BarrelJack_GCT_DCJ200-10-A_Horizontal"
+		(property "Footprint" "barrel jack:DC_Power_Jack_PCB_Mounted_2.1mm"
 			(at 39.37 67.056 0)
 			(effects
 				(font
