@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "setup.h"
+#include "tc.h"
 
 /*
  begin(port)
@@ -74,11 +75,15 @@ public:
 	bool sync(void);
 	bool available(void);
 
+	TIMECODE get(void);
+
 	long debug;
 
 private:
 	uint8_t _inc(void);
 	uint8_t _index(void);
+
+void _peak(void);
 
 	void _add(bool);
 	void _reset(void);
@@ -88,8 +93,12 @@ private:
 
 	uint16_t _port;
 
+	TC _tc;
+
 	bool _start;
 	bool _sync;
+
+	long _threshold;
 
 	long _last_time;
 	long _bit_time;
@@ -101,7 +110,7 @@ private:
 	uint8_t _byte_counter;
 
 	uint16_t _sync_word;
-	uint8_t _sync_word_counter;
+	uint16_t _sync_register;
 };
 
 

@@ -86,6 +86,8 @@ public:
 	void set(TIMECODE);
 	void set(uint8_t h, uint8_t m, uint8_t s, uint8_t f, uint8_t fps);
 	void set(uint8_t h, uint8_t m, uint8_t s, uint8_t f);
+	void set(uint8_t*);
+
 	TIMECODE get(void);
 
 	void update_binary(void);

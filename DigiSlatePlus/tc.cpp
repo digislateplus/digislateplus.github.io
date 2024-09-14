@@ -105,8 +105,41 @@ void TC::set(uint8_t h, uint8_t m, uint8_t s, uint8_t f) {
 	_tc.changed = true;
 }
 
+// set timecode struct from 8 byte raw data
+// the syncword is ignored
+void TC::set(uint8_t* binary) {
+
+	_tc.f = binary[0] & 0xb1111 + (binary[1] & 0b11) * 10;
+	_tc.s = binary[2] & 0xb1111 + (binary[3] & 0b111) * 10;
+	_tc.m = binary[4] & 0xb1111 + (binary[5] & 0b111) * 10;
+	_tc.h = binary[6] & 0xb1111 + (binary[7] & 0b11) * 10;
+
+	_tc.dropframe = binary[1] >> 2;
+	_tc.colorframe = binary[1] >> 3;
+	_tc.biphase = binary[3] >> 3;
+	_tc.flag0 = binary[5] >> 3;
+	_tc.flag1 = binary[7] >> 3;
+
+	_ub.bit[0] = (binary[0] >> 4) & 0xF;
+	_ub.bit[1] = (binary[1] >> 4) & 0xF;
+	_ub.bit[2] = (binary[2] >> 4) & 0xF;
+	_ub.bit[3] = (binary[3] >> 4) & 0xF;
+	_ub.bit[4] = (binary[4] >> 4) & 0xF;
+	_ub.bit[5] = (binary[5] >> 4) & 0xF;
+	_ub.bit[6] = (binary[6] >> 4) & 0xF;
+	_ub.bit[7] = (binary[7] >> 4) & 0xF;
+
+	// ======================================
+	// check for framerate
+
+
+	_tc.changed = true;
+}
+
+
 // get timecode struct
 TIMECODE TC::get(void) {
+	_tc.changed = false;
 	return _tc;
 }
 
@@ -117,12 +150,14 @@ void TC::update_binary(void) {
 
 
 	// ** byte 0
+	// uuuuffff
 	//  0-3	frame units
 	//  4-7	user bits 1
 	_binary[0] = ((_tc.f % 10) & 0b1111) | ((_ub.bit[0] & 0xF) << 4);
 	// _binary[0] = (((_tc.f % 10) & 0b1111) << 4) | (_ub.bit[0] & 0xF);
 	
 	// ** byte 1
+	// uuuucdff
 	//  8-9	frame tens
 	//  10		dropframe bit 	1=drop frame (frame 0 and 1 omitted from first second of each minute, but included when minutes divides by ten; approximates 29.97 frame/s)
 	//  11 	colorframe bit 	i.e. the time code is intentionally synchronised with a color TV field sequence.
@@ -131,12 +166,14 @@ void TC::update_binary(void) {
 	// _binary[1] = ((_tc.f / 10) & 0b0011) << 6 | (_tc.dropframe << 5) | (_tc.colorframe << 4) | (_ub.bit[1] & 0xF);
 
 	// ** byte 2
+	// uuuussss
 	//  16-19	secs units
 	//  20-23	user bits 3
 	_binary[2] = ((_tc.s % 10) & 0b1111) | ((_ub.bit[2] & 0xF) << 4);
 	// _binary[2] = (((_tc.s % 10) & 0b1111) << 4) | (_ub.bit[2] & 0xF);
 
 	// ** byte 3
+	// uuuubsss
 	//  24-26	secs tens
 	//  27		bi phase mark correction bit 
 	//  28-31	user bits 4
@@ -144,12 +181,14 @@ void TC::update_binary(void) {
 	// _binary[3] = (((_tc.s / 10) & 0b0111) << 4) | (_tc.biphase << 3) | (_ub.bit[3] & 0xF);
 
 	// ** byte 4
+	// uuuummmm
 	//  32-35	mins units
 	//  36-39	user bits 5
 	_binary[4] = ((_tc.m % 10) & 0b1111) | ((_ub.bit[4] & 0xF) << 4);
 	// _binary[4] = (((_tc.m % 10) & 0b1111) << 4) | (_ub.bit[4] & 0xF);
 
 	// ** byte 5
+	// uuuubmmm
 	//  40-42	mins tens
 	//  43		binary group flag bit (with bit 59, 43,59 = 00 = no format for user bits, 10 = eight bit format, 01, 11 are unassigned and reserved).
 	//  44-47	user bits 6
@@ -157,12 +196,14 @@ void TC::update_binary(void) {
 	// _binary[5] = (((_tc.m / 10) & 0b0111) << 4) | (_tc.flag0 << 3) | (_ub.bit[5] & 0xF);
 
 	// ** byte 6
+	// uuuuhhhh
 	//  48-51	hours units
 	//  52-55	user bits 7
 	_binary[6] = ((_tc.h % 10) & 0b1111) | ((_ub.bit[6] & 0xF) << 4);
 	// _binary[6] = (((_tc.h % 10) & 0b1111) << 4) | (_ub.bit[6] & 0xF);
 
 	// ** byte 7
+	// uuuubrhh
 	//  56-57	hour tens
 	//  58		unused, reserved, should transmit zero and ignore on receive for compatibility
 	//  59		binary group flag bit (see bit 43 for encoding)
