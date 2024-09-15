@@ -130,8 +130,8 @@ void READER::_add(bool bit) {
 	uint8_t bit_count = _counter & 0b111;
 
 
-	// is synced > write data
-	if (_sync) {
+	// is synced and bit 0-63 > write data
+	if (_sync && _counter < 64) {
 
 		// set bit in reverse order >> LSB to the left
 		if (bit) {
@@ -168,11 +168,17 @@ uint8_t READER::_inc(void) {
 	_counter ++;
 
 	// end of data count (8 byte)
-	if (_counter >= 64) {
+	// write data
+	if (_counter == 64) {
 
 		_tc.set(_raw_timecode);
-		_reset();
+	}
+
+
+	// overflow > is not sync
+	if (_counter >= 80) {
 		_sync = false;
+		_reset();
 	}
 
 	return _index();
@@ -206,7 +212,6 @@ void READER::_reset(void) {
 // return true, if sync word found
 // sync word: 0b0011111111111101
 bool READER::_check_sync_word(bool bit) {
-
 
 	bool sync = false;
 

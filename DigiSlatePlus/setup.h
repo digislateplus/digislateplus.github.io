@@ -32,6 +32,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #define SETUP_H
 
 
+#define RUNMODE 0
+#define READMODE 1
+
 #define ENABLE_LIMIT 1000		// ms for stable sync
 #define CLAP_DENOISE 100		// ms
 #define CLAP_LONG_CLOSED 2000	// time with closed clap to enable tc display 

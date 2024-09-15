@@ -63,6 +63,50 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 		better results, especially at higher speeds.
 */
 
+
+/*
+ FLOAT DEFINITION
+ 
+ setup()
+	1. init classes and variables
+	2. start LED and LC displays and clap flash LED
+	3. init timecode structure
+	4. init real time clock
+	5. init interrupts
+		a. init reader class
+		b. attach interrupts
+
+ loop()
+	1. get clapbar switch
+	
+	is RUNMODE
+		1. IF boot or runmode did not change
+			a. read time from rtc and write to timecode
+			b. set framerate
+		2.	IF timecode has changed
+			a. check clapbar and flash light
+			b. display timecode on LED if running (not just clapped)
+			c. IF tick (interrupt from RTC occured)
+				recalculate bit timer for tc output
+		3. display status (run, clap, init) on LCD
+
+	is READMODE
+		1. check for read timeout > set to runmode
+		2. IF boot or mode changed
+			a. set mode to READMODE
+		3. diable timecode
+		4. IF reader synced
+			a. value 
+			a. IF read boot
+				> write time to RTC
+				> set boot to false
+
+			b. display status (sync, jam) on LCD
+
+ */
+
+
+
 #include <Arduino.h>
 #include <RTClib.h>
 
@@ -75,6 +119,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "rtc.h"
 #include "reader.h"
 
+
+// =========================================
+// init classes
 LCD lcd;
 LED led;
 RLED rled;
@@ -104,60 +151,37 @@ bool tick;
 // DEBUG
 long offset;
 
+
 // =========================================
-int btnpressed, btnold, btncount;
-
-byte h, m, s, f;      //hours, minutes, seconds, frame
-byte buf_temp[8];     //timecode buffer
-byte command, data, index;
-
-
-enum {          // the states of the ISR state machine
-	isrNull,
-	isrInit,
-	isrSync,
-	isrRead
-};
-
-const uint8_t dfFlag = 0x04;          // in 'frames tens'
-
-
-// vars shared with ISR
-//
-volatile uint8_t v_tcBuff[10];        // double-buffer for raw TC
-volatile bool v_tcReady;              // indicates frame available
-volatile bool v_tcRvs;                // true if TC was moving in reverse
-volatile uint8_t v_isrState;          // initing -> syncing -> reading
-volatile uint8_t v_tcFrameCtr;        // counter for v_tcFrameMax
-volatile uint8_t v_tcFrameMax;        //  for imputing frame rate
-
-
-bool m_tcDF;                          // DF flag was seen in raw bits
-
 // run mode
 // 		false => free run
 // 		true => read
 bool runMode;
+bool lastRunMode;
+
+// true if system started
+bool boot;
+bool rtc_updated;
 
 
 // =========================================
-//
 void setup() {
 
 
-	// set runMode to read
-	runMode = false;
+	// set initial state
+	// set initial state to readmode
+	runMode = READMODE;
+	lastRunMode = runMode;
+
+	boot = true;
+	rtc_updated = false;
+
 	clap = false;
 
+
+	// start timing
 	realtime = micros();
 	old_realtime = realtime;
-
-
-	// =============================================================
-	// INIT timecode
-	tc.begin();
-	tc.set(0,0,0,0);
-	tc.fps(24);
 
 
 	// =============================================================
@@ -188,6 +212,17 @@ void setup() {
 	//display all zeros, and add decimal points to LSB
 	led.set(88, 88, 88, 88);
 	delay(250);
+
+
+// TODO get data from EEPROM
+
+
+	// =============================================================
+	// INIT timecode
+	tc.begin();
+	tc.set(0,0,0,0);
+	tc.fps(24);
+
 	led.set(tc.get());
 
 
@@ -197,14 +232,23 @@ void setup() {
 	lcd.clear();
 
 
-
 	// =============================================================
-	// start function
-	// lcd.dir(false);
-	lcd.fps(tc.fps());
-	lcd.status(" run");
+	// start real time clock
+	switch (rtc.begin(RTC_INT_PORT)) {
 
-	// disp.print(uBits);
+		case 1:
+			lcd.status(" RTC");
+
+			break;
+
+		case 0:
+			lcd.status("!RTC");
+			break;
+
+		case -1:
+			lcd.status(" SET");
+			break; 
+	}
 
 
 	// =============================================================
@@ -223,21 +267,6 @@ void setup() {
 	sei();
 
 
-	switch (rtc.begin(RTC_INT_PORT)) {
-
-		case 1:
-			lcd.status(" RTC");
-
-			break;
-
-		case 0:
-			lcd.status("!RTC");
-			break;
-
-		case -1:
-			lcd.status(" SET");
-			break; 
-	}
 
 
 // debug => set time
@@ -245,26 +274,6 @@ void setup() {
 // rtc.set(7,30,0,9,8,2024);
 
 
-	// read rtc and set time code
-	if (rtc.status() != false) {
-
-		// init time of slate to rtc
-		DateTime time = rtc.get();
-		tc.set(time.hour(), time.minute(), time.second(), 0);
-
-		// set date in user bits
-		// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
-
-		// snprintf("%0d:%0d:%0d", tc.ubit[0], tc.ubit[2], tc.ubit[3]);
-
-		// display date as userbits on LCD
-// DEBUG uncomment for second row display
-		// lcd.val8(time.day(), 0, 1);
-		// lcd.print(".", 2, 1);
-		// lcd.val8(time.month(), 3, 1);
-		// lcd.print(".", 5, 1);
-		// lcd.val16(time.year(), 6, 1);
-	}
 
 // // DEBUG
 // lcd.clear();
@@ -292,7 +301,45 @@ void loop() {
 	// =============================================================
 	// no TC on input
 	// free run mode
-	if (runMode == false) {
+	if (runMode == RUNMODE) {
+
+
+		// ===================================
+		// mode changed to runMode
+		if (boot || (runMode != lastRunMode)) {
+
+			lastRunMode = runMode;
+			boot = false;
+			rtc_updated = false;
+
+			// init runMode
+			// read rtc and set time code
+			if (rtc.status() != false) {
+
+				// init time of slate to rtc
+				DateTime time = rtc.get();
+				tc.set(time.hour(), time.minute(), time.second(), 0);
+
+				// set date in user bits
+				// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
+
+				// snprintf("%0d:%0d:%0d", tc.ubit[0], tc.ubit[2], tc.ubit[3]);
+
+				// display date as userbits on LCD
+		// DEBUG uncomment for second row display
+				// lcd.val8(time.day(), 0, 1);
+				// lcd.print(".", 2, 1);
+				// lcd.val8(time.month(), 3, 1);
+				// lcd.print(".", 5, 1);
+				// lcd.val16(time.year(), 6, 1);
+			}
+
+
+			// ===================
+			// set lc display data
+			lcd.fps(tc.fps());
+		}
+
 
 		// =============================================================
 		// update time if timecode has changed
@@ -398,36 +445,71 @@ void loop() {
 
 		// return to run mode
 		if (millis() > (lastreadtime + READ_TIMEOUT)) {
-			runMode = false;
+			runMode = RUNMODE;
 
 			start_timer1(tc.fps());
 		}
 
 		else {
 
+
+			// mode changed to readmode
+			if (boot | (runMode != lastRunMode)) {
+				lastRunMode = runMode;
+			}
+
+
+			// =========================================
 			// disaple run timecode
 			tc.enable(false);
+
 
 			// check if reader is in sync
 			if (reader.sync()) {
 
-				lcd.status("sync");
-
+				// a timecode value is available
 				if (reader.available()) {
 
-					TIMECODE reater_tc;
-					reater_tc = reader.get();
 
-					led.set(reater_tc);
+					// get read timecode
+					TIMECODE reader_tc;
+					reader_tc = reader.get();
+
+					led.set(reader_tc);
 
 
-					// =================
-					// set new framerate
+					// =====================
+					// display new framerate
 					if (reader.fps_changed()) {
-						lcd.fps(reater_tc.fps);
+						lcd.fps(reader_tc.fps + 1);
+					}
+
+
+					// =======================================
+					// if just booted -> write timecode to rtc
+					if (boot) {
+						lcd.status(" jam");
+
+						// rtc not jet updated > do it
+						if (!rtc_updated) {
+
+							// get current rtc settings
+							DateTime rtc_time = rtc.get();
+							DateTime new_time;
+
+							// set new time
+							rtc.set(reader_tc.h, reader_tc.m, reader_tc.s, rtc_time.day(), rtc_time.month(), rtc_time.year());
+							rtc_updated = true;
+						}
+					}
+
+					else {
+						lcd.status("sync");
 					}
 				}
 			}
+
+			// not synced
 			else {
 				lcd.status("read");
 			}
@@ -525,7 +607,7 @@ void syncISR() {
 void readISR(void) {
 
 	// init read mode
-	runMode = true;
+	runMode = READMODE;
 	stop_timer1();
 
 	lastreadtime = millis();
