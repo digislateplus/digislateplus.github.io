@@ -157,7 +157,7 @@ void setup() {
 	// INIT timecode
 	tc.begin();
 	tc.set(0,0,0,0);
-	tc.fps(25);
+	tc.fps(24);
 
 
 	// =============================================================
@@ -415,23 +415,24 @@ void loop() {
 
 				if (reader.available()) {
 
-					TC temp; //= reader.get();
-					temp.set(12,13,14,15);
+					TIMECODE reater_tc;
+					reater_tc = reader.get();
 
-					TIMECODE tctemp;
-					tctemp = reader.get();
+					led.set(reater_tc);
 
-					led.set(tctemp);
 
-					// lcd.val8(tctemp.h,0,1);
-					// lcd.val8(tctemp.m,3,1);
-					// lcd.val8(tctemp.s,6,1);
-					// lcd.val8(tctemp.f,9,1);
+					// =================
+					// set new framerate
+					if (reader.fps_changed()) {
+						lcd.fps(reater_tc.fps);
+					}
 				}
 			}
 			else {
 				lcd.status("read");
 			}
+
+
 
 		}
 
@@ -530,13 +531,7 @@ void readISR(void) {
 	lastreadtime = millis();
 
 	// read bit
-	if (reader.read()) {
-
-		// complete frame read
-		// display timecode
-	}
-
-	// rled.set(true);
+	reader.read();
 }
 
 

@@ -34,10 +34,10 @@ bool READER::read(void) {
 
 
 	// loop write to tc output if synced
-	if (_sync) {
+	// if (_sync) {
 // DEBUG
 		// digitalWrite(SIGNAL_OUTPUT, val);
-	}
+	// }
 
 
 
@@ -45,9 +45,9 @@ bool READER::read(void) {
 // calculate frame time?
 
 	
-
 	// suppress short spikes
 	if (delta > (TIMECODE_THRESHOLD / 2)) {
+// _peak();
 
 		// long time
 		// is logic 0 of 1+0
@@ -105,6 +105,17 @@ bool READER::available(void) {
 
 
 // ===========================================
+// framerate has changed
+bool READER::fps_changed(void) {
+	return _tc.fps_changed();
+}
+
+
+// ===========================================
+// get framerate
+
+
+// ===========================================
 // get timecode structure
 TIMECODE READER::get(void) {
 	return _tc.get();
@@ -115,21 +126,21 @@ TIMECODE READER::get(void) {
 // add bit to buffer
 void READER::_add(bool bit) {
 
-// DEBUG
-// create peak
-// _peak();
+	uint8_t byte_count = _counter >> 3;
+	uint8_t bit_count = _counter & 0b111;
+
 
 	// is synced > write data
 	if (_sync) {
 
-		// set bit >> LSB to the left
+		// set bit in reverse order >> LSB to the left
 		if (bit) {
-			_timecode[_byte_counter] |= (1 << (7 - _bit_counter));
+			_raw_timecode[byte_count] |= (1 << bit_count);
 		}
 
 		// clear bit
 		else {
-			_timecode[_byte_counter] &= (1 << (7 - _bit_counter));
+			_raw_timecode[byte_count] &= ~(1 << bit_count);
 		}
 
 
@@ -139,7 +150,7 @@ void READER::_add(bool bit) {
 
 
 	// check sync word
-	if (_check_sync_word(bit)) {
+	else if (_check_sync_word(bit)) {
 		_sync = true;
 
 		// is in sync > reset and set sync to true
@@ -151,52 +162,42 @@ void READER::_add(bool bit) {
 // ===========================================
 // increment counter
 // return bit index (0-79)
+// reset sync -> sync word must follow
 uint8_t READER::_inc(void) {
 
+	_counter ++;
 
-	_bit_counter++;
+	// end of data count (8 byte)
+	if (_counter >= 64) {
 
-	if (_bit_counter >= 8) {
-		_bit_counter = 0;
-		_byte_counter++;
-
-
-		// date complete > write raw data to timecode
-		// reset counter
-		if (_byte_counter == 8) {
-_peak();
-			_tc.set(_timecode);
-			_reset();
-			_sync = false;
-		}
-
-		// overflow (no reset from sync word)
-		// 8 byte data (the sync word is not stored)
-		// if (_byte_counter >= 10) {
-		// 	_reset();
-		// 	_sync = false;
-		// }
+		_tc.set(_raw_timecode);
+		_reset();
+		_sync = false;
 	}
 
-
-
 	return _index();
+}
+
+
+uint8_t READER::_reverse(uint8_t b) {
+   b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
+   b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
+   b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
+   return b;
 }
 
 
 // ===========================================
 // get bit index
 uint8_t READER::_index(void) {
-	return (_byte_counter * 8) + _bit_counter;
+	return _counter;
 }
 
 
 // ===========================================
 // reset counter
 void READER::_reset(void) {
-
-	_bit_counter = 0;
-	_byte_counter = 0;
+	_counter = 0;
 }
 
 
@@ -225,6 +226,11 @@ bool READER::_check_sync_word(bool bit) {
 // DEBUG
 // create peak
 void READER::_peak(void) {
-	digitalWrite(SIGNAL_OUTPUT, !digitalRead(SIGNAL_OUTPUT));
+	_rect();
+	_rect();
+}
+
+
+void READER::_rect(void) {
 	digitalWrite(SIGNAL_OUTPUT, !digitalRead(SIGNAL_OUTPUT));
 }

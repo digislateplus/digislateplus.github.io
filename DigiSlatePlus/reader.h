@@ -74,6 +74,7 @@ public:
 	bool read(void);
 	bool sync(void);
 	bool available(void);
+	bool fps_changed(void);
 
 	TIMECODE get(void);
 
@@ -83,7 +84,10 @@ private:
 	uint8_t _inc(void);
 	uint8_t _index(void);
 
+	uint8_t _reverse(uint8_t);
+
 void _peak(void);
+void _rect(void);
 
 	void _add(bool);
 	void _reset(void);
@@ -104,10 +108,12 @@ void _peak(void);
 	long _bit_time;
 	long _half_bit_time;
 
-	uint8_t _timecode[10];
+	uint8_t _raw_timecode[10];
 
-	uint8_t _bit_counter;
-	uint8_t _byte_counter;
+	uint8_t _counter;
+
+uint8_t _bit_counter;
+uint8_t _byte_counter;
 
 	uint16_t _sync_word;
 	uint16_t _sync_register;

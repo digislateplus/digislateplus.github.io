@@ -48,6 +48,8 @@ void TC::begin(void) {
 	_bit_counter = 0;
 	_byte_counter = 0;
 
+	_fps_changed = false;
+
 	// set standards
 	_tc.dropframe = false;
 	_tc.colorframe = false;
@@ -109,10 +111,10 @@ void TC::set(uint8_t h, uint8_t m, uint8_t s, uint8_t f) {
 // the syncword is ignored
 void TC::set(uint8_t* binary) {
 
-	_tc.f = binary[0] & 0xb1111 + (binary[1] & 0b11) * 10;
-	_tc.s = binary[2] & 0xb1111 + (binary[3] & 0b111) * 10;
-	_tc.m = binary[4] & 0xb1111 + (binary[5] & 0b111) * 10;
-	_tc.h = binary[6] & 0xb1111 + (binary[7] & 0b11) * 10;
+	_tc.f = (binary[0] & 0b1111) + ((binary[1] & 0b11) * 10);
+	_tc.s = (binary[2] & 0b1111) + ((binary[3] & 0b111) * 10);
+	_tc.m = (binary[4] & 0b1111) + ((binary[5] & 0b111) * 10);
+	_tc.h = (binary[6] & 0b1111) + ((binary[7] & 0b11) * 10);
 
 	_tc.dropframe = binary[1] >> 2;
 	_tc.colorframe = binary[1] >> 3;
@@ -131,8 +133,26 @@ void TC::set(uint8_t* binary) {
 
 	// ======================================
 	// check for framerate
+	// frame has started > use last frame as framerate
+	if (_last_fps > _tc.f) {
 
+		// framerate has changed
+		if (_last_fps != _tc.fps) {
+			_fps_changed = true;
 
+			// set new framerate
+			_tc.fps = _last_fps;
+		}
+
+		else {
+			_fps_changed = false;
+		}
+	}
+
+	// set frame as last frame number
+	_last_fps = _tc.f;
+
+	// timecode has changed
 	_tc.changed = true;
 }
 
@@ -144,6 +164,7 @@ TIMECODE TC::get(void) {
 }
 
 
+// create 64 bit raw timecode data; sync word is set in init process
 void TC::update_binary(void) {
 
 	// SMPTE/EBU timecode structure (https://www.wikiaudio.org/smpte-time-code/)
@@ -336,13 +357,6 @@ long TC::inc(bool tick) {
 			// =======================================
 
 			_byte_counter = 0;
-
-
-// Debug => write frame sync to flash led
-// digitalWrite(FLASH_LED, HIGH);
-// // delay(1);
-// digitalWrite(FLASH_LED, LOW);
-
 			_tc.f++;
 
 			// frames overflow
@@ -392,4 +406,9 @@ bool TC::changed(void) {
 
 void TC::unchange(void) {
 	_tc.changed = false;
+}
+
+// true if framerate has changed
+bool TC::fps_changed(void) {
+	return _fps_changed;
 }
