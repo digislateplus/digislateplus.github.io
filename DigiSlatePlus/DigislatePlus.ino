@@ -63,6 +63,50 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 		better results, especially at higher speeds.
 */
 
+
+/*
+ FLOAT DEFINITION
+ 
+ setup()
+	1. init classes and variables
+	2. start LED and LC displays and clap flash LED
+	3. init timecode structure
+	4. init real time clock
+	5. init interrupts
+		a. init reader class
+		b. attach interrupts
+
+ loop()
+	1. get clapbar switch
+	
+	is RUNMODE
+		1. IF boot or runmode did not change
+			a. read time from rtc and write to timecode
+			b. set framerate
+		2.	IF timecode has changed
+			a. check clapbar and flash light
+			b. display timecode on LED if running (not just clapped)
+			c. IF tick (interrupt from RTC occured)
+				recalculate bit timer for tc output
+		3. display status (run, clap, init) on LCD
+
+	is READMODE
+		1. check for read timeout > set to runmode
+		2. IF boot or mode changed
+			a. set mode to READMODE
+		3. diable timecode
+		4. IF reader synced
+			a. value 
+			a. IF read boot
+				> write time to RTC
+				> set boot to false
+
+			b. display status (sync, jam) on LCD
+
+ */
+
+
+
 #include <Arduino.h>
 #include <RTClib.h>
 
@@ -75,6 +119,9 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "rtc.h"
 #include "reader.h"
 
+
+// =========================================
+// init classes
 LCD lcd;
 LED led;
 RLED rled;
@@ -104,60 +151,37 @@ bool tick;
 // DEBUG
 long offset;
 
+
 // =========================================
-int btnpressed, btnold, btncount;
-
-byte h, m, s, f;      //hours, minutes, seconds, frame
-byte buf_temp[8];     //timecode buffer
-byte command, data, index;
-
-
-enum {          // the states of the ISR state machine
-	isrNull,
-	isrInit,
-	isrSync,
-	isrRead
-};
-
-const uint8_t dfFlag = 0x04;          // in 'frames tens'
-
-
-// vars shared with ISR
-//
-volatile uint8_t v_tcBuff[10];        // double-buffer for raw TC
-volatile bool v_tcReady;              // indicates frame available
-volatile bool v_tcRvs;                // true if TC was moving in reverse
-volatile uint8_t v_isrState;          // initing -> syncing -> reading
-volatile uint8_t v_tcFrameCtr;        // counter for v_tcFrameMax
-volatile uint8_t v_tcFrameMax;        //  for imputing frame rate
-
-
-bool m_tcDF;                          // DF flag was seen in raw bits
-
 // run mode
 // 		false => free run
 // 		true => read
 bool runMode;
+bool lastRunMode;
+
+// true if system started
+bool boot;
+bool rtc_updated;
 
 
 // =========================================
-//
 void setup() {
 
 
-	// set runMode to read
-	runMode = false;
+	// set initial state
+	// set initial state to readmode
+	runMode = READMODE;
+	lastRunMode = runMode;
+
+	boot = true;
+	rtc_updated = false;
+
 	clap = false;
 
+
+	// start timing
 	realtime = micros();
 	old_realtime = realtime;
-
-
-	// =============================================================
-	// INIT timecode
-	tc.begin();
-	tc.set(0,0,0,0);
-	tc.fps(25);
 
 
 	// =============================================================
@@ -188,6 +212,17 @@ void setup() {
 	//display all zeros, and add decimal points to LSB
 	led.set(88, 88, 88, 88);
 	delay(250);
+
+
+// TODO get data from EEPROM
+
+
+	// =============================================================
+	// INIT timecode
+	tc.begin();
+	tc.set(0,0,0,0);
+	tc.fps(24);
+
 	led.set(tc.get());
 
 
@@ -197,14 +232,23 @@ void setup() {
 	lcd.clear();
 
 
-
 	// =============================================================
-	// start function
-	// lcd.dir(false);
-	lcd.fps(tc.fps());
-	lcd.status(" run");
+	// start real time clock
+	switch (rtc.begin(RTC_INT_PORT)) {
 
-	// disp.print(uBits);
+		case 1:
+			lcd.status(" RTC");
+
+			break;
+
+		case 0:
+			lcd.status("!RTC");
+			break;
+
+		case -1:
+			lcd.status(" SET");
+			break; 
+	}
 
 
 	// =============================================================
@@ -223,21 +267,6 @@ void setup() {
 	sei();
 
 
-	switch (rtc.begin(RTC_INT_PORT)) {
-
-		case 1:
-			lcd.status(" RTC");
-
-			break;
-
-		case 0:
-			lcd.status("!RTC");
-			break;
-
-		case -1:
-			lcd.status(" SET");
-			break; 
-	}
 
 
 // debug => set time
@@ -245,28 +274,9 @@ void setup() {
 // rtc.set(7,30,0,9,8,2024);
 
 
-	// read rtc and set time code
-	if (rtc.status() != false) {
 
-		// init time of slate to rtc
-		DateTime time = rtc.get();
-		tc.set(time.hour(), time.minute(), time.second(), 0);
-
-		// set date in user bits
-		// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
-
-		// snprintf("%0d:%0d:%0d", tc.ubit[0], tc.ubit[2], tc.ubit[3]);
-
-		// display date as userbits on LCD
-		lcd.val8(time.day(), 0, 1);
-		lcd.print(".", 2, 1);
-		lcd.val8(time.month(), 3, 1);
-		lcd.print(".", 5, 1);
-		lcd.val16(time.year(), 6, 1);
-	}
-
-// DEBUG
-lcd.clear();
+// // DEBUG
+// lcd.clear();
 
 	start_timer1(tc.fps());
 }
@@ -291,7 +301,45 @@ void loop() {
 	// =============================================================
 	// no TC on input
 	// free run mode
-	if (runMode == false) {
+	if (runMode == RUNMODE) {
+
+
+		// ===================================
+		// mode changed to runMode
+		if (boot || (runMode != lastRunMode)) {
+
+			lastRunMode = runMode;
+			boot = false;
+			rtc_updated = false;
+
+			// init runMode
+			// read rtc and set time code
+			if (rtc.status() != false) {
+
+				// init time of slate to rtc
+				DateTime time = rtc.get();
+				tc.set(time.hour(), time.minute(), time.second(), 0);
+
+				// set date in user bits
+				// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
+
+				// snprintf("%0d:%0d:%0d", tc.ubit[0], tc.ubit[2], tc.ubit[3]);
+
+				// display date as userbits on LCD
+		// DEBUG uncomment for second row display
+				// lcd.val8(time.day(), 0, 1);
+				// lcd.print(".", 2, 1);
+				// lcd.val8(time.month(), 3, 1);
+				// lcd.print(".", 5, 1);
+				// lcd.val16(time.year(), 6, 1);
+			}
+
+
+			// ===================
+			// set lc display data
+			lcd.fps(tc.fps());
+		}
+
 
 		// =============================================================
 		// update time if timecode has changed
@@ -397,201 +445,84 @@ void loop() {
 
 		// return to run mode
 		if (millis() > (lastreadtime + READ_TIMEOUT)) {
-			runMode = false;
+			runMode = RUNMODE;
 
 			start_timer1(tc.fps());
 		}
 
 		else {
 
-			if (reader.sync()) {
-				rled.set(reader.sync());
 
-				lcd.status("sync");
+			// mode changed to readmode
+			if (boot | (runMode != lastRunMode)) {
+				lastRunMode = runMode;
 			}
+
+
+			// =========================================
+			// disaple run timecode
+			tc.enable(false);
+
+
+			// check if reader is in sync
+			if (reader.sync()) {
+
+				// a timecode value is available
+				if (reader.available()) {
+
+
+					// get read timecode
+					TIMECODE reader_tc;
+					reader_tc = reader.get();
+
+					led.set(reader_tc);
+
+
+					// =====================
+					// display new framerate
+					if (reader.fps_changed()) {
+						lcd.fps(reader_tc.fps + 1);
+					}
+
+
+					// =======================================
+					// if just booted -> write timecode to rtc
+					if (boot) {
+						lcd.status(" jam");
+
+						// rtc not jet updated > do it
+						if (!rtc_updated) {
+
+							// get current rtc settings
+							DateTime rtc_time = rtc.get();
+							DateTime new_time;
+
+							// set new time
+							rtc.set(reader_tc.h, reader_tc.m, reader_tc.s, rtc_time.day(), rtc_time.month(), rtc_time.year());
+							rtc_updated = true;
+						}
+					}
+
+					else {
+						lcd.status("sync");
+					}
+				}
+			}
+
+			// not synced
 			else {
 				lcd.status("read");
 			}
 
+
+
 		}
 
 		// DEBUG
-		// lcd.val16(reader.debug, 0, 1);
-
+		// rled.set(reader.sync());
 	}
 }    // end of loop()
 
-
-// =========================================
-//
-/*void tcISR() {
-*/
-	/*
-		The shell of the ISR is a state machine with three states:
-
-		 isrInit - sets/clears variables and transitions to:
-
-		 isrSync - counts and times arriving edges to define
-							 a window that decides when an edge pair (cell)
-							 represents a '1' or an '0'. Once set up,
-							 transitions to:
-
-		 isrRead - reads edges and fills the shift register with '1's and '0's
-	*/
-/*
-	const uint8_t sampleSize = 40;    // number of cells to sample
-
-	static uint8_t shiftReg[10];      // shift register for incoming bits
-	static uint16_t lastEdge;         // count when previous edge arrived
-	static uint8_t counter;           // cells in state 1, bits in state 2
-	static bool eatEdge;              // true if discarding a '1' edge
-
-	static uint8_t zeroCount;
-	static uint32_t accum;
-	static uint16_t cellOne;
-	static uint16_t cellMin;          // low edge of jitter window
-	static uint16_t cellDet;          // decision point
-	static uint16_t cellMax;          // high edge of jitter window
-
-	uint8_t newBit = 0;               // bit to be shifted in
-	uint8_t idx;
-	bool syncFound = false;
-
-	uint16_t now = TCNT1;               // capture the timer count
-	uint16_t cellTime = now - lastEdge; // compute interval
-	lastEdge = now;                     // preserve for next time
-
-	switch (v_isrState) {  // init, sync, read
-
-		// in this state the internal variables etc
-		//  are cleared. It lasts just one edge time.
-		//
-		case isrInit:
-
-			for (idx = 0; idx < 10; idx++) {
-				shiftReg[idx] = 0;
-			}
-
-			eatEdge = false;
-			counter = 0;
-			zeroCount = 0;
-			accum = 0;
-			cellOne = 0;
-			v_tcRvs = false;
-			v_tcReady = false;
-			v_tcFrameCtr = 0;
-			v_tcFrameMax = 0;
-			v_isrState = isrSync;       // init done, enter 'sync' state
-			break;
-
-		// in this state we try to determine the
-		//  duration of a One cell by finding some
-		//  longer cells and averaging them.
-		// This takes about 40 cell times (1/2 frame)
-		//
-		case isrSync:
-
-			if (++counter > sampleSize) {     // if we've seen 40 cells
-				if (zeroCount > 1) {            //  and some are wider
-					cellOne = (accum / (zeroCount - 1)) / 2;
-				}
-				else {
-					v_isrState = isrInit;         // didn't see any cells?
-					return;                       // then try 40 more
-				}
-
-				cellMin = (cellOne / 2);        // 1/4 of an '0' cell
-				cellDet = (cellMin * 3);        // 3/4 of an '0'
-				cellMax = (cellMin * 5);        // 5/4 of an '0'
-				v_isrState = isrRead;           // sync done, enter 'read' state
-				return;
-
-			}
-			else {
-				if (cellTime >=                                       ) {
-					if (++zeroCount > 1) {
-						accum += cellTime;          // add up the longer intervals
-					}
-					else {
-						cellOne = (cellTime * 2) / 3;
-					}
-				}
-			}
-			break;
-
-		// in this state we compare each cell
-		//  time to the presumptive One duration
-		//  to decide if it's a One or a Zero,
-		//  then shift it into a shift register.
-		//
-		case isrRead:
-
-			if ((cellTime < cellMin)
-					|| (cellTime > cellMax)) {
-				v_isrState = isrInit;         // an out-of-bounds cell,
-				return;                       //  so time to recal
-			}
-			if (cellTime > cellDet) {       // an '0' bit was found
-				if (eatEdge) {
-					v_isrState = isrInit;       // but wasn't expected
-					return;
-				}
-				newBit = 0;                   // shift in an '0' bit
-			}
-			else {                          // not an '0', try a '1'
-				if (cellTime > cellMin) {
-					if ( ! eatEdge) {           // this is the first half-cell
-						eatEdge = true;           // just wait
-						return;
-					}
-					eatEdge = false;
-					newBit = bit(7);            // shift in a '1' bit
-				}
-			}
-
-			// this shifts the FIFO to the right by
-			//  one bit position and adds the new bit
-			//
-			for (idx = 9; idx > 0; idx--) {
-				shiftReg[idx] = (shiftReg[idx] >> 1)
-												| (shiftReg[idx - 1] & 1) << 7;
-			}
-			shiftReg[0] = ((shiftReg[0] >> 1) | newBit);  // newBit is 0 or 0x80
-
-			eatEdge = false;
-
-			// with good code, eventually the sync pattern
-			//  will be shifted into a known location.
-			//
-			if (shiftReg[8] == 0xBF
-					&& shiftReg[9] == 0xFC) {       // BFFC is fwd sync word
-				syncFound = true;
-				v_tcRvs = false;
-			}
-			if (! syncFound) {
-				if (shiftReg[0] == 0x3F
-						&& shiftReg[1] == 0xFD) {     // 3FFD is rvs sync word
-					syncFound = true;
-					v_tcRvs = true;
-				}
-			}
-
-			if (syncFound) {
-				if (v_tcReady) {                  // pending read: overrun
-					v_isrState = isrInit;
-					return;
-				}
-				for (idx = 0; idx < 10; idx++) {
-					v_tcBuff[idx] = shiftReg[idx];  // buffer the raw bits
-				}
-				v_tcReady = true;                 // Signal valid TC
-			}
-			break;
-
-		default:
-			break;
-	}
-}	// end of tcISR*/
 
 
 // =========================================
@@ -676,19 +607,13 @@ void syncISR() {
 void readISR(void) {
 
 	// init read mode
-	runMode = true;
+	runMode = READMODE;
 	stop_timer1();
 
 	lastreadtime = millis();
 
 	// read bit
-	if (reader.read()) {
-
-		// complete frame read
-		// display timecode
-	}
-
-	// rled.set(true);
+	reader.read();
 }
 
 

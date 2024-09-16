@@ -86,6 +86,8 @@ public:
 	void set(TIMECODE);
 	void set(uint8_t h, uint8_t m, uint8_t s, uint8_t f, uint8_t fps);
 	void set(uint8_t h, uint8_t m, uint8_t s, uint8_t f);
+	void set(uint8_t*);
+
 	TIMECODE get(void);
 
 	void update_binary(void);
@@ -103,6 +105,8 @@ public:
 	bool changed(void);
 	void unchange(void);
 
+	bool fps_changed(void);
+
 private:
 	TIMECODE _tc;
 	USERBITS _ub;
@@ -110,6 +114,9 @@ private:
 	uint8_t _binary[10];
 	uint8_t _bit_counter;
 	uint8_t _byte_counter;
+
+	uint8_t _last_fps;
+	bool _fps_changed;
 
 	bool _enable;
 
