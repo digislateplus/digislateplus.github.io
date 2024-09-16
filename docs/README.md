@@ -1,7 +1,5 @@
 # DigiSlate+
 
-The project is in an early developement state.
-
 - [Hardware](hardware.md)
 - [Functions](function.md)
 - [Code](https://github.com/digislateplus/digislateplus.github.io)
@@ -12,3 +10,4 @@ DigiSlate+ is based on the [DigiSlate](https://www.youtube.com/watch?v=TnaWQZtmP
 The DigiSlate+ has two operating states. If an external time code is fed in and the slate is switched on, it starts in read mode. The time code is read, shown on the LED display and the time in the RTC is updated. The DS3231 sends an interrupt to the controller at the beginning of each second. The offset of frames to the time code fed in is stored in the EEPROM memory in order to provide a frame-accurate time in free-running mode.
 
 As soon as the external time code is disconnected or the slate is switched on without a time code at the input, it changes to free-running mode. It now runs automatically with the time from the RTC and the saved frame offset.
+
