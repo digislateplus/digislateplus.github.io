@@ -65,7 +65,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 /*
- FLOAT DEFINITION
+ FLOAT
  
  setup()
 	1. init classes and variables
@@ -96,12 +96,21 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 			a. set mode to READMODE
 		3. diable timecode
 		4. IF reader synced
-			a. value 
-			a. IF read boot
-				> write time to RTC
-				> set boot to false
+			a. IF value available
+				> get reader timecode
+				> display on LED
+				> IF framerate changed
+					* display fps on LCD
+				> IF read boot
+					* display status jam on LCD
 
-			b. display status (sync, jam) on LCD
+					* IF rtc not updated
+						> get date from rtc
+						> write read time to RTC
+						> set rtc updated true
+
+				> ELSE display status sync on LCD
+		5. ELSE display status read on LCD
 
  */
 
@@ -118,6 +127,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "tc.h"
 #include "rtc.h"
 #include "reader.h"
+#include "flash.h"
 
 
 // =========================================
@@ -128,6 +138,8 @@ RLED rled;
 TC tc;
 RTC rtc;
 READER reader;
+FLASH flash;
+
 
 bool clap;
 bool run;
@@ -142,7 +154,6 @@ long old_realtime;
 long cycletime;
 
 long timertime;
-
 long lastreadtime;
 
 bool tick;
@@ -154,14 +165,13 @@ long offset;
 
 // =========================================
 // run mode
-// 		false => free run
-// 		true => read
+// 		RUNMODE => free run mode
+// 		READMODE => read mode
 bool runMode;
 bool lastRunMode;
 
-// true if system started
-bool boot;
-bool rtc_updated;
+bool boot;				// true on system start
+bool rtc_updated;		// false on system start
 
 
 // =========================================
@@ -209,27 +219,9 @@ void setup() {
 	led.begin(LOAD_PIN);
 
 
-	//display all zeros, and add decimal points to LSB
+	// test LED display
 	led.set(88, 88, 88, 88);
 	delay(250);
-
-
-// TODO get data from EEPROM
-
-
-	// =============================================================
-	// INIT timecode
-	tc.begin();
-	tc.set(0,0,0,0);
-	tc.fps(24);
-
-	led.set(tc.get());
-
-
-	// =============================================================
-	// end INIT sequence
-	rled.off();
-	lcd.clear();
 
 
 	// =============================================================
@@ -252,6 +244,36 @@ void setup() {
 
 
 	// =============================================================
+	// INIT timecode
+	tc.begin();
+	tc.set(0,0,0,0);
+
+
+	// get data from EEPROM
+	TIMECODE flash_tc = flash.read();
+
+	// framerate is not valid > load default values and write to flash
+	if (!in_array(flash_tc.fps, framerates, 3)) {
+
+		tc.fps(DEFAULT_FRAMERATE);
+		tc.flags(0);
+
+		flash.write(tc.get());
+		flash.write_userbits(tc.ubits());
+	}
+
+
+	// display timecode on LED
+	led.set(tc.get());
+
+
+	// =============================================================
+	// end INIT sequence
+	rled.off();
+	lcd.clear();
+
+
+	// =============================================================
 	// activate interrupts
 	pinMode(RTC_INT_PORT, INPUT_PULLUP);  	// rtc sync input
 
@@ -267,17 +289,6 @@ void setup() {
 	sei();
 
 
-
-
-// debug => set time
-// h,m,s,d,m,y 
-// rtc.set(7,30,0,9,8,2024);
-
-
-
-// // DEBUG
-// lcd.clear();
-
 	start_timer1(tc.fps());
 }
 
@@ -292,15 +303,11 @@ void loop() {
 
 
 	// =============================================================
-	// const char hexchar[] = "0123456789ABCDEF";    // for uBits
-	// static uint8_t rawTC[8];                      // snapshot of tc/ubits data
-	// char tCode[12] = {"00:00:00:00"};      		// readable text
-	// static char uBits[17] = {"UB:             "}; // 8 hex chars centered
-
-
 	// =============================================================
-	// no TC on input
 	// free run mode
+	// no TC on input
+	// =============================================================
+	// =============================================================
 	if (runMode == RUNMODE) {
 
 
@@ -433,13 +440,17 @@ void loop() {
 			lcd.status("init");
 		}
 	}
+	// =============================================================
+	// END OF RUN MODE
+	// =============================================================
 
 
 
-
-	// =========================================
+	// =============================================================
+	// =============================================================
 	// READ MODE
-	// =========================================
+	// =============================================================
+	// =============================================================
 	else {
 
 
@@ -497,8 +508,13 @@ void loop() {
 							DateTime rtc_time = rtc.get();
 							DateTime new_time;
 
-							// set new time
+							// set new time to rtc
 							rtc.set(reader_tc.h, reader_tc.m, reader_tc.s, rtc_time.day(), rtc_time.month(), rtc_time.year());
+
+							// write flags to flash store
+							flash.write(reader_tc);
+
+							// timecode update completed
 							rtc_updated = true;
 						}
 					}
@@ -513,29 +529,16 @@ void loop() {
 			else {
 				lcd.status("read");
 			}
-
-
-
 		}
-
-		// DEBUG
-		// rled.set(reader.sync());
 	}
-}    // end of loop()
+	// =============================================================
+	// END OF READ MODE
+	// =============================================================
 
-
-
-// =========================================
-// flip byte order for backwards reading
-uint8_t flip8(uint8_t b) {
-
-	// reverses the bit order within a byte
-
-	b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-	b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-	b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-	return b;
 }
+
+// end of loop()
+
 
 
 // =========================================
@@ -557,13 +560,13 @@ void start_timer1(uint8_t fps) {
 	// set inital cmr by framerate
 	switch(fps) {
 		case 24:
-			OCR1A = 4166; // 24 fpx
+			OCR1A = TIMER_24; // 24 fpx
 			break;
 		case 25:
-			OCR1A = 4000; // 25 fps
+			OCR1A = TIMER_25; // 25 fps
 			break;
 		case 30:
-			OCR1A = 3332; // 30 fps
+			OCR1A = TIMER_30; // 30 fps
 			break;
 	}
 
@@ -586,6 +589,21 @@ void stop_timer1(void) {
 	TCCR1B &= ~(1 << CS10);
 	TCCR1B &= ~(1 << CS11);
 	TCCR1B &= ~(1 << CS12);
+}
+
+
+// check if value is in array
+// (needle, array, length)
+bool in_array(uint8_t val, uint8_t* ary, uint8_t length) {
+
+	for (uint8_t i = 0; i < length; i++) {
+
+		if (val == ary[i]) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 

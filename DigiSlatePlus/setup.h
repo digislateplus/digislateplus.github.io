@@ -32,14 +32,39 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #define SETUP_H
 
 
+// framerates
+#define DEFAULT_FRAMERATE 24
+static const uint8_t framerates[3] = {24,25,30};
+
+
+// runmodes
 #define RUNMODE 0
 #define READMODE 1
 
+
+// timecode data settings
+#define FLASH_FPS 0
+#define FLASH_FLAGS 1
+#define FLASH_USERBITS 2
+
+#define FLASH_FLAGS_DROPFRAME 0
+#define FLASH_FLAGS_COLORFRAME 1
+#define FLASH_FLAGS_BIPHASE 2
+#define FLASH_FLAGS_FLAG0 3
+#define FLASH_FLAGS_FLAG1 4
+
+
+// timer settings
 #define ENABLE_LIMIT 1000		// ms for stable sync
 #define CLAP_DENOISE 100		// ms
 #define CLAP_LONG_CLOSED 2000	// time with closed clap to enable tc display 
 
 #define READ_TIMEOUT 500		// time without input to switch to run mode
+
+#define TIMER_24 4166			// basic timer setting for 24 fps
+#define TIMER_25 4000			// basic timer setting for 25 fps
+#define TIMER_30 3332			// basic timer setting for 30 fps
+
 
 // IO definitions
 #define FLASH_LED A0	// flash led output
@@ -61,6 +86,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
 // led display pinout
 #define LOAD_PIN 7    //Load/CS pin
+
 
 // led register settings
 #define LED_F1 0x02

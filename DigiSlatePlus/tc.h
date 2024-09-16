@@ -88,6 +88,10 @@ public:
 	void set(uint8_t h, uint8_t m, uint8_t s, uint8_t f);
 	void set(uint8_t*);
 
+	// write and read flags
+	void flags(uint8_t);
+	uint8_t flags(void);
+
 	TIMECODE get(void);
 
 	void update_binary(void);
