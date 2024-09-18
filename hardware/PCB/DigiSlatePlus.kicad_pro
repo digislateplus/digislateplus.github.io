@@ -58,26 +58,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        "items_not_allowed|73449500|166135000|be829765-3320-4b79-8f72-79fe9151b69e|00000000-0000-0000-0000-000000000000",
-        "items_not_allowed|73449500|178360000|2312e61a-55bb-4fd3-b0a4-9706cd7fc14f|00000000-0000-0000-0000-000000000000",
-        "malformed_courtyard|72899500|166135000|1319913f-8b9c-4fd0-a029-3d31052d05eb|00000000-0000-0000-0000-000000000000",
-        "malformed_courtyard|75149500|166135000|1319913f-8b9c-4fd0-a029-3d31052d05eb|00000000-0000-0000-0000-000000000000",
-        "malformed_courtyard|75149500|179135000|1319913f-8b9c-4fd0-a029-3d31052d05eb|00000000-0000-0000-0000-000000000000",
-        "silk_edge_clearance|174250000|206000000|7e7dba85-62a2-4319-87de-050c84fc1a75|a342a094-3465-4bb8-9c1e-61d5b2199f84",
-        "silk_edge_clearance|175250000|206000000|7e7dba85-62a2-4319-87de-050c84fc1a75|832bec17-34ea-49a4-9a63-f7fe8c796726",
-        "silk_edge_clearance|179250000|206000000|7e7dba85-62a2-4319-87de-050c84fc1a75|8f57ed87-bfa2-475c-8b83-0f38f12d3307",
-        "silk_edge_clearance|180250000|206000000|7e7dba85-62a2-4319-87de-050c84fc1a75|2e25a231-8a01-4a51-acc5-f12712bd75ee",
-        "silk_edge_clearance|188250000|206000000|7e7dba85-62a2-4319-87de-050c84fc1a75|1c00c985-6027-4c57-9cfc-0b14a9e1f57d",
-        "silk_edge_clearance|189250000|206000000|7e7dba85-62a2-4319-87de-050c84fc1a75|e2209303-e0ad-4231-b00e-ea028278d35e",
-        "silk_edge_clearance|193250000|206000000|7e7dba85-62a2-4319-87de-050c84fc1a75|675c495f-a0f9-4c75-89de-19bab2d33675",
-        "silk_edge_clearance|194250000|206000000|7e7dba85-62a2-4319-87de-050c84fc1a75|7a89aecb-34b8-439b-b325-d28611ed83c5",
-        "silk_edge_clearance|236075000|206040000|7e7dba85-62a2-4319-87de-050c84fc1a75|da12e5a5-78f0-4820-9bbe-46e391992325",
-        "silk_edge_clearance|242475000|206040000|7e7dba85-62a2-4319-87de-050c84fc1a75|679c613a-5142-4aab-adc3-cf37915638ac",
-        "starved_thermal|158500900|156642500|a5fc0b1c-89ee-4a5c-89b1-5a0bf1c6a646|43d94603-4449-413c-8065-41002b3a398f|F.Cu",
-        "starved_thermal|267100000|185910000|805596d1-f175-4949-8748-42c3c7e806a1|127221bc-2882-40b6-b111-dcc7b059e311|B.Cu",
-        "starved_thermal|97620000|131350000|805596d1-f175-4949-8748-42c3c7e806a1|222c875c-4042-4491-880f-61c41d5d6c2e|B.Cu"
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -198,7 +179,6 @@
       ],
       "track_widths": [
         0.0,
-        0.2,
         0.25,
         0.3,
         0.5,
@@ -262,20 +242,7 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [
-      "lib_symbol_issues|889000|1397000|d2694d06-fea2-44da-ba5d-620fce461afd|00000000-0000-0000-0000-000000000000|||",
-      "missing_unit|1168400|1117600|d345f42c-795f-4ba4-95ee-cbb0a31ca87a|00000000-0000-0000-0000-000000000000|||",
-      "power_pin_not_driven|2057400|914400|773896f8-1825-4ba9-8499-c4b7d1e9b8fd|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85|",
-      "power_pin_not_driven|2070100|2120900|666e72cf-fd58-482a-aeb2-46bf4a301db4|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85|",
-      "power_pin_not_driven|2095500|698500|28c0d7d2-4b13-4c29-8d8d-9af23dfab776|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|",
-      "power_pin_not_driven|2222500|457200|29679d07-1ceb-45e0-b756-d28cb5fdd327|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d|",
-      "power_pin_not_driven|2552700|901700|ea0b416a-1164-49cf-8165-449ad7cfb6ee|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85|",
-      "power_pin_not_driven|2565400|2108200|aa4e757d-ba21-454c-bfef-84a19b7ca80f|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85|",
-      "power_pin_not_driven|419100|1333500|a5da2c3d-c41e-4f72-bd78-6da7c2d430ea|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|",
-      "power_pin_not_driven|685800|698500|b4955439-d115-45d6-913f-968bfcbd3f09|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|",
-      "power_pin_not_driven|800100|1219200|67e1457a-0177-4a17-9ff5-44f9966f78ae|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|",
-      "power_pin_not_driven|800100|1270000|8e8eec70-6eaa-4098-90a4-1073e19d6062|00000000-0000-0000-0000-000000000000|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc|"
-    ],
+    "erc_exclusions": [],
     "meta": {
       "version": 0
     },
@@ -511,23 +478,6 @@
         "via_diameter": 0.6,
         "via_drill": 0.3,
         "wire_width": 6
-      },
-      {
-        "bus_width": 24,
-        "clearance": 0.2,
-        "diff_pair_gap": 0.25,
-        "diff_pair_via_gap": 0.25,
-        "diff_pair_width": 0.2,
-        "line_style": 0,
-        "microvia_diameter": 0.5,
-        "microvia_drill": 0.1,
-        "name": "Power",
-        "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "schematic_color": "rgb(208, 0, 9)",
-        "track_width": 0.5,
-        "via_diameter": 1.0,
-        "via_drill": 0.5,
-        "wire_width": 12
       }
     ],
     "meta": {
@@ -535,47 +485,18 @@
     },
     "net_colors": null,
     "netclass_assignments": {
-      "+12V": "Power",
-      "+5V": "Power",
       "+BATT": "Power",
-      "CHARGER": "Power",
-      "GND": "Power",
-      "VCC-INT": "Power"
+      "GND": "Power"
     },
-    "netclass_patterns": [
-      {
-        "netclass": "Power",
-        "pattern": "+5V"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "+3.3V"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "GND"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "CHARGER"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "VCC-INT"
-      },
-      {
-        "netclass": "Power",
-        "pattern": "+12V"
-      }
-    ]
+    "netclass_patterns": []
   },
   "pcbnew": {
     "last_paths": {
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "production/gerber/",
-      "pos_files": "production/placement/",
+      "plot": "",
+      "pos_files": "",
       "specctra_dsn": "",
       "step": "DigiSlatePlus.step",
       "svg": "",
@@ -585,7 +506,7 @@
   },
   "schematic": {
     "annotate_start_num": 0,
-    "bom_export_filename": "production\\DigiSlatePlus.csv",
+    "bom_export_filename": "",
     "bom_fmt_presets": [],
     "bom_fmt_settings": {
       "field_delimiter": ",",
@@ -719,18 +640,6 @@
           "label": "Availability",
           "name": "Availability",
           "show": false
-        },
-        {
-          "group_by": false,
-          "label": "Sim.Device",
-          "name": "Sim.Device",
-          "show": false
-        },
-        {
-          "group_by": false,
-          "label": "Sim.Pins",
-          "name": "Sim.Pins",
-          "show": false
         }
       ],
       "filter_string": "",
@@ -785,11 +694,7 @@
     ],
     [
       "8aad025e-4bc0-4907-b517-9a6d83f1b6c4",
-      "Timecode Display"
-    ],
-    [
-      "9fdb67e5-5a22-4406-8105-d7910dfeff85",
-      "Dot Display"
+      "Display"
     ],
     [
       "8d8c6cc3-ae5a-4a9a-87ce-71fd40365acc",
