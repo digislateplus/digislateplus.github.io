@@ -281,6 +281,19 @@ uint8_t TC::fps(void) {
 
 
 // =============================================================
+// sync external timecode with rtc
+// called, when the rtc second irq occurs
+void TC::sync(void) {
+	_tc.offset = _tc.f;
+}
+
+// return the frame offset between rtc second start and timecode
+uint8_t TC::offset(void) {
+	return _tc.offset;
+}
+
+
+// =============================================================
 // user bits
 // set userbits from char array
 void TC::ubits(USERBITS* ub) {
@@ -439,4 +452,8 @@ void TC::unchange(void) {
 // true if framerate has changed
 bool TC::fps_changed(void) {
 	return _fps_changed;
+}
+
+void TC::fps_change(bool status) {
+	_fps_changed = status;
 }

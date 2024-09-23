@@ -13,9 +13,17 @@ void READER::begin(uint16_t port) {
 	// sync is true if frame is available
 	_sync = false;
 	_reset();
+	reset();
 
 	_sync_word =  0b0011111111111101;
 	_sync_register = 0;
+
+}
+
+
+// reset values
+void READER::reset(void) {
+	_tc.fps_change(true);
 }
 
 

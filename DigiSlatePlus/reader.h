@@ -71,6 +71,7 @@ class READER {
 
 public:
 	void begin(uint16_t port);
+	void reset(void);
 	bool read(void);
 	bool sync(void);
 	bool available(void);

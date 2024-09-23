@@ -82,17 +82,23 @@ void LCD::print(char* text, uint8_t x, uint8_t y) {
 // display byte value at x, y
 void LCD::val8(uint8_t val, uint8_t x, uint8_t y) {
 	_disp->setCursor(x, y);
+	_disp->print("   ");
+	_disp->setCursor(x, y);
 	_disp->print(val);
 }
 
 // display long value at x, y
 void LCD::val16(uint16_t val, uint8_t x, uint8_t y) {
 	_disp->setCursor(x, y);
+	_disp->print("     ");
+	_disp->setCursor(x, y);
 	_disp->print(val);
 }
 
 // display int value at x, y
 void LCD::val32(uint32_t val, uint8_t x, uint8_t y) {
+	_disp->setCursor(x, y);
+	_disp->print("          ");
 	_disp->setCursor(x, y);
 	_disp->print(val);
 }

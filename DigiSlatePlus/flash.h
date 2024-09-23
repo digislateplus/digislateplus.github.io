@@ -9,6 +9,8 @@
 class FLASH {
 
 public:
+	uint16_t begin(void);
+	uint16_t begin(uint16_t);
 	void write(TIMECODE);
 	TIMECODE read(void);
 
@@ -17,6 +19,8 @@ public:
 
 private:
 	uint8_t _i;
+	uint16_t _size;
+	
 };
 
 #endif

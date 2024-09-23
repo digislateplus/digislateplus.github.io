@@ -1,20 +1,34 @@
 #include "flash.h"
 
 
+// start flash
+// set size if ESP32
+// return the max size
+uint16_t FLASH::begin(void) {
+	return begin(EEPROM.length());
+}
+
+
+uint16_t FLASH::begin(uint16_t size) {
+	_size = size;
+
+	return _size;
+}
+
+
 // write timecode framerate and bits to flash store
 void FLASH::write(TIMECODE tc) {
 
-	uint8_t fps;
 	uint8_t flags = 0;
 
-	fps = tc.fps;
 	flags |= (tc.dropframe << FLASH_FLAGS_DROPFRAME);
 	flags |= (tc.colorframe << FLASH_FLAGS_COLORFRAME);
 	flags |= (tc.biphase << FLASH_FLAGS_BIPHASE);
 	flags |= (tc.flag0 << FLASH_FLAGS_FLAG0);
 	flags |= (tc.flag1 << FLASH_FLAGS_FLAG1);
 
-	EEPROM.update(FLASH_FPS, fps);
+	EEPROM.update(FLASH_FPS, tc.fps);
+	EEPROM.update(FLASH_OFFSET, tc.offset);
 	EEPROM.update(FLASH_FLAGS, flags);
 }
 
@@ -25,6 +39,7 @@ TIMECODE FLASH::read(void) {
 	TIMECODE tc;
 
 	uint8_t fps = EEPROM.read(FLASH_FPS);
+	uint8_t offset = EEPROM.read(FLASH_OFFSET);
 	uint8_t flags = EEPROM.read(FLASH_FLAGS);
 
 	tc.fps = fps;

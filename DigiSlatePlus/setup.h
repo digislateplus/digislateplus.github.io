@@ -33,7 +33,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 // framerates
-#define DEFAULT_FRAMERATE 24
+#define DEFAULT_FRAMERATE 25
 static const uint8_t framerates[3] = {24,25,30};
 
 
@@ -42,10 +42,19 @@ static const uint8_t framerates[3] = {24,25,30};
 #define READMODE 1
 
 
+// setup
+#define SETTINGS_MAX_STATI 5
+#define SETTINGS_ENTER_TIMEOUT 2000
+#define SETTINGS_ENTER_REPEATS 2
+
+static const char* status_text[SETTINGS_MAX_STATI] = {"hour  ","minute","second","frames","fps   "};
+
+
 // timecode data settings
 #define FLASH_FPS 0
-#define FLASH_FLAGS 1
-#define FLASH_USERBITS 2
+#define FLASH_OFFSET 1
+#define FLASH_FLAGS 2
+#define FLASH_USERBITS 3
 
 #define FLASH_FLAGS_DROPFRAME 0
 #define FLASH_FLAGS_COLORFRAME 1

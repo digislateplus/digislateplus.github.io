@@ -114,6 +114,13 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
  */
 
+/*
+ dependencies
+
+ RTCLIB.h 			by Adafruit / fork of Jeelab's RTC library Version 2.1.4
+ LiquidCrystal.h 	by Arduino Version 1.0.7
+ */
+
 
 
 #include <Arduino.h>
@@ -128,6 +135,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "rtc.h"
 #include "reader.h"
 #include "flash.h"
+#include "settings.h"
 
 
 // =========================================
@@ -139,6 +147,8 @@ TC tc;
 RTC rtc;
 READER reader;
 FLASH flash;
+
+TC reader_tc;
 
 
 bool clap;
@@ -173,9 +183,11 @@ bool lastRunMode;
 bool boot;				// true on system start
 bool rtc_updated;		// false on system start
 
+#include <EEPROM.h>
 
 // =========================================
 void setup() {
+
 
 
 	// set initial state
@@ -210,6 +222,7 @@ void setup() {
 	// INIT LC-Display
 	lcd.begin(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
+
 	lcd.print(" DigiSlate-Plus", 0, 0);
 	lcd.print("  initializing", 0, 1);
 
@@ -221,7 +234,7 @@ void setup() {
 
 	// test LED display
 	led.set(88, 88, 88, 88);
-	delay(250);
+	delay(500);
 
 
 	// =============================================================
@@ -249,17 +262,47 @@ void setup() {
 	tc.set(0,0,0,0);
 
 
+	// =============================================================
+	// check for setup
+	lcd.clear();
+	lcd.print("  Tripple clap", 0, 0);
+	lcd.print(" to enter setup", 0, 1);
+
+
+	SETTINGS settings;
+
+	if (settings.begin(BUTTON, &lcd, &led)) {
+		settings.exec();
+	}
+
+
+	// =============================================================
+	// INIT flash
 	// get data from EEPROM
+	flash.begin();
 	TIMECODE flash_tc = flash.read();
+
 
 	// framerate is not valid > load default values and write to flash
 	if (!in_array(flash_tc.fps, framerates, 3)) {
 
-		tc.fps(DEFAULT_FRAMERATE);
+		tc.fps((uint8_t)DEFAULT_FRAMERATE);
 		tc.flags(0);
+
+		lcd.clear();
+		lcd.print("No flash values!", 0, 0);
+		lcd.print("  load default", 0, 1);
 
 		flash.write(tc.get());
 		flash.write_userbits(tc.ubits());
+
+		delay(1000);
+	}
+
+
+	// set found framerate
+	else {
+		tc.fps(flash_tc.fps);
 	}
 
 
@@ -314,6 +357,8 @@ void loop() {
 		// ===================================
 		// mode changed to runMode
 		if (boot || (runMode != lastRunMode)) {
+
+			lcd.clear();
 
 			lastRunMode = runMode;
 			boot = false;
@@ -466,7 +511,10 @@ void loop() {
 
 			// mode changed to readmode
 			if (boot | (runMode != lastRunMode)) {
+
+				reader.reset();
 				lastRunMode = runMode;
+				lcd.clear();
 			}
 
 
@@ -483,16 +531,15 @@ void loop() {
 
 
 					// get read timecode
-					TIMECODE reader_tc;
-					reader_tc = reader.get();
+					reader_tc.set(reader.get());
 
-					led.set(reader_tc);
+					led.set(reader_tc.get());
 
 
 					// =====================
 					// display new framerate
 					if (reader.fps_changed()) {
-						lcd.fps(reader_tc.fps + 1);
+						lcd.fps(reader_tc.fps() + 1);
 					}
 
 
@@ -500,6 +547,8 @@ void loop() {
 					// if just booted -> write timecode to rtc
 					if (boot) {
 						lcd.status(" jam");
+						lcd.print("offset ", 0, 1);
+						lcd.val8(reader_tc.offset(), 7, 1);
 
 						// rtc not jet updated > do it
 						if (!rtc_updated) {
@@ -509,10 +558,10 @@ void loop() {
 							DateTime new_time;
 
 							// set new time to rtc
-							rtc.set(reader_tc.h, reader_tc.m, reader_tc.s, rtc_time.day(), rtc_time.month(), rtc_time.year());
+							rtc.set(reader_tc.get().h, reader_tc.get().m, reader_tc.get().s, rtc_time.day(), rtc_time.month(), rtc_time.year());
 
 							// write flags to flash store
-							flash.write(reader_tc);
+							flash.write(reader_tc.get());
 
 							// timecode update completed
 							rtc_updated = true;
@@ -521,6 +570,7 @@ void loop() {
 
 					else {
 						lcd.status("sync");
+						lcd.val8(reader_tc.offset(), 0, 1);
 					}
 				}
 			}
@@ -530,6 +580,7 @@ void loop() {
 				lcd.status("read");
 			}
 		}
+
 	}
 	// =============================================================
 	// END OF READ MODE
@@ -610,6 +661,9 @@ bool in_array(uint8_t val, uint8_t* ary, uint8_t length) {
 // =========================================
 // RTC interrupt every exact second
 void syncISR() {
+
+	// sync timecode frames to second start
+	reader_tc.sync();
 
 	tick = true;
 
