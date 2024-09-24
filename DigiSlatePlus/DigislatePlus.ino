@@ -119,6 +119,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
  RTCLIB.h 			by Adafruit / fork of Jeelab's RTC library Version 2.1.4
  LiquidCrystal.h 	by Arduino Version 1.0.7
+ LedControl			https://github.com/wayoda/LedControl
  */
 
 
@@ -136,6 +137,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "reader.h"
 #include "flash.h"
 #include "settings.h"
+#include "button.h"
 
 
 // =========================================
@@ -147,6 +149,7 @@ TC tc;
 RTC rtc;
 READER reader;
 FLASH flash;
+BUTTON button;
 
 TC reader_tc;
 
@@ -209,7 +212,7 @@ void setup() {
 	// =============================================================
 	// INIT IO
 	pinMode(SIGNAL_OUTPUT,OUTPUT);
-	pinMode(BUTTON,INPUT_PULLUP);
+	button.begin(BUTTON_PORT);
 
 
 	// =============================================================
@@ -271,7 +274,7 @@ void setup() {
 
 	SETTINGS settings;
 
-	if (settings.begin(BUTTON, &lcd, &led)) {
+	if (settings.begin(&button, &lcd, &led)) {
 		settings.exec();
 	}
 
@@ -342,7 +345,7 @@ void loop() {
 
 	// get clapbar state
 	// true = closed
-	bool clapbar = !digitalRead(BUTTON);
+	bool clapbar = !button.get();
 
 
 	// =============================================================
@@ -394,41 +397,24 @@ void loop() {
 
 
 		// =============================================================
+		// slate just closed (button open)
+		if (button.changed() && clapbar == true) {
+			rled.flash(30);
+			run = false;
+		}
+
+
+		// slate was closed (button open) for CLAP_LONG_CLOSED
+		if (button.opened(CLAP_LONG_CLOSED)) {
+			// rled.flash(30);
+			run = true;
+		}
+
+
+		// =============================================================
 		// update time if timecode has changed
 		if (tc.changed()) {
 			tc.unchange();
-
-
-			// ===================================
-			// slate is open
-			// check for clap button
-			if (!clapbar) {
-				clap = false;
-				run = true;
-			}
-
-
-			// ===================================
-			// slate is closed
-			// clapped
-			else if (!clap) {
-
-				run = false;
-				clap = true;
-				rled.flash(30);
-
-				claptime = millis();
-			}
-
-			// clap is closed
-			else {
-
-				// check for timeout
-				if (millis() > (claptime + CLAP_LONG_CLOSED)) {
-					run = true;
-				}
-
-			}
 
 
 			// ===================================
