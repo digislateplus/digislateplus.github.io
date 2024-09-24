@@ -45,7 +45,7 @@ static const uint8_t framerates[3] = {24,25,30};
 // setup
 #define SETTINGS_MAX_STATI 5
 #define SETTINGS_ENTER_TIMEOUT 2000
-#define SETTINGS_ENTER_REPEATS 2
+#define SETTINGS_ENTER_REPEATS 3
 
 static const char* status_text[SETTINGS_MAX_STATI] = {"hour  ","minute","second","frames","fps   "};
 
