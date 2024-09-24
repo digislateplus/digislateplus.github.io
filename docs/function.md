@@ -1,4 +1,4 @@
-# Functions
+# Operation
 ## Start
 The DigiSlate+ is put into operation using the switch on the bottom. After a short initialization, the time is read from the real-time clock. The time code is synchronized with the exact time base of the real-time clock and "init" is shown on the LC display.
 
