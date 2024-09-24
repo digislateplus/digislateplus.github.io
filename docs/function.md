@@ -1,52 +1,43 @@
 # Functions
+## Start
+The DigiSlate+ is put into operation using the switch on the bottom. After a short initialization, the time is read from the real-time clock. The time code is synchronized with the exact time base of the real-time clock and "init" is shown on the LC display.
 
-[Home](README.md)
+Once initialization is complete, the time code starts running on the LED display. The LC display on the back shows "run" as well as the set frame rate and the user bits.
 
-## Standard
-The standard on the LC display on the back of the DigiSlate+ shows the settings of the scene and take display. Both values have a range from 1 to 999 and an optional trailing character.
+If the DigiSlate+ is operated, the sync LEDs flash and the time code display remains for three seconds. "clap" is shown on the LC display. After that, the time code continues to run again.
 
-The four buttons beneath the LC display change the scene and take settings. If the scene number is changed, the take number jumps to 1.
+## Time code output
+The time code is output at the tip of the 3.5 mm jack socket as an LTC with a voltage of 1 volt peak-to-peak.
 
-    ┌─────────────────┐
-    │ ░░░000░x░░000░x░ |───┐rotary
-    │ ░-░SC░+░░-░TK░+░ │───┘button
-    └─────────────────┘
-      B1   B2   B3   B4
+## Time code input
+An external time code can be fed in via the ring of the 3.5 mm jack socket.  The DigiSlate+ recognizes this and switches to reading mode. The read time code is shown on the LED display and the LC display shows "sync".
 
-If you uploaded a scene list via WiFi a push if a scene button jumps to the next number on the list.
+The time in the real-time clock is not changed. When the time code entry is finished, the DigiSlate+ goes back to "run" mode and shows the time of the real-time clock.
 
-### Set scene
-To enter the scene and take number setup, push the knob shortly. Set the scene number by rotating the knob. Enter the new value by short pressing the knob. The take number jumps to 1.
+### Jam
+The external time code can be transferred to the real-time clock.
 
-    ┌─────────────────┐
-    │ ░>0000<░░░0000░░ |───┐rotary
-    │ ESC░░░░░░░SC<>TK │───┘button
-    └─────────────────┘
-      B1   B2   B3   B4
-      
-To change the take number, press B4. The >0000< cursor will jump to the take number.
+1. Switch off the DigiSlate+
 
-    ┌─────────────────┐
-    │ ░░0000░░░>0000<░ |───┐rotary
-    │ ESC░░░░░░░SC<>TK │───┘button
-    └─────────────────┘
-      B1   B2   B3   B4
+2. Feed the external time code via the 3.5mm jack socket
+3. Switch on the DigiSlate+
 
+It is in "jam" mode, which is shown on the LC display. The time code is transferred to the real-time clock as soon as it is folded once.
 
-## Menu
-To enter the menu long press the rotary button. Many DigiSlate+ settings can be made in the menu.
+## Setup
+Parameters of the DigiSlate+ can be set in the setup.
 
-Rotate the knob to scroll through the items. The < cursor shows the selected entry.
+- Set time code
+- Set user bits
+- Select frame rate
 
-    ┌─────────────────┐
-    │ ░░░░1 Timecode░░< |───┐rotary
-    │ ESC░2 Userbits░░░ │───┘button
-    └─────────────────┘
-      B1   B2   B3   B4
+### Start
+The setup mode is started as follows.
 
-1. Set timecode
-2. Set userbits
-3. WiFi
-4. Bluetooth
+1. Turn off the DigiSlate+
+2. Turn on the DigiSlate+
+3. When the text "tripple clap to enter setup" appears, quickly clap the DigiSlate+ three times.
 
-The menu is left by pushing button 1.
+"SETUP" will now appear on the LCD display.
+
+(more to come)
