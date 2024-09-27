@@ -7,7 +7,7 @@
 	(title_block
 		(title "DigiSlate+")
 		(date "2024-09-05")
-		(rev "1.0")
+		(rev "1.1")
 	)
 	(lib_symbols
 		(symbol "7-Segment:WC1602A"
@@ -4764,12 +4764,6 @@
 		(uuid "cf6d9f53-07d4-4a20-9d11-86c9c550f329")
 	)
 	(junction
-		(at 196.85 50.8)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "dbf64764-e02a-48de-a18f-b4fe159edbec")
-	)
-	(junction
 		(at 161.29 85.09)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5813,6 +5807,16 @@
 	)
 	(wire
 		(pts
+			(xy 44.45 46.99) (xy 49.53 46.99)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7ca5eab9-b410-4643-bdb7-e7342d31a757")
+	)
+	(wire
+		(pts
 			(xy 139.7 143.51) (xy 139.7 142.24)
 		)
 		(stroke
@@ -6083,7 +6087,7 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 46.99) (xy 49.53 46.99)
+			(xy 34.29 46.99) (xy 36.83 46.99)
 		)
 		(stroke
 			(width 0)
@@ -6493,7 +6497,7 @@
 	)
 	(wire
 		(pts
-			(xy 196.85 50.8) (xy 209.55 50.8)
+			(xy 209.55 38.1) (xy 209.55 50.8)
 		)
 		(stroke
 			(width 0)
@@ -6634,7 +6638,7 @@
 		(uuid aa04e05e-3e6d-42dc-aa77-7586b7de1720)
 	)
 	(rectangle
-		(start 33.02 27.94)
+		(start 18.415 27.94)
 		(end 105.41 107.95)
 		(stroke
 			(width 0)
@@ -6755,7 +6759,7 @@
 	)
 	(global_label "RST"
 		(shape input)
-		(at 45.72 46.99 180)
+		(at 34.29 46.99 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6765,7 +6769,7 @@
 		)
 		(uuid "0bc8a916-24c9-44b9-97eb-63afe98ae005")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 39.2877 46.99 0)
+			(at 27.8577 46.99 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10294,6 +10298,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 40.64 46.99 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8afbca69-4e13-4bd1-a6b3-0dd02bb366aa")
+		(property "Reference" "C40"
+			(at 38.1 45.974 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF/50V"
+			(at 45.974 41.91 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 44.45 46.0248 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 40.64 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 40.64 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "65b8ed80-8f4b-422e-8cda-4858967b4517")
+		)
+		(pin "2"
+			(uuid "2048232b-66f2-43b2-952e-bfa6fc39bf82")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d"
+					(reference "C40")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 118.11 87.63 0)
 		(unit 1)
@@ -10444,7 +10517,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "20K"
+		(property "Value" "10K"
 			(at 177.8 46.228 90)
 			(effects
 				(font
@@ -11924,7 +11997,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100"
+		(property "Value" "10k"
 			(at 241.3 102.87 90)
 			(effects
 				(font

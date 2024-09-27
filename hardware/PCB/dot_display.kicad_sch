@@ -5,9 +5,9 @@
 	(uuid "d17a8a57-c793-42ad-a050-8f5a04b5bee9")
 	(paper "A3")
 	(title_block
-		(title "Dot Matrix Display")
-		(date "2024-09-11")
-		(rev "1.0")
+		(title "DigiSlate+")
+		(date "2024-09-05")
+		(rev "1.1")
 	)
 	(lib_symbols
 		(symbol "Device:C"
