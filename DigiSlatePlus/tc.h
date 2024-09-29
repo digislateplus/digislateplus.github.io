@@ -62,6 +62,7 @@ struct TIMECODE {
 	uint8_t s;
 	uint8_t f;
 	uint8_t fps;
+	uint8_t offset;		// offset in frames between read timecode and rtc second irq
 	bool dropframe;
 	bool colorframe;
 	bool biphase;
@@ -88,12 +89,19 @@ public:
 	void set(uint8_t h, uint8_t m, uint8_t s, uint8_t f);
 	void set(uint8_t*);
 
+	// write and read flags
+	void flags(uint8_t);
+	uint8_t flags(void);
+
 	TIMECODE get(void);
 
 	void update_binary(void);
 
 	void fps(uint8_t);
 	uint8_t fps(void);
+
+	void sync(void);
+	uint8_t offset(void);
 
 	void ubits(USERBITS*);
 	void ubits(uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t, uint8_t);
@@ -106,6 +114,7 @@ public:
 	void unchange(void);
 
 	bool fps_changed(void);
+	void fps_change(bool);
 
 private:
 	TIMECODE _tc;

@@ -164,6 +164,34 @@ TIMECODE TC::get(void) {
 }
 
 
+// =============================================================
+// set flags
+void TC::flags(uint8_t flags) {
+
+	_tc.dropframe = (flags >> FLASH_FLAGS_DROPFRAME) & 0x01;
+	_tc.colorframe = (flags >> FLASH_FLAGS_COLORFRAME) & 0x01;
+	_tc.biphase = (flags >> FLASH_FLAGS_BIPHASE) & 0x01;
+	_tc.flag0 = (flags >> FLASH_FLAGS_FLAG0) & 0x01;
+	_tc.flag1 = (flags >> FLASH_FLAGS_FLAG1) & 0x01;
+}
+
+
+// get flags
+uint8_t TC::flags(void) {
+
+	uint8_t flags;
+
+	flags |= (_tc.dropframe << FLASH_FLAGS_DROPFRAME);
+	flags |= (_tc.colorframe << FLASH_FLAGS_COLORFRAME);
+	flags |= (_tc.biphase << FLASH_FLAGS_BIPHASE);
+	flags |= (_tc.flag0 << FLASH_FLAGS_FLAG0);
+	flags |= (_tc.flag1 << FLASH_FLAGS_FLAG1);
+
+	return flags;
+}
+
+
+// =============================================================
 // create 64 bit raw timecode data; sync word is set in init process
 void TC::update_binary(void) {
 
@@ -249,6 +277,19 @@ void TC::fps(uint8_t fr) {
 // get framerate
 uint8_t TC::fps(void) {
 	return _tc.fps;
+}
+
+
+// =============================================================
+// sync external timecode with rtc
+// called, when the rtc second irq occurs
+void TC::sync(void) {
+	_tc.offset = _tc.f;
+}
+
+// return the frame offset between rtc second start and timecode
+uint8_t TC::offset(void) {
+	return _tc.offset;
 }
 
 
@@ -411,4 +452,8 @@ void TC::unchange(void) {
 // true if framerate has changed
 bool TC::fps_changed(void) {
 	return _fps_changed;
+}
+
+void TC::fps_change(bool status) {
+	_fps_changed = status;
 }

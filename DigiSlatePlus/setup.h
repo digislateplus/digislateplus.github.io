@@ -32,35 +32,95 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #define SETUP_H
 
 
+// framerates
+#define DEFAULT_FRAMERATE 25
+static const uint8_t framerates[3] = {24,25,30};
+
+
+// runmodes
 #define RUNMODE 0
 #define READMODE 1
 
+
+// setup
+#define SETTINGS_MAX_STATI 5
+#define SETTINGS_ENTER_TIMEOUT 2000
+#define SETTINGS_ENTER_REPEATS 3
+
+static const char* status_text[SETTINGS_MAX_STATI] = {"hour  ","minute","second","frames","fps   "};
+
+
+// SPI definitions
+#define MOSI 11
+#define MISO 13
+#define SCK 12
+
+// I2C definitions
+#define SDA 8
+#define SCL 9
+
+
+// timecode data settings
+#define FLASH_FPS 0
+#define FLASH_OFFSET 1
+#define FLASH_FLAGS 2
+#define FLASH_USERBITS 3
+
+#define FLASH_FLAGS_DROPFRAME 0
+#define FLASH_FLAGS_COLORFRAME 1
+#define FLASH_FLAGS_BIPHASE 2
+#define FLASH_FLAGS_FLAG0 3
+#define FLASH_FLAGS_FLAG1 4
+
+
+// timer settings
 #define ENABLE_LIMIT 1000		// ms for stable sync
 #define CLAP_DENOISE 100		// ms
 #define CLAP_LONG_CLOSED 2000	// time with closed clap to enable tc display 
 
 #define READ_TIMEOUT 500		// time without input to switch to run mode
 
-// IO definitions
-#define FLASH_LED A0	// flash led output
-#define BUTTON A1		// clap reed button input
+#define TIMER_24 4166			// basic timer setting for 24 fps
+#define TIMER_25 4000			// basic timer setting for 25 fps
+#define TIMER_30 3332			// basic timer setting for 30 fps
 
-#define SIGNAL_OUTPUT 0 // TC output to BNC
-#define SIGNAL_INPUT 2	// INT0 / for audio input
-#define RTC_INT_PORT 3  // INT1 / RTC sync input
+
+// IO ESP32S3 definitions
+#define FLASH_LED 40			// flash led output
+#define SLATE_PORT 39			// clap reed button input
+
+#define DOTS_LED 41;			// timecode separation dots
+
+#define SIGNAL_OUTPUT 39 		// TC output to BNC
+#define SIGNAL_INPUT 17			// INT0 / for audio input
+#define RTC_INT_PORT 18			// INT1 / RTC sync input
+
+#define SWITCH_1 10 			// LCD switch 1
+#define SWITCH_2 14 			// LCD switch 2
+#define SWITCH_3 15 			// LCD switch 3
+#define SWITCH_4 16 			// LCD switch 4
+
+#define ROTARY_CLK 46 			// rotary encoder clock
+#define ROTARY_DATA 47 			// rotary encoder data
+#define ROTARY_SWITCH 48 		// rotary encoder switch
+
+#define FREE 7 					// free unused GPIO
 
 
 // lc display pinout
-#define LCD_RS 9
-#define LCD_EN 8
-#define LCD_D4 6
-#define LCD_D5 5
-#define LCD_D6 4
-#define LCD_D7 17
+#define LCD_RS 6
+#define LCD_EN 5
+#define LCD_D4 1
+#define LCD_D5 2
+#define LCD_D6 3
+#define LCD_D7 4
 
 
-// led display pinout
-#define LOAD_PIN 7    //Load/CS pin
+// led display pinout ESP32
+#define LOAD_TC 21  	// Load pin timecode display
+#define LOAD_1 42		// Load pin matrix display 1-4
+#define LOAD_2 45		// Load pin matrix display 5-8
+
 
 // led register settings
 #define LED_F1 0x02

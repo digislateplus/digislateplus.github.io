@@ -65,7 +65,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 /*
- FLOAT DEFINITION
+ FLOAT
  
  setup()
 	1. init classes and variables
@@ -96,13 +96,34 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 			a. set mode to READMODE
 		3. diable timecode
 		4. IF reader synced
-			a. value 
-			a. IF read boot
-				> write time to RTC
-				> set boot to false
+			a. IF value available
+				> get reader timecode
+				> display on LED
+				> IF framerate changed
+					* display fps on LCD
+				> IF read boot
+					* display status jam on LCD
 
-			b. display status (sync, jam) on LCD
+					* IF rtc not updated
+						> get date from rtc
+						> write read time to RTC
+						> set rtc updated true
 
+				> ELSE display status sync on LCD
+		5. ELSE display status read on LCD
+
+ */
+
+/*
+ inspire libraries:
+ ------------------
+ LedControl			https://github.com/wayoda/LedControl
+
+
+ dependencies:
+ -------------
+ RTCLIB.h 			by Adafruit / fork of Jeelab's RTC library Version 2.1.4
+ LiquidCrystal.h 	by Arduino Version 1.0.7
  */
 
 
@@ -118,18 +139,32 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "tc.h"
 #include "rtc.h"
 #include "reader.h"
+#include "flash.h"
+#include "settings.h"
+#include "button.h"
 
 
 // =========================================
 // init classes
 LCD lcd;
-LED led;
+
+LED led_tc;
+LED led_matrix_1;
+LED led_matrix_2;
+
 RLED rled;
+RLED dled;
+
 TC tc;
 RTC rtc;
-READER reader;
 
-bool clap;
+READER reader;
+FLASH flash;
+BUTTON button;
+
+TC reader_tc;
+
+
 bool run;
 uint32_t claptime;
 uint32_t old_claptime;
@@ -142,7 +177,6 @@ long old_realtime;
 long cycletime;
 
 long timertime;
-
 long lastreadtime;
 
 bool tick;
@@ -154,18 +188,19 @@ long offset;
 
 // =========================================
 // run mode
-// 		false => free run
-// 		true => read
+// 		RUNMODE => free run mode
+// 		READMODE => read mode
 bool runMode;
 bool lastRunMode;
 
-// true if system started
-bool boot;
-bool rtc_updated;
+bool boot;				// true on system start
+bool rtc_updated;		// false on system start
 
+#include <EEPROM.h>
 
 // =========================================
 void setup() {
+
 
 
 	// set initial state
@@ -176,8 +211,6 @@ void setup() {
 	boot = true;
 	rtc_updated = false;
 
-	clap = false;
-
 
 	// start timing
 	realtime = micros();
@@ -187,7 +220,7 @@ void setup() {
 	// =============================================================
 	// INIT IO
 	pinMode(SIGNAL_OUTPUT,OUTPUT);
-	pinMode(BUTTON,INPUT_PULLUP);
+	button.begin(SLATE_PORT);
 
 
 	// =============================================================
@@ -195,10 +228,14 @@ void setup() {
 	rled.begin(FLASH_LED);
 	rled.on();
 
+	dled.begin(DOTS_LED);
+	dled.on();
+
 
 	// =============================================================
 	// INIT LC-Display
 	lcd.begin(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+
 
 	lcd.print(" DigiSlate-Plus", 0, 0);
 	lcd.print("  initializing", 0, 1);
@@ -206,30 +243,14 @@ void setup() {
 
 	// =============================================================
 	// INIT LED-Display
-	led.begin(LOAD_PIN);
+	led_tc.begin(LOAD_TC);
+	led_matrix_1.begin(LOAD_1);
+	led_matrix_2.begin(LOAD_2);
 
 
-	//display all zeros, and add decimal points to LSB
-	led.set(88, 88, 88, 88);
-	delay(250);
-
-
-// TODO get data from EEPROM
-
-
-	// =============================================================
-	// INIT timecode
-	tc.begin();
-	tc.set(0,0,0,0);
-	tc.fps(24);
-
-	led.set(tc.get());
-
-
-	// =============================================================
-	// end INIT sequence
-	rled.off();
-	lcd.clear();
+	// test LED display
+	led_tc.set(88, 88, 88, 88);
+	delay(500);
 
 
 	// =============================================================
@@ -252,6 +273,66 @@ void setup() {
 
 
 	// =============================================================
+	// INIT timecode
+	tc.begin();
+	tc.set(0,0,0,0);
+
+
+	// =============================================================
+	// check for setup
+	lcd.clear();
+	lcd.print("  Tripple clap", 0, 0);
+	lcd.print(" to enter setup", 0, 1);
+
+
+	SETTINGS settings;
+
+	if (settings.begin(&button, &lcd, &led)) {
+		settings.exec();
+	}
+
+
+	// =============================================================
+	// INIT flash
+	// get data from EEPROM
+	flash.begin();
+	TIMECODE flash_tc = flash.read();
+
+
+	// framerate is not valid > load default values and write to flash
+	if (!in_array(flash_tc.fps, framerates, 3)) {
+
+		tc.fps((uint8_t)DEFAULT_FRAMERATE);
+		tc.flags(0);
+
+		lcd.clear();
+		lcd.print("No flash values!", 0, 0);
+		lcd.print("  load default", 0, 1);
+
+		flash.write(tc.get());
+		flash.write_userbits(tc.ubits());
+
+		delay(1000);
+	}
+
+
+	// set found framerate
+	else {
+		tc.fps(flash_tc.fps);
+	}
+
+
+	// display timecode on LED
+	led_tc.set(tc.get());
+
+
+	// =============================================================
+	// end INIT sequence
+	rled.off();
+	lcd.clear();
+
+
+	// =============================================================
 	// activate interrupts
 	pinMode(RTC_INT_PORT, INPUT_PULLUP);  	// rtc sync input
 
@@ -267,17 +348,6 @@ void setup() {
 	sei();
 
 
-
-
-// debug => set time
-// h,m,s,d,m,y 
-// rtc.set(7,30,0,9,8,2024);
-
-
-
-// // DEBUG
-// lcd.clear();
-
 	start_timer1(tc.fps());
 }
 
@@ -288,25 +358,23 @@ void loop() {
 
 	// get clapbar state
 	// true = closed
-	bool clapbar = !digitalRead(BUTTON);
+	bool clapbar = !button.get();
 
 
 	// =============================================================
-	// const char hexchar[] = "0123456789ABCDEF";    // for uBits
-	// static uint8_t rawTC[8];                      // snapshot of tc/ubits data
-	// char tCode[12] = {"00:00:00:00"};      		// readable text
-	// static char uBits[17] = {"UB:             "}; // 8 hex chars centered
-
-
 	// =============================================================
-	// no TC on input
 	// free run mode
+	// no TC on input
+	// =============================================================
+	// =============================================================
 	if (runMode == RUNMODE) {
 
 
 		// ===================================
 		// mode changed to runMode
 		if (boot || (runMode != lastRunMode)) {
+
+			lcd.clear();
 
 			lastRunMode = runMode;
 			boot = false;
@@ -342,41 +410,24 @@ void loop() {
 
 
 		// =============================================================
+		// slate just closed (button open)
+		if (button.changed() && clapbar == true) {
+			rled.flash(30);
+			run = false;
+		}
+
+
+		// slate was closed (button open) for CLAP_LONG_CLOSED
+		if (button.opened(CLAP_LONG_CLOSED)) {
+			// rled.flash(30);
+			run = true;
+		}
+
+
+		// =============================================================
 		// update time if timecode has changed
 		if (tc.changed()) {
 			tc.unchange();
-
-
-			// ===================================
-			// slate is open
-			// check for clap button
-			if (!clapbar) {
-				clap = false;
-				run = true;
-			}
-
-
-			// ===================================
-			// slate is closed
-			// clapped
-			else if (!clap) {
-
-				run = false;
-				clap = true;
-				rled.flash(30);
-
-				claptime = millis();
-			}
-
-			// clap is closed
-			else {
-
-				// check for timeout
-				if (millis() > (claptime + CLAP_LONG_CLOSED)) {
-					run = true;
-				}
-
-			}
 
 
 			// ===================================
@@ -384,7 +435,7 @@ void loop() {
 			if (run) {
 
 				if (tc.enable()) {
-					led.set(tc.get());
+					led_tc.set(tc.get());
 				}
 			}
 
@@ -433,13 +484,17 @@ void loop() {
 			lcd.status("init");
 		}
 	}
+	// =============================================================
+	// END OF RUN MODE
+	// =============================================================
 
 
 
-
-	// =========================================
+	// =============================================================
+	// =============================================================
 	// READ MODE
-	// =========================================
+	// =============================================================
+	// =============================================================
 	else {
 
 
@@ -455,7 +510,10 @@ void loop() {
 
 			// mode changed to readmode
 			if (boot | (runMode != lastRunMode)) {
+
+				reader.reset();
 				lastRunMode = runMode;
+				lcd.clear();
 			}
 
 
@@ -472,16 +530,15 @@ void loop() {
 
 
 					// get read timecode
-					TIMECODE reader_tc;
-					reader_tc = reader.get();
+					reader_tc.set(reader.get());
 
-					led.set(reader_tc);
+					led_tc.set(reader_tc.get());
 
 
 					// =====================
 					// display new framerate
 					if (reader.fps_changed()) {
-						lcd.fps(reader_tc.fps + 1);
+						lcd.fps(reader_tc.fps() + 1);
 					}
 
 
@@ -489,6 +546,8 @@ void loop() {
 					// if just booted -> write timecode to rtc
 					if (boot) {
 						lcd.status(" jam");
+						lcd.print("offset ", 0, 1);
+						lcd.val8(reader_tc.offset(), 7, 1);
 
 						// rtc not jet updated > do it
 						if (!rtc_updated) {
@@ -497,14 +556,20 @@ void loop() {
 							DateTime rtc_time = rtc.get();
 							DateTime new_time;
 
-							// set new time
-							rtc.set(reader_tc.h, reader_tc.m, reader_tc.s, rtc_time.day(), rtc_time.month(), rtc_time.year());
+							// set new time to rtc
+							rtc.set(reader_tc.get().h, reader_tc.get().m, reader_tc.get().s, rtc_time.day(), rtc_time.month(), rtc_time.year());
+
+							// write flags to flash store
+							flash.write(reader_tc.get());
+
+							// timecode update completed
 							rtc_updated = true;
 						}
 					}
 
 					else {
 						lcd.status("sync");
+						lcd.val8(reader_tc.offset(), 0, 1);
 					}
 				}
 			}
@@ -513,29 +578,17 @@ void loop() {
 			else {
 				lcd.status("read");
 			}
-
-
-
 		}
 
-		// DEBUG
-		// rled.set(reader.sync());
 	}
-}    // end of loop()
+	// =============================================================
+	// END OF READ MODE
+	// =============================================================
 
-
-
-// =========================================
-// flip byte order for backwards reading
-uint8_t flip8(uint8_t b) {
-
-	// reverses the bit order within a byte
-
-	b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
-	b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
-	b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
-	return b;
 }
+
+// end of loop()
+
 
 
 // =========================================
@@ -557,13 +610,13 @@ void start_timer1(uint8_t fps) {
 	// set inital cmr by framerate
 	switch(fps) {
 		case 24:
-			OCR1A = 4166; // 24 fpx
+			OCR1A = TIMER_24; // 24 fpx
 			break;
 		case 25:
-			OCR1A = 4000; // 25 fps
+			OCR1A = TIMER_25; // 25 fps
 			break;
 		case 30:
-			OCR1A = 3332; // 30 fps
+			OCR1A = TIMER_30; // 30 fps
 			break;
 	}
 
@@ -589,9 +642,27 @@ void stop_timer1(void) {
 }
 
 
+// check if value is in array
+// (needle, array, length)
+bool in_array(uint8_t val, uint8_t* ary, uint8_t length) {
+
+	for (uint8_t i = 0; i < length; i++) {
+
+		if (val == ary[i]) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
 // =========================================
 // RTC interrupt every exact second
 void syncISR() {
+
+	// sync timecode frames to second start
+	reader_tc.sync();
 
 	tick = true;
 
