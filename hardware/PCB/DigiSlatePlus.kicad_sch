@@ -4764,6 +4764,12 @@
 		(uuid "cf6d9f53-07d4-4a20-9d11-86c9c550f329")
 	)
 	(junction
+		(at 196.85 50.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d5df73d3-d4b5-497c-b00f-76527b2c9201")
+	)
+	(junction
 		(at 161.29 85.09)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4874,6 +4880,16 @@
 			(type default)
 		)
 		(uuid "03914ea2-ab54-4978-9c23-c069c3a5b9e7")
+	)
+	(wire
+		(pts
+			(xy 196.85 50.8) (xy 209.55 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "044fd4fd-5950-415f-891a-dde55cac8751")
 	)
 	(wire
 		(pts
@@ -6497,16 +6513,6 @@
 	)
 	(wire
 		(pts
-			(xy 209.55 38.1) (xy 209.55 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f2654eef-9793-4793-b2bb-3812aeaf442e")
-	)
-	(wire
-		(pts
 			(xy 49.53 46.99) (xy 52.07 46.99)
 		)
 		(stroke
@@ -6692,6 +6698,16 @@
 			(justify left)
 		)
 		(uuid "6b816e77-9d48-4d34-b731-fdc615f1d8a1")
+	)
+	(text "remove R3 for\ncorrect boot mode"
+		(exclude_from_sim no)
+		(at 43.688 147.574 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "732c6d56-348c-4677-b279-55945e2a013c")
 	)
 	(text "I/O"
 		(exclude_from_sim no)
@@ -8431,7 +8447,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Mains"
+		(property "Value" "Slate"
 			(at 172.72 142.2399 0)
 			(effects
 				(font
