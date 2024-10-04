@@ -115,21 +115,18 @@ OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*
- inspire libraries:
- ------------------
- LedControl			https://github.com/wayoda/LedControl
-
-
  dependencies:
  -------------
  RTCLIB.h 			by Adafruit / fork of Jeelab's RTC library Version 2.1.4
  LiquidCrystal.h 	by Arduino Version 1.0.7
+Ai ESP32 Rotary Encoder by Igor Antolic
  */
 
 
 
 #include <Arduino.h>
 #include <RTClib.h>
+#include <ESP32RotaryEncoder.h>
 
 #include "setup.h"
 
@@ -160,9 +157,13 @@ RTC rtc;
 
 READER reader;
 FLASH flash;
+
 BUTTON button;
 
+
 TC reader_tc;
+
+hw_timer_t *timer1 = NULL;
 
 
 bool run;
@@ -202,6 +203,14 @@ bool rtc_updated;		// false on system start
 void setup() {
 
 
+	#ifdef DEBUG
+		Serial.begin(115200);
+		while(!Serial);
+
+		Serial.println("-----------------------------");
+		Serial.println("start debug");
+	#endif
+
 
 	// set initial state
 	// set initial state to readmode
@@ -219,12 +228,49 @@ void setup() {
 
 	// =============================================================
 	// INIT IO
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("init GPIO");
+		Serial.print("signal out port ");
+		Serial.println(SIGNAL_OUTPUT);
+		Serial.print("RTC interrupt in port ");
+		Serial.println(RTC_INT_PORT);
+	#endif
+
 	pinMode(SIGNAL_OUTPUT,OUTPUT);
+	pinMode(RTC_INT_PORT, INPUT_PULLUP);  	// rtc sync input
+
+
+	#ifdef DEBUG
+		Serial.print("slate button to ");
+		Serial.println(SLATE_PORT);
+	#endif
+
+	// =============================================================
+	// init BUTTONS
 	button.begin(SLATE_PORT);
+
+
+	// start rotary
+	RotaryEncoder rotaryEncoder(ROTARY_CLK, ROTARY_DATA, ROTARY_SWITCH, -1);
+	rotaryEncoder.setBoundaries( 1, 10, true );
+	rotaryEncoder.onTurned(&rotary_knob_callback);
+	rotaryEncoder.onPressed(&rotary_button_callback);
+	rotaryEncoder.begin();
 
 
 	// =============================================================
 	// INIT flash led
+	#ifdef DEBUG
+		Serial.print("init flash LED on port ");
+		Serial.println(FLASH_LED);
+
+		Serial.print("init dots LED on port ");
+		Serial.println(DOTS_LED);
+
+		Serial.println("switch both on");
+	#endif
+
 	rled.begin(FLASH_LED);
 	rled.on();
 
@@ -234,6 +280,28 @@ void setup() {
 
 	// =============================================================
 	// INIT LC-Display
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("init LCD");
+
+		Serial.print("RS=");
+		Serial.print(LCD_RS);
+
+		Serial.print(", EN=");
+		Serial.print(LCD_EN);
+
+		Serial.print(", D4=");
+		Serial.print(LCD_D4);
+		Serial.print(", D5=");
+		Serial.print(LCD_D5);
+		Serial.print(", D6=");
+		Serial.print(LCD_D6);
+		Serial.print(", D7=");
+		Serial.println(LCD_D7);
+
+		Serial.println("display init screen");
+	#endif
+
 	lcd.begin(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
 
@@ -242,31 +310,73 @@ void setup() {
 
 
 	// =============================================================
-	// INIT LED-Display
-	led_tc.begin(LOAD_TC);
-	led_matrix_1.begin(LOAD_1);
-	led_matrix_2.begin(LOAD_2);
+	// INIT LED-Displays
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("init LED displays");
+
+		Serial.print("7-segment port ");
+		Serial.println(LOAD_TC);
+
+		Serial.print("matrix 1-4 port ");
+		Serial.println(LOAD_1);
+
+		Serial.print("matrix 5-8 port ");
+		Serial.println(LOAD_2);
+
+		Serial.println("88 88 88 88 on timecode display");
+	#endif
 
 
-	// test LED display
-	led_tc.set(88, 88, 88, 88);
+	// =============================================================
+	// create SPI bus
+	SPIClass spi(SPI_BUS);
+
+
+	led_tc.begin(&spi, LOAD_TC, LED_TYPE_7_SEGMENT, 1);
+	led_matrix_1.begin(&spi, LOAD_1, LED_TYPE_MATRIX, 4);
+	led_matrix_2.begin(&spi, LOAD_2, LED_TYPE_MATRIX, 4);
+
+
+	// test LED displays
+	led_matrix_1.print("DigiSlate+", 10);
+
+
 	delay(500);
 
 
 	// =============================================================
 	// start real time clock
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("init RTC");
+	#endif
+
+
 	switch (rtc.begin(RTC_INT_PORT)) {
 
 		case 1:
+			#ifdef DEBUG
+				Serial.println(">> RTC ok");
+			#endif
+
 			lcd.status(" RTC");
 
 			break;
 
 		case 0:
+			#ifdef DEBUG
+				Serial.println(">> no RTC found");
+			#endif
+
 			lcd.status("!RTC");
 			break;
 
 		case -1:
+			#ifdef DEBUG
+				Serial.println(">> RTC power loss");
+			#endif
+
 			lcd.status(" SET");
 			break; 
 	}
@@ -274,33 +384,55 @@ void setup() {
 
 	// =============================================================
 	// INIT timecode
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("set timecode to: 00:00:00:00");
+	#endif
+
 	tc.begin();
 	tc.set(0,0,0,0);
 
 
+// TODO remove, because setup can be called every time
 	// =============================================================
 	// check for setup
-	lcd.clear();
-	lcd.print("  Tripple clap", 0, 0);
-	lcd.print(" to enter setup", 0, 1);
+	// lcd.clear();
+	// lcd.print("  Tripple clap", 0, 0);
+	// lcd.print(" to enter setup", 0, 1);
 
 
-	SETTINGS settings;
+	// SETTINGS settings;
 
-	if (settings.begin(&button, &lcd, &led)) {
-		settings.exec();
-	}
+	// if (settings.begin(&button, &lcd, &led_tc)) {
+	// 	settings.exec();
+	// }
 
 
 	// =============================================================
 	// INIT flash
 	// get data from EEPROM
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("init EEPROM functionality");
+
+		Serial.println("read data");
+	#endif
+
 	flash.begin();
 	TIMECODE flash_tc = flash.read();
 
 
 	// framerate is not valid > load default values and write to flash
-	if (!in_array(flash_tc.fps, framerates, 3)) {
+	if (!in_array(flash_tc.fps, (uint8_t*)framerates, 3)) {
+
+		#ifdef DEBUG
+			Serial.println(">> no valid data found");
+			Serial.print(flash_tc.fps);
+			Serial.println(" fps is no valid framerate");
+			Serial.print("set default framerate ");
+			Serial.print(DEFAULT_FRAMERATE);
+			Serial.println(" fps");
+		#endif
 
 		tc.fps((uint8_t)DEFAULT_FRAMERATE);
 		tc.flags(0);
@@ -308,6 +440,10 @@ void setup() {
 		lcd.clear();
 		lcd.print("No flash values!", 0, 0);
 		lcd.print("  load default", 0, 1);
+
+		#ifdef DEBUG
+			Serial.println(">> write data to EEPROM");
+		#endif
 
 		flash.write(tc.get());
 		flash.write_userbits(tc.ubits());
@@ -318,11 +454,19 @@ void setup() {
 
 	// set found framerate
 	else {
+		#ifdef DEBUG
+			Serial.println(">> set loaded values");
+		#endif
+
 		tc.fps(flash_tc.fps);
 	}
 
 
 	// display timecode on LED
+	#ifdef DEBUG
+		Serial.println(">> display timecode on LED");
+	#endif
+
 	led_tc.set(tc.get());
 
 
@@ -332,29 +476,55 @@ void setup() {
 	lcd.clear();
 
 
+
+
 	// =============================================================
 	// activate interrupts
-	pinMode(RTC_INT_PORT, INPUT_PULLUP);  	// rtc sync input
 
 
 	// start reader class
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("init timecode reader");
+	#endif
+
 	reader.begin(SIGNAL_INPUT);
 
 	tick = false;
 
-	cli();
-	attachInterrupt(digitalPinToInterrupt(SIGNAL_INPUT), readISR, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(RTC_INT_PORT), syncISR, FALLING);
-	sei();
 
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("attach interrupts to");
+		Serial.print("tc on port ");
+		Serial.println(SIGNAL_INPUT);
+		Serial.print("tc on port ");
+		Serial.println(RTC_INT_PORT);
+	#endif
+
+	// cli();
+	attachInterrupt(SIGNAL_INPUT, readISR, CHANGE);
+	attachInterrupt(RTC_INT_PORT, syncISR, FALLING);
+	// sei();
 
 	start_timer1(tc.fps());
+
+
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.println("init successfull");
+		Serial.println("-----------------------------");
+	#endif
 }
 
 
 // =========================================
 //
 void loop() {
+
+	// current timer speed
+	uint64_t current_timer;
+	int32_t delta_time;
 
 	// get clapbar state
 	// true = closed
@@ -373,6 +543,10 @@ void loop() {
 		// ===================================
 		// mode changed to runMode
 		if (boot || (runMode != lastRunMode)) {
+
+			#ifdef DEBUG
+				Serial.println("run mode started");
+			#endif
 
 			lcd.clear();
 
@@ -435,6 +609,17 @@ void loop() {
 			if (run) {
 
 				if (tc.enable()) {
+
+					#ifdef DEBUG
+						Serial.print(tc.get().h);
+						Serial.print(":");
+						Serial.print(tc.get().m);
+						Serial.print(":");
+						Serial.print(tc.get().s);
+						Serial.print(":");
+						Serial.println(tc.get().f);
+					#endif
+
 					led_tc.set(tc.get());
 				}
 			}
@@ -449,14 +634,15 @@ void loop() {
 				// sync timer by rtc
 				// rtc time smaller
 				// speed um timer
-				if (cycletime < timertime) {
-					OCR1A--;
-				}
+				current_timer = timerRead(timer1);
 
-				// slow down timer
-				else if (cycletime > timertime) {
-					OCR1A++;
-				}
+				// >0 if timer is too slow
+				// reduce timer µs by difference
+				delta_time = cycletime - timertime;
+
+
+				// adapt timer
+				timerWrite(timer1, current_timer + delta_time);
 
 
 				// enable if different is low enough
@@ -507,9 +693,12 @@ void loop() {
 
 		else {
 
-
 			// mode changed to readmode
 			if (boot | (runMode != lastRunMode)) {
+
+				#ifdef DEBUG
+					Serial.println("read mode started");
+				#endif
 
 				reader.reset();
 				lastRunMode = runMode;
@@ -545,6 +734,11 @@ void loop() {
 					// =======================================
 					// if just booted -> write timecode to rtc
 					if (boot) {
+
+						#ifdef DEBUG
+							Serial.println("jam > write read timecode to rtc");
+						#endif
+
 						lcd.status(" jam");
 						lcd.print("offset ", 0, 1);
 						lcd.val8(reader_tc.offset(), 7, 1);
@@ -591,6 +785,9 @@ void loop() {
 
 
 
+
+
+
 // =========================================
 // INTERRUPT ROUTINES
 // =========================================
@@ -600,60 +797,32 @@ void start_timer1(uint8_t fps) {
 
 	// =========================================
 	// 25 * 80 Hz Interrupt
-	cli();
+	timer1 = timerBegin(1000000);
+	timerAttachInterrupt(timer1, &clockISR);
 
-	// Clear registers
-	TCCR1A = 0;
-	TCCR1B = 0;
-	TCNT1 = 0;
 
 	// set inital cmr by framerate
 	switch(fps) {
 		case 24:
-			OCR1A = TIMER_24; // 24 fpx
+			timerAlarm(timer1, TIMER_24, true, 0);
 			break;
 		case 25:
-			OCR1A = TIMER_25; // 25 fps
+			timerAlarm(timer1, TIMER_25, true, 0);
 			break;
 		case 30:
-			OCR1A = TIMER_30; // 30 fps
+			timerAlarm(timer1, TIMER_30, true, 0);
 			break;
 	}
 
-
-	// CTC
-	TCCR1B |= (1 << WGM12);
-	// Prescaler 8
-	TCCR1B |= (1 << CS10);
-	// Output Compare Match A Interrupt Enable
-	TIMSK1 |= (1 << OCIE1A);
-
-	sei();
-	// =========================================
+	timerStart(timer1);
 }
 
 
+// =========================================
 // stop timer
 // write 0 to clock select bits
 void stop_timer1(void) {
-	TCCR1B &= ~(1 << CS10);
-	TCCR1B &= ~(1 << CS11);
-	TCCR1B &= ~(1 << CS12);
-}
-
-
-// check if value is in array
-// (needle, array, length)
-bool in_array(uint8_t val, uint8_t* ary, uint8_t length) {
-
-	for (uint8_t i = 0; i < length; i++) {
-
-		if (val == ary[i]) {
-			return true;
-		}
-	}
-
-	return false;
+	timerStop(timer1);
 }
 
 
@@ -679,7 +848,7 @@ void readISR(void) {
 
 	// init read mode
 	runMode = READMODE;
-	stop_timer1();
+	// stop_timer1();
 
 	lastreadtime = millis();
 
@@ -695,15 +864,30 @@ void readISR(void) {
 // 	24 fps => 3840 Hz; cmr = 4166
 // 	25 fps => 4000 Hz; cmr = 4000
 // 	30 fps => 4800 Hz; cmr = 3332
-ISR(TIMER1_COMPA_vect) {
-
-	long time;
+void clockISR(void) {
 
 	// tick signals the second from the rtc
 	// the timecode can run in an frame offset
 	timertime = tc.inc(tick);
 }
 
+
+// =========================================
+// rotary encoder interrup routine
+void rotary_button_callback(uint32_t duration) {
+
+	if (duration > ROTARY_LONG_PRESS) {
+		Serial.println("long press");
+	}
+
+	else {
+		Serial.println("press");
+	}
+}
+
+void rotary_knob_callback(int32_t value) {
+	Serial.println(value);
+}
 
 
 /* Check for micros() rollover
@@ -712,3 +896,19 @@ elapsedMicros = (18446744073709551615ULL - lastMicros) + currentMicros + 1;
 } else {
 elapsedMicros = currentMicros - lastMicros;
 }*/
+
+
+// =========================================
+// check if value is in array
+// (needle, array, length)
+bool in_array(uint8_t val, uint8_t* ary, uint8_t length) {
+
+	for (uint8_t i = 0; i < length; i++) {
+
+		if (val == ary[i]) {
+			return true;
+		}
+	}
+
+	return false;
+}

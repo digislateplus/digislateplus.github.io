@@ -50,7 +50,7 @@ void SETTINGS::exec(void) {
 
 		// status has changed
 		if (_status != _oldstatus) {
-			_lcd->print(status_text[_status - 1], 0, 1);
+			_lcd->print((char*)status_text[_status - 1], 0, 1);
 		}
 
 delay(1000);

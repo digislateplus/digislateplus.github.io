@@ -39,31 +39,91 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "tc.h"
 
 
-void LED::begin(uint8_t load_pin) {
+void LED::begin(SPIClass* spi, uint8_t load_pin, uint8_t type, uint8_t count) {
 
+	uint8_t i;
+
+	_spi = spi;
 	_load_pin = load_pin;
+	_type = type;
+	_count = count;
 
 	pinMode(_load_pin, OUTPUT);
 	digitalWrite(_load_pin, HIGH);
 
 	// =============================================================
 	// INIT LED-Display
-	SPI.setBitOrder(MSBFIRST);  //MSB first
-	SPI.begin();
+	#ifdef DEBUG
+		Serial.println("-----------------------------");
+		Serial.print("init type ");
+		Serial.print(type);
+		Serial.print(" LED on SPI bus ");
+		Serial.print(SPI_BUS);
+		Serial.print(" load port ");
+		Serial.println(_load_pin);
+	#endif
+
+	_spi->setBitOrder(MSBFIRST);  //MSB first
+	_spi->begin(SCK, MISO, MOSI, _load_pin);
 
 	delay(200);
+
 
 	//test by turning on, then off
-	_write(0x0F, 0x01);
-	delay(200);
-	_write(0x0F, 0x00);
+	for(i = 0; i < _count; i++) {
 
-	_write(0x09, 0xFF);  //enable onboard bit decode (Mode B)
-	_write(0x0A, 0x0F);  //max intensity
-	_write(0x0B, 0x07);  //display all digits
-	_write(0x0C, 0x01);  //turn on chip
+
+		#ifdef DEBUG
+			Serial.print("init registers of MAX7219 #");
+			Serial.println(i);
+		#endif
+
+
+		// displaytest
+		_send(i, OP_DISPLAYTEST, 0x01);
+
+		// clearDisplay(i);
+		_send(i, OP_INTENSITY, 0x0F);  //max intensity
+
+		//scanlimit is set to max on startup
+		_send(i, OP_SCANLIMIT,0x07);
+
+
+		// set decode by type
+		switch (_type) {
+
+			case LED_TYPE_7_SEGMENT:
+
+				_send(i, OP_DECODEMODE, 0xFF);  //enable onboard bit decode (Mode B)
+
+				break;
+
+			case LED_TYPE_MATRIX:
+
+				_send(i, OP_DECODEMODE, 0x00);  //disable onboard bit decode (Mode B)
+				break;
+		}
+
+	}
+
+	delay(750);
+
+
+	//we go into shutdown-mode on startup
+	for(i = 0; i < _count; i++) {
+		_send(i, OP_SHUTDOWN, 0x01);  //turn on chip
+	}
+
+
+	// _write(OP_DISPLAYTEST, 0x01);
+	// _write(OP_DISPLAYTEST, 0x00);
 }
 
+
+// void LED::_test_patter(uint8_t addr) {
+
+	// _send(addr, )
+// }
 
 void LED::set(TIMECODE tc) {
 	set(tc.h, tc.m, tc.s, tc.f);
@@ -94,12 +154,41 @@ void LED::hours(uint8_t val) {
 }
 
 
+// send count bytes
+void LED::_send(uint8_t addr, uint8_t opcode, uint8_t data) {
+
+	//Create an array with the data to shift out
+	int offset = addr*2;
+	int maxbytes = _count * 2;
+
+	// clear output data
+	for(_i = 0; _i < _count; _i++) {
+		_spidata[_i] = (byte)0;
+	}
+
+	//put our device data into the array
+	_spidata[offset+1] = opcode;
+	_spidata[offset] = data;
+
+	//enable the line 
+	digitalWrite(_load_pin,LOW);
+
+	//Now shift out the data 
+	for(_i = _count; _i > 0; _i--) {
+	    shiftOut(_load_pin, SCK, MSBFIRST, _spidata[_i-1]);
+	}
+
+	//latch the data onto the display
+	digitalWrite(_load_pin,HIGH); 
+}
+
+
 /*  Write VALUE to register ADDRESS on the MAX7219. */
 void LED::_write(uint8_t address, uint8_t value) {
 
 	digitalWrite(_load_pin, LOW); //Toggle enable pin to load MAX7219 shift register
-	SPI.transfer(address);
-	SPI.transfer(value);
+	_spi->transfer(address);
+	_spi->transfer(value);
 	digitalWrite(_load_pin, HIGH); 
 }
 
@@ -107,4 +196,46 @@ void LED::_write(uint8_t address, uint8_t value) {
 void LED::_digits(uint8_t val, uint8_t ten, uint8_t one) {
 	_write(ten, (val / 10) | '0');
 	_write(one, (val % 10) | '0');
+}
+
+
+// draw character at x-position (0-64)
+void LED::chr(uint8_t chr, uint8_t pos) {
+
+}
+
+// print text starting at x = 0
+void LED::print(char* text, uint8_t length) {
+	print(text, length, 0);
+}
+
+
+// print text starting at position (0-64)
+void LED::print(char* text, uint8_t length, uint8_t pos) {
+
+	Serial.print("print to matrix: ");
+
+	for (_i = 0;_i < length; _i++) {
+		Serial.print(text[_i]);
+	}
+
+	// display colums
+	// MSB = down
+	_send(0, OP_DIGIT0, B00011111);
+	_send(0, OP_DIGIT1, B00100100);
+	_send(0, OP_DIGIT2, B01000100);
+	_send(0, OP_DIGIT3, B00100100);
+	_send(0, OP_DIGIT4, B00011111);
+	_send(0, OP_DIGIT5, B00000000);
+	_send(0, OP_DIGIT6, B00000000);
+	_send(0, OP_DIGIT7, B00000000);
+
+	Serial.println();
+
+}
+
+
+// set row of display
+void LED::_set_row(uint8_t address, uint8_t row, uint8_t data) {
+
 }

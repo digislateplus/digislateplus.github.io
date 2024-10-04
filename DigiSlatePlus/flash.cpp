@@ -5,6 +5,12 @@
 // set size if ESP32
 // return the max size
 uint16_t FLASH::begin(void) {
+
+	#ifdef DEBUG
+		Serial.print("init EEPROM with length ");
+		Serial.println(EEPROM.length());
+	#endif
+
 	return begin(EEPROM.length());
 }
 
@@ -27,9 +33,11 @@ void FLASH::write(TIMECODE tc) {
 	flags |= (tc.flag0 << FLASH_FLAGS_FLAG0);
 	flags |= (tc.flag1 << FLASH_FLAGS_FLAG1);
 
-	EEPROM.update(FLASH_FPS, tc.fps);
-	EEPROM.update(FLASH_OFFSET, tc.offset);
-	EEPROM.update(FLASH_FLAGS, flags);
+	EEPROM.write(FLASH_FPS, tc.fps);
+	EEPROM.write(FLASH_OFFSET, tc.offset);
+	EEPROM.write(FLASH_FLAGS, flags);
+
+	EEPROM.commit();
 }
 
 
@@ -58,8 +66,10 @@ TIMECODE FLASH::read(void) {
 void FLASH::write_userbits(USERBITS ub) {
 
 	for (_i = 0; _i < 8; _i++) {
-		EEPROM.update(FLASH_USERBITS + _i, ub.bit[_i]);
+		EEPROM.write(FLASH_USERBITS + _i, ub.bit[_i]);
 	}
+  
+	EEPROM.commit();
 }
 
 
