@@ -2925,6 +2925,16 @@
 	)
 	(wire
 		(pts
+			(xy 336.55 48.26) (xy 336.55 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "174c9bd7-d840-4e9a-8a11-61f25687d637")
+	)
+	(wire
+		(pts
 			(xy 119.38 186.69) (xy 118.11 186.69)
 		)
 		(stroke
@@ -3345,6 +3355,16 @@
 	)
 	(wire
 		(pts
+			(xy 336.55 34.29) (xy 336.55 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37cb3b67-4618-42e5-8db9-4f2a33a2904e")
+	)
+	(wire
+		(pts
 			(xy 267.97 170.18) (xy 266.7 170.18)
 		)
 		(stroke
@@ -3695,6 +3715,16 @@
 	)
 	(wire
 		(pts
+			(xy 336.55 87.63) (xy 336.55 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63ecdf0d-fa7f-4f6a-ae66-73a7a8b7b3b4")
+	)
+	(wire
+		(pts
 			(xy 83.82 156.21) (xy 83.82 181.61)
 		)
 		(stroke
@@ -4032,6 +4062,16 @@
 			(type default)
 		)
 		(uuid "8476d1c5-bdc0-43b7-ae2b-5e4d6ba527fb")
+	)
+	(wire
+		(pts
+			(xy 336.55 73.66) (xy 336.55 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "84cd3065-7c80-43b4-9da7-bc751fde1d87")
 	)
 	(wire
 		(pts
@@ -5554,6 +5594,18 @@
 		(uuid "fd6da61c-77a8-4cba-b87f-7cb1d418c4ff")
 	)
 	(rectangle
+		(start 284.48 25.4)
+		(end 344.17 97.155)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 5a423f03-163f-4bee-9dd5-c0b4a6a25822)
+	)
+	(rectangle
 		(start 74.93 146.431)
 		(end 278.13 264.541)
 		(stroke
@@ -5588,6 +5640,17 @@
 			(type none)
 		)
 		(uuid f9bfd003-b608-4a74-a567-e7dac41ddf8b)
+	)
+	(text "Level converter"
+		(exclude_from_sim no)
+		(at 285.75 27.94 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "60dad4f1-4c33-49de-9fc5-4b46468b5b37")
 	)
 	(text "LED brightness"
 		(exclude_from_sim no)
@@ -6018,6 +6081,28 @@
 			)
 		)
 	)
+	(global_label "LOAD1-5V"
+		(shape input)
+		(at 313.69 41.91 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0f7f7477-5f19-4c6e-a45e-32df4b09a045")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 326.4724 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "C4-2"
 		(shape input)
 		(at 207.01 232.41 90)
@@ -6058,6 +6143,28 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "LOAD-2"
+		(shape input)
+		(at 298.45 81.28 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1214c35b-6e52-4c42-846f-4df5f2168239")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 287.9657 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -6304,7 +6411,7 @@
 			)
 		)
 	)
-	(global_label "L2-5V"
+	(global_label "LOAD2-5V"
 		(shape input)
 		(at 95.25 81.28 180)
 		(fields_autoplaced yes)
@@ -6316,7 +6423,7 @@
 		)
 		(uuid "1c5a6adc-4165-4c82-94cd-8ea0b16d6ec9")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 86.1567 81.28 0)
+			(at 82.4676 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6524,7 +6631,7 @@
 			)
 		)
 	)
-	(global_label "L1-5V"
+	(global_label "LOAD1-5V"
 		(shape input)
 		(at 195.58 201.93 180)
 		(fields_autoplaced yes)
@@ -6536,7 +6643,7 @@
 		)
 		(uuid "29ff44c8-4560-44e1-a750-c9ac9f7c8025")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 186.4867 201.93 0)
+			(at 182.7976 201.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7778,28 +7885,6 @@
 			)
 		)
 	)
-	(global_label "L2-5V"
-		(shape input)
-		(at 342.9 100.33 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "5806ae62-2361-42c4-8d92-a06f44b76453")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 351.9933 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "R1-2"
 		(shape input)
 		(at 193.04 238.76 180)
@@ -8020,7 +8105,7 @@
 			)
 		)
 	)
-	(global_label "L1-5V"
+	(global_label "LOAD1-5V"
 		(shape input)
 		(at 245.11 200.66 180)
 		(fields_autoplaced yes)
@@ -8032,7 +8117,7 @@
 		)
 		(uuid "655c7993-35c8-402b-9535-6cabd0a42957")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 236.0167 200.66 0)
+			(at 232.3276 200.66 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8108,7 +8193,7 @@
 			)
 		)
 	)
-	(global_label "L2-5V"
+	(global_label "LOAD2-5V"
 		(shape input)
 		(at 243.84 80.01 180)
 		(fields_autoplaced yes)
@@ -8120,7 +8205,7 @@
 		)
 		(uuid "6a9f23e5-6948-4c99-a3c9-f9822168a765")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 234.7467 80.01 0)
+			(at 231.0576 80.01 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9076,6 +9161,50 @@
 			)
 		)
 	)
+	(global_label "LOAD2-5V"
+		(shape input)
+		(at 313.69 81.28 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "91a2240e-73a2-4b96-95c5-5839a0fca6d8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 326.4724 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "LOAD-1"
+		(shape input)
+		(at 298.45 41.91 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "92155efd-df21-4cc2-9620-00173242330f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 287.9657 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "C4-6"
 		(shape input)
 		(at 217.17 73.66 0)
@@ -9406,7 +9535,7 @@
 			)
 		)
 	)
-	(global_label "L1-5V"
+	(global_label "LOAD1-5V"
 		(shape input)
 		(at 146.05 201.93 180)
 		(fields_autoplaced yes)
@@ -9418,7 +9547,7 @@
 		)
 		(uuid "a07fb591-c79c-493a-afb6-f3d9a0f58e64")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 136.9567 201.93 0)
+			(at 133.2676 201.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9560,28 +9689,6 @@
 			)
 		)
 	)
-	(global_label "L1-5V"
-		(shape input)
-		(at 342.9 60.96 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "a4825003-1d8c-4f99-a3c4-677f8f3b1dee")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 351.9933 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "R5-1"
 		(shape input)
 		(at 267.97 175.26 0)
@@ -9604,7 +9711,7 @@
 			)
 		)
 	)
-	(global_label "L2-5V"
+	(global_label "LOAD2-5V"
 		(shape input)
 		(at 194.31 81.28 180)
 		(fields_autoplaced yes)
@@ -9616,7 +9723,7 @@
 		)
 		(uuid "a8a5eefa-bfc9-48a5-a723-c62119912406")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 185.2167 81.28 0)
+			(at 181.5276 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10066,28 +10173,6 @@
 			)
 		)
 	)
-	(global_label "LOAD-2"
-		(shape input)
-		(at 327.66 100.33 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "b9454244-17fd-4542-94f0-b524002286d8")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 317.1757 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "C4-1"
 		(shape input)
 		(at 267.97 193.04 0)
@@ -10132,7 +10217,7 @@
 			)
 		)
 	)
-	(global_label "L2-5V"
+	(global_label "LOAD2-5V"
 		(shape input)
 		(at 144.78 81.28 180)
 		(fields_autoplaced yes)
@@ -10144,7 +10229,7 @@
 		)
 		(uuid "bb96ff1c-e62d-4144-afef-f5fbc1dfa2a6")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 135.6867 81.28 0)
+			(at 131.9976 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11078,28 +11163,6 @@
 			)
 		)
 	)
-	(global_label "LOAD-1"
-		(shape input)
-		(at 327.66 60.96 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "e2ce0199-d6f0-45d0-ad84-a5c4404732b5")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 317.1757 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-				(hide yes)
-			)
-		)
-	)
 	(global_label "R4-5"
 		(shape input)
 		(at 266.7 52.07 0)
@@ -11760,7 +11823,7 @@
 			)
 		)
 	)
-	(global_label "L1-5V"
+	(global_label "LOAD1-5V"
 		(shape input)
 		(at 96.52 201.93 180)
 		(fields_autoplaced yes)
@@ -11772,7 +11835,7 @@
 		)
 		(uuid "f66224db-27b9-4dc9-84e2-56946f1a434e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 87.4267 201.93 0)
+			(at 83.7376 201.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12347,6 +12410,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 336.55 87.63 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1cf5ca82-9414-4691-9d43-98953b318343")
+		(property "Reference" "#PWR061"
+			(at 336.55 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 336.55 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 336.55 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 336.55 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 336.55 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "d024dc58-0cd8-4570-aa17-e4905fac939f")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "#PWR061")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "FYM-12833A:FYM-12883A")
 		(at 156.21 127 0)
 		(unit 1)
@@ -12528,82 +12657,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Logic_LevelTranslator:SN74LV1T34DBV")
-		(at 335.28 100.33 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "2391227e-4734-440e-a2a4-cec179ae5e28")
-		(property "Reference" "U38"
-			(at 335.28 117.602 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SN74LV1T34DBV"
-			(at 335.28 120.142 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
-			(at 351.79 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/sn74lv1t34.pdf"
-			(at 325.12 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Single Power Supply, Single Buffer GATE, CMOS Logic, Level Shifter, SOT-23-5"
-			(at 335.28 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "99ae725e-f79f-40f0-835f-63deedcef8fd")
-		)
-		(pin "3"
-			(uuid "0345b15e-3e39-4854-b324-7e66e85e35b1")
-		)
-		(pin "2"
-			(uuid "ff9dfda2-5ab2-4cae-a0a9-20f1e08e29b0")
-		)
-		(pin "4"
-			(uuid "5c6ff6a6-214f-4dfc-bdd3-e0164b75deb2")
-		)
-		(pin "5"
-			(uuid "5880681c-c309-42cc-b2a2-aabf06d3e820")
-		)
-		(instances
-			(project "DigiSlatePlus"
-				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
-					(reference "U38")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Polarized")
 		(at 139.7 189.23 0)
 		(unit 1)
@@ -12667,6 +12720,72 @@
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
 					(reference "C31")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 336.55 48.26 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "26f82b39-67b6-42c4-9f76-f1be762b870e")
+		(property "Reference" "#PWR059"
+			(at 336.55 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 336.55 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 336.55 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 336.55 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 336.55 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4067ec41-24e5-497e-83a8-ff31e6c1a2b9")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "#PWR059")
 					(unit 1)
 				)
 			)
@@ -13078,6 +13197,83 @@
 		)
 	)
 	(symbol
+		(lib_id "Logic_LevelTranslator:SN74LV1T34DBV")
+		(at 306.07 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "2ce4f054-f6ce-488e-a645-f333a3417c22")
+		(property "Reference" "U38"
+			(at 320.04 74.9614 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SN74LV1T34DBV"
+			(at 320.04 77.5014 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+			(at 322.58 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/sn74lv1t34.pdf"
+			(at 295.91 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Single Power Supply, Single Buffer GATE, CMOS Logic, Level Shifter, SOT-23-5"
+			(at 306.07 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "19af36d8-5681-478d-a235-82057b3d2f40")
+		)
+		(pin "1"
+			(uuid "7238961a-674b-4cff-9c17-89e978eb5302")
+		)
+		(pin "3"
+			(uuid "de5e2ff2-fd1f-4759-9147-fd8d185fde31")
+		)
+		(pin "5"
+			(uuid "d21e6651-0631-4ecd-b406-5d857ac2cb31")
+		)
+		(pin "4"
+			(uuid "6fe7bb8e-72bb-4cc2-bcf4-1a2a53dd3de5")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "U38")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 232.41 187.96 0)
 		(unit 1)
@@ -13141,6 +13337,72 @@
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
 					(reference "C34")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 306.07 34.29 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3145ab85-13f0-44ce-900b-02dc96c82710")
+		(property "Reference" "#PWR048"
+			(at 306.07 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 306.07 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 306.07 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 306.07 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 306.07 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e5197e6c-54ea-4182-b667-3d3b76012c0f")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "#PWR048")
 					(unit 1)
 				)
 			)
@@ -13279,41 +13541,34 @@
 		)
 	)
 	(symbol
-		(lib_id "Logic_LevelTranslator:SN74LV1T34DBV")
-		(at 335.28 60.96 0)
+		(lib_id "Device:C")
+		(at 336.55 41.91 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5591d5e1-7362-46f3-a8ab-7bfd140595b5")
-		(property "Reference" "U37"
-			(at 335.28 78.232 0)
+		(uuid "459fdbbe-e06f-4843-bff3-295df6260cf7")
+		(property "Reference" "C44"
+			(at 337.312 39.116 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "SN74LV1T34DBV"
-			(at 335.28 80.772 0)
+		(property "Value" "100nF/50V"
+			(at 332.74 47.244 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
-			(at 351.79 67.31 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/sn74lv1t34.pdf"
-			(at 325.12 66.04 0)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 337.5152 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13321,8 +13576,17 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Single Power Supply, Single Buffer GATE, CMOS Logic, Level Shifter, SOT-23-5"
-			(at 335.28 60.96 0)
+		(property "Datasheet" "~"
+			(at 336.55 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 336.55 41.91 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13331,24 +13595,161 @@
 			)
 		)
 		(pin "1"
-			(uuid "bac23476-b48a-4893-bf31-ab1c4777bda4")
-		)
-		(pin "3"
-			(uuid "d5cc02f4-74d6-4a6c-8faa-d06263850f4f")
+			(uuid "5f878610-d2eb-443c-95d5-7a8680164e16")
 		)
 		(pin "2"
-			(uuid "14dfb8dc-9b76-4fb8-8b61-5825e26610bf")
+			(uuid "b094f831-76a3-487e-8262-c6edf1e65af1")
 		)
-		(pin "4"
-			(uuid "05f73fae-78a2-4951-82b7-4c57c63ae66e")
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "C44")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Logic_LevelTranslator:SN74LV1T34DBV")
+		(at 306.07 41.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4d312d9c-f46c-4549-82e3-77a51efe0e2d")
+		(property "Reference" "U37"
+			(at 320.04 35.5914 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SN74LV1T34DBV"
+			(at 320.04 38.1314 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5"
+			(at 322.58 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/sn74lv1t34.pdf"
+			(at 295.91 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Single Power Supply, Single Buffer GATE, CMOS Logic, Level Shifter, SOT-23-5"
+			(at 306.07 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "73494c03-78fe-4515-beb5-c98e5ca5c956")
+		)
+		(pin "1"
+			(uuid "06dfec75-70bc-45d5-80a8-d8fac8b63176")
+		)
+		(pin "3"
+			(uuid "323f5737-6ab4-4a7f-8fde-4031c7f1c090")
 		)
 		(pin "5"
-			(uuid "49c9e5c1-62f0-4279-9ef2-c78d101f8ff5")
+			(uuid "e6253b10-3642-48b7-89d6-0529e44fece0")
+		)
+		(pin "4"
+			(uuid "a09c38c3-858b-44e8-88b7-9a25d45771cf")
 		)
 		(instances
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
 					(reference "U37")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 336.55 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "561b470c-1ca3-46a0-b642-d71f4d68fd8f")
+		(property "Reference" "C45"
+			(at 337.312 78.486 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100nF/50V"
+			(at 332.74 86.614 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 337.5152 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 336.55 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 336.55 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "67439e2f-6d59-426b-8f55-590585493fca")
+		)
+		(pin "2"
+			(uuid "34be0454-e105-4b9b-932b-3d13cb0306dc")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "C45")
 					(unit 1)
 				)
 			)
@@ -13701,6 +14102,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 306.07 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7a7ca4e5-e260-4b6e-845a-828329091a91")
+		(property "Reference" "#PWR051"
+			(at 306.07 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 306.07 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 306.07 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 306.07 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 306.07 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "6dd376ea-7881-42ca-8150-917a8aab916d")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "#PWR051")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Driver_LED:MAX7219")
 		(at 157.48 186.69 0)
 		(unit 1)
@@ -13831,6 +14298,72 @@
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
 					(reference "U27")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 306.07 73.66 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7f914268-3649-44c0-ab87-a1ff6ea54813")
+		(property "Reference" "#PWR050"
+			(at 306.07 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 306.07 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 306.07 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 306.07 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 306.07 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0b9a059f-43b2-4234-8caf-6d6cba9c62e4")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "#PWR050")
 					(unit 1)
 				)
 			)
@@ -14154,6 +14687,72 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
+		(at 336.55 73.66 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a11fabe0-833c-40bb-bb44-7ad2569ebf32")
+		(property "Reference" "#PWR060"
+			(at 336.55 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 336.55 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 336.55 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 336.55 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 336.55 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "105fe013-4c51-48cd-b2a2-5ce17bde28e0")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "#PWR060")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
 		(at 205.74 34.29 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14213,72 +14812,6 @@
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
 					(reference "#PWR034")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 335.28 92.71 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a8a9c042-1452-4f05-ad3c-8f63a4a9a437")
-		(property "Reference" "#PWR050"
-			(at 335.28 96.52 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+5V"
-			(at 335.28 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 335.28 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 335.28 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 335.28 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e76a9b97-af4b-4a7e-8d5d-5d23bd73f165")
-		)
-		(instances
-			(project "DigiSlatePlus"
-				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
-					(reference "#PWR050")
 					(unit 1)
 				)
 			)
@@ -14731,72 +15264,6 @@
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
 					(reference "U10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 335.28 53.34 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ae3f40cf-a14f-4474-b6a9-a1fa292077a1")
-		(property "Reference" "#PWR048"
-			(at 335.28 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+5V"
-			(at 335.28 48.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 335.28 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 335.28 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 335.28 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "bce31331-41ff-4297-bea8-bd45b789bc16")
-		)
-		(instances
-			(project "DigiSlatePlus"
-				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
-					(reference "#PWR048")
 					(unit 1)
 				)
 			)
@@ -15412,72 +15879,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 335.28 107.95 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ccfd82d6-3fa8-4185-b4b9-9d5de90803f0")
-		(property "Reference" "#PWR051"
-			(at 335.28 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 335.28 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 335.28 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 335.28 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 335.28 107.95 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "810c129c-cba4-4483-a08c-340a77b25a0b")
-		)
-		(instances
-			(project "DigiSlatePlus"
-				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
-					(reference "#PWR051")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Polarized")
 		(at 189.23 189.23 0)
 		(unit 1)
@@ -15653,72 +16054,6 @@
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
 					(reference "U11")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 335.28 68.58 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "db68a247-2634-44af-8e09-e017fba42c83")
-		(property "Reference" "#PWR049"
-			(at 335.28 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 335.28 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 335.28 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 335.28 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 335.28 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "315e2fd9-b338-4a5d-b9ca-3dd5a9dae100")
-		)
-		(instances
-			(project "DigiSlatePlus"
-				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
-					(reference "#PWR049")
 					(unit 1)
 				)
 			)
@@ -15996,6 +16331,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 306.07 49.53 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e6f7156b-f6ef-477c-ac23-9348b8189854")
+		(property "Reference" "#PWR049"
+			(at 306.07 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 306.07 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 306.07 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 306.07 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 306.07 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e79005c7-e88f-499d-8e44-92af29cfdfde")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "#PWR049")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "FYM-12833A:FYM-12883A")
 		(at 257.81 247.65 0)
 		(unit 1)
@@ -16168,6 +16569,72 @@
 			(project "DigiSlatePlus"
 				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
 					(reference "#PWR039")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 336.55 34.29 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ee6296d4-27a2-4866-9c3f-97ce4fffa18b")
+		(property "Reference" "#PWR058"
+			(at 336.55 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 336.55 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 336.55 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 336.55 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+5V\""
+			(at 336.55 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b9ba01ab-4cfb-4d92-a6df-24db1166d8bb")
+		)
+		(instances
+			(project "DigiSlatePlus"
+				(path "/dcb9cf24-5afa-4bbe-8afa-a00529143e4d/9fdb67e5-5a22-4406-8105-d7910dfeff85"
+					(reference "#PWR058")
 					(unit 1)
 				)
 			)
