@@ -24580,7 +24580,7 @@
 		(descr "Through hole straight pin header, 1x01, 1.00mm pitch, single row")
 		(tags "Through hole pin header THT 1x01 1.00mm single row")
 		(property "Reference" "J10"
-			(at 2.7 -0.1 0)
+			(at 2.7 0.535 0)
 			(layer "B.SilkS")
 			(uuid "43581c75-8190-4d0a-bded-c670cc069cb3")
 			(effects
@@ -24852,7 +24852,7 @@
 		(descr "Tantalum Capacitor SMD Kemet-D (7343-31 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor tantalum")
 		(property "Reference" "C33"
-			(at 0 5.72 90)
+			(at 0 3.087 90)
 			(layer "B.SilkS")
 			(uuid "fdec4e2b-6b3f-423c-a367-99edf6abd047")
 			(effects
@@ -25091,7 +25091,7 @@
 		(descr "Tantalum Capacitor SMD Kemet-D (7343-31 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor tantalum")
 		(property "Reference" "C31"
-			(at 0 5.4 90)
+			(at 0 3.036 90)
 			(layer "B.SilkS")
 			(uuid "599a45e7-bef6-4bce-a619-51d23a94f898")
 			(effects
@@ -25788,7 +25788,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R7"
-			(at -0.0375 -2.5 90)
+			(at 0.0305 -1.911 90)
 			(layer "B.SilkS")
 			(uuid "50fe24b7-c951-48d2-861d-64ca749228b2")
 			(effects
@@ -29777,7 +29777,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C44"
-			(at 0 1.85 90)
+			(at 0.1735 -1.72 90)
 			(layer "B.SilkS")
 			(uuid "e1bce186-3916-4f78-8e2d-e5171b2ab416")
 			(effects
@@ -38067,7 +38067,7 @@
 		)
 		(fp_arc
 			(start 63.70066 -22.9997)
-			(mid 64.054515 -22.853157)
+			(mid 64.05448 -22.853151)
 			(end 64.20104 -22.49932)
 			(stroke
 				(width 0.12)
@@ -40987,7 +40987,7 @@
 		(descr "Tantalum Capacitor SMD Kemet-D (7343-31 Metric), IPC_7351 nominal, (Body size from: http://www.kemet.com/Lists/ProductCatalog/Attachments/253/KEM_TC101_STD.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor tantalum")
 		(property "Reference" "C29"
-			(at 0 6.64 90)
+			(at 0 3.063 90)
 			(layer "B.SilkS")
 			(uuid "62b4b397-89d3-42fc-b01a-58d90355b4c3")
 			(effects
@@ -42846,7 +42846,7 @@
 		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R4"
-			(at -3.2795 0.025 90)
+			(at -2.8885 0.018 90)
 			(layer "B.SilkS")
 			(uuid "8be48d6e-9c71-4855-a81d-6d45d6450d1d")
 			(effects
@@ -43284,7 +43284,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C42"
-			(at 0 1.85 90)
+			(at 3.921 0.0018 90)
 			(layer "B.SilkS")
 			(uuid "cfb38f89-deb8-4970-9b66-df4b24ec23e4")
 			(effects
@@ -45230,7 +45230,7 @@
 		(descr "Capacitor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor handsolder")
 		(property "Reference" "C6"
-			(at -3.5475 0.005 180)
+			(at -3.2425 0.005 180)
 			(layer "B.SilkS")
 			(uuid "d3f2aa5f-d596-4ee6-be54-a22a64b0ad01")
 			(effects
@@ -52998,7 +52998,7 @@
 		(descr "2.4 GHz Wi-Fi and Bluetooth module  https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf")
 		(tags "2.4 GHz Wi-Fi and Bluetooth module")
 		(property "Reference" "U1"
-			(at -10.45 -14.94 180)
+			(at -10.795 -7.827 0)
 			(unlocked yes)
 			(layer "B.SilkS")
 			(uuid "f6aa4e72-22c2-406f-becf-7a9031803f07")
@@ -55202,7 +55202,7 @@
 			(justify bottom mirror)
 		)
 	)
-	(gr_text "V1.0"
+	(gr_text "V1.1"
 		(at 197 102 0)
 		(layer "B.SilkS")
 		(uuid "0c2f8399-84d9-4bca-8105-a6f6c420b83e")
@@ -55293,6 +55293,18 @@
 			(justify bottom mirror)
 		)
 	)
+	(gr_text "MISO"
+		(at 302.006 118.999 0)
+		(layer "B.SilkS")
+		(uuid "86250ad2-2d29-47a9-a589-2cb8c008d1c1")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.15)
+			)
+			(justify mirror)
+		)
+	)
 	(gr_text "https://digislateplus.github.io"
 		(at 197 88 0)
 		(layer "B.SilkS")
@@ -55329,6 +55341,18 @@
 				(bold yes)
 			)
 			(justify bottom mirror)
+		)
+	)
+	(gr_text "IO7"
+		(at 321.564 118.11 0)
+		(layer "B.SilkS")
+		(uuid "a20e19d5-5b26-438c-a199-1958ae403f75")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.15)
+			)
+			(justify mirror)
 		)
 	)
 	(gr_text "scene/take\nbrightnes"

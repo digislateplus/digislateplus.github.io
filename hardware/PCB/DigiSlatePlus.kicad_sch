@@ -6699,7 +6699,7 @@
 		)
 		(uuid "6b816e77-9d48-4d34-b731-fdc615f1d8a1")
 	)
-	(text "remove R3 for\ncorrect boot mode"
+	(text "remove R3 for\nserial boot mode"
 		(exclude_from_sim no)
 		(at 43.688 147.574 0)
 		(effects
