@@ -37,9 +37,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 2.5,
-          "height": 2.9,
-          "width": 3.4
+          "drill": 0.0,
+          "height": 1.8,
+          "width": 1.325
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -58,7 +58,17 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "items_not_allowed|73449500|166135000|be829765-3320-4b79-8f72-79fe9151b69e|00000000-0000-0000-0000-000000000000",
+        "items_not_allowed|73449500|178360000|2312e61a-55bb-4fd3-b0a4-9706cd7fc14f|00000000-0000-0000-0000-000000000000",
+        "malformed_courtyard|59549500|169385000|1319913f-8b9c-4fd0-a029-3d31052d05eb|00000000-0000-0000-0000-000000000000",
+        "malformed_courtyard|66049500|169385000|1319913f-8b9c-4fd0-a029-3d31052d05eb|00000000-0000-0000-0000-000000000000",
+        "malformed_courtyard|72899500|166135000|1319913f-8b9c-4fd0-a029-3d31052d05eb|00000000-0000-0000-0000-000000000000",
+        "malformed_courtyard|75149500|166135000|1319913f-8b9c-4fd0-a029-3d31052d05eb|00000000-0000-0000-0000-000000000000",
+        "malformed_courtyard|75149500|179135000|1319913f-8b9c-4fd0-a029-3d31052d05eb|00000000-0000-0000-0000-000000000000",
+        "starved_thermal|267100000|185910000|805596d1-f175-4949-8748-42c3c7e806a1|127221bc-2882-40b6-b111-dcc7b059e311|B.Cu",
+        "starved_thermal|97620000|131350000|805596d1-f175-4949-8748-42c3c7e806a1|222c875c-4042-4491-880f-61c41d5d6c2e|B.Cu"
+      ],
       "meta": {
         "version": 2
       },
