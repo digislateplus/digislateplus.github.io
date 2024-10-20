@@ -2,7 +2,7 @@
 #define FLASH_H
 
 #include <EEPROM.h>
-#include "setup.h"
+#include "config.h"
 #include "tc.h"
 
 

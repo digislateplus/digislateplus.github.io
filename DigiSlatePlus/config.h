@@ -108,7 +108,7 @@ static const char* status_text[SETTINGS_MAX_STATI] = {"hour  ","minute","second"
 #define ROTARY_SWITCH 48 		// rotary encoder switch
 #define ROTARY_STEPS 4 			// 
 #define ROTARY_ACCELERATION 250	// acceleration if turned fastly
-#define ROTARY_LONG_PRESS 2000
+#define ROTARY_LONG_PRESS 1000
 
 #define FREE 7 					// free unused GPIO
 
@@ -123,29 +123,13 @@ static const char* status_text[SETTINGS_MAX_STATI] = {"hour  ","minute","second"
 
 
 // led display pinout ESP32
-//the opcodes for the MAX7221 and MAX7219
-#define OP_NOOP   0x00
-#define OP_DIGIT0 0x01
-#define OP_DIGIT1 0x02
-#define OP_DIGIT2 0x03
-#define OP_DIGIT3 0x04
-#define OP_DIGIT4 0x05
-#define OP_DIGIT5 0x06
-#define OP_DIGIT6 0x07
-#define OP_DIGIT7 0x08
-#define OP_DECODEMODE  0x09
-#define OP_INTENSITY   0x0A
-#define OP_SCANLIMIT   0x0B
-#define OP_SHUTDOWN    0x0C
-#define OP_DISPLAYTEST 0x0F
-
-
-#define LED_TYPE_7_SEGMENT 0
-#define LED_TYPE_MATRIX 1
+#define MATRIX_CONTROLLERS 2
+#define MATRIX_WIDTH 64
+#define MATRIX_HEIGHT 8
 
 #define LOAD_TC 21  			// Load pin timecode display
-#define LOAD_1 42				// Load pin matrix display 1-4
-#define LOAD_2 45				// Load pin matrix display 5-8
+#define MATRIX_LOAD_1 42		// Load pin matrix display 1-4
+#define MATRIX_LOAD_2 45		// Load pin matrix display 5-8
 
 
 // led register settings

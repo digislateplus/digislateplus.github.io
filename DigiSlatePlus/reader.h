@@ -2,7 +2,7 @@
 #define READER_H
 
 #include <Arduino.h>
-#include "setup.h"
+#include "config.h"
 #include "tc.h"
 
 /*

@@ -50,7 +50,7 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #define TC_H
 
 #include <Arduino.h>
-#include "setup.h"
+#include "config.h"
 
 // timecode definitions
 #define GEN_MAX_BITS 8

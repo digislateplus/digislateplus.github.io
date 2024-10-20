@@ -31,60 +31,56 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 /*
- The class is a framework to display values on the LED 7-segment display.
+ The class is a framework to display values on the LED 8x8 dot display.
  The assignment of the data to the segments is defined in the config.h file.
  */
 
 
-#ifndef LED_H
-#define LED_H
-
-#include "tc.h"
+#ifndef LED_MATRIX_H
+#define LED_MATRIX_H
 
 
-//the opcodes for the MAX7221 and MAX7219
-#define OP_NOOP   0x00
-#define OP_DIGIT0 0x01
-#define OP_DIGIT1 0x02
-#define OP_DIGIT2 0x03
-#define OP_DIGIT3 0x04
-#define OP_DIGIT4 0x05
-#define OP_DIGIT5 0x06
-#define OP_DIGIT6 0x07
-#define OP_DIGIT7 0x08
-#define OP_DECODEMODE  0x09
-#define OP_INTENSITY   0x0A
-#define OP_SCANLIMIT   0x0B
-#define OP_SHUTDOWN    0x0C
-#define OP_DISPLAYTEST 0x0F
+#include <Arduino.h>
+#include <SPI.h>
+
+#include "config.h"
+#include "led.h"
+#include "charset.h"
 
 
-class LED {
+class LED_MATRIX {
+
 public:
+	void begin(SPIClass*, uint8_t width, uint8_t height);
+	void add_controller(uint8_t port);
 
-	// start led class
-	// count = number of cascading controllers
-	void begin(SPIClass*, uint8_t, uint8_t count);
-	void set(TIMECODE);
-	void set(uint8_t, uint8_t, uint8_t, uint8_t);
-	void frames(uint8_t);
-	void seconds(uint8_t);
-	void minutes(uint8_t);
-	void hours(uint8_t);
+	void home(void);
+	void clear(void);
+	void clear(uint8_t);	
+
+	void print(char*, uint8_t);
+	void print(char*, uint8_t, uint8_t);
+
+	void chr(uint8_t, uint8_t);
 
 private:
-	uint8_t _load_pin;
-
-	void _write(uint8_t, uint8_t);
-	void _digits(uint8_t, uint8_t, uint8_t);
+	void _send(uint8_t addr, uint8_t opcode, uint8_t data);
 
 	uint8_t _i;
+	
 	uint8_t _count;
 
-	/* The array for shifting the data to the devices */
-	byte _spidata[16];
+	uint8_t _width;
+	uint8_t _height;
 
-	SPIClass* _spi = NULL;
+	uint8_t _cursor;
+	uint8_t _spidata[64];
+
+
+	SPIClass* _spi;
+
+	uint8_t _controller_count;
+	uint8_t _port[MATRIX_CONTROLLERS];
 };
 
 

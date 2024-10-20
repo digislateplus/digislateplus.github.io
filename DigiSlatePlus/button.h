@@ -2,7 +2,7 @@
 #define BUTTON_H
 
 #include <Arduino.h>
-#include "setup.h"
+#include "config.h"
 #include "button.h"
 
 
