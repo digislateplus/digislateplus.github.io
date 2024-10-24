@@ -48,33 +48,58 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #include "charset.h"
 
 
+// text alignment
+#define ALIGN_LEFT -1
+#define ALIGN_RIGHT -2
+#define ALIGN_CENTER -3
+
 class LED_MATRIX {
 
 public:
-	void begin(SPIClass*, uint8_t width, uint8_t height);
-	void add_controller(uint8_t port);
+	void begin(SPIClass*, uint8_t width, uint8_t height, uint8_t load_1, uint8_t load_2);
 
 	void home(void);
 	void clear(void);
-	void clear(uint8_t);	
+	void clear(uint8_t, uint8_t);
 
-	void print(char*, uint8_t);
-	void print(char*, uint8_t, uint8_t);
+	// set cursor position
+	// false if out of range
+	bool cursor(uint8_t cursor);
 
-	void chr(uint8_t, uint8_t);
+	// print character at cursor position
+	uint8_t print_char(uint8_t c);
+
+	// print text with chars_count characters
+	void print(char* text, uint8_t chars);
+
+	// print text with chars_count at position
+	// position can be alignment
+	void print(char* text, uint8_t chars, int8_t position);
+
+	// set printable area
+	// without parameter, reset to full
+	void area(void);
+	void area(uint8_t min, uint8_t max);
+
+	uint8_t length(char* text, uint8_t chars);
 
 private:
-	void _send(uint8_t addr, uint8_t opcode, uint8_t data);
+	void _send(uint8_t start, uint8_t end);
+	void _write(uint8_t load_pin, uint8_t addr, uint8_t opcode, uint8_t data);
 
 	uint8_t _i;
-	
+
 	uint8_t _count;
 
 	uint8_t _width;
 	uint8_t _height;
 
+	uint8_t _min;
+	uint8_t _max;
+
 	uint8_t _cursor;
-	uint8_t _spidata[64];
+	uint8_t _spidata[16];
+	uint8_t _buffer[64];
 
 
 	SPIClass* _spi;

@@ -53,20 +53,20 @@ void LED::begin(SPIClass* spi, uint8_t load_pin, uint8_t count) {
 	// INIT LED-Display
 	#ifdef DEBUG
 		Serial.println("-----------------------------");
-		Serial.print("init LED on SPI bus ");
+		Serial.print("begin LED on SPI bus ");
 		Serial.print(SPI_BUS);
 		Serial.print(" load port ");
 		Serial.println(_load_pin);
 	#endif
 
-	_spi->setBitOrder(MSBFIRST);  //MSB first
-	_spi->begin(SCK, MISO, MOSI);
+	// _spi->setBitOrder(MSBFIRST);  //MSB first
+	// _spi->begin(SCK, MISO, MOSI);
 
 	delay(100);
 
 
 	#ifdef DEBUG
-		Serial.print("init registers of MAX7219");
+		Serial.println("init registers of MAX7219");
 	#endif
 
 

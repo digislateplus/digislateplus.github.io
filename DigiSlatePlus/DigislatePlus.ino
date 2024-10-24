@@ -348,25 +348,24 @@ void setup() {
 
 	Serial.print("7-segment port ");
 	Serial.println(LOAD_TC);
+#endif
 
-	// Serial.print("matrix 1-4 port ");
-	// Serial.println(LOAD_1);
+	// =============================================================
+	spi.setBitOrder(MSBFIRST);  //MSB first
+	spi.begin(SCK, MISO, MOSI);
 
-	// Serial.print("matrix 5-8 port ");
-	// Serial.println(LOAD_2);
+	led_tc.begin(&spi, LOAD_TC, 1);
 
+#ifdef DEBUG
 	Serial.println("88 88 88 88 on timecode display");
+
+	Serial.println("-----------------------------");
+	Serial.println("init matrix LED displays");
 #endif
 
 
-	// =============================================================
-	led_tc.begin(&spi, LOAD_TC, 1);
-
-	led_matrix.begin(&spi, MATRIX_WIDTH, MATRIX_HEIGHT);
-	led_matrix.add_controller(MATRIX_LOAD_1);
-	led_matrix.add_controller(MATRIX_LOAD_2);
-
-	delay(500);
+	led_matrix.begin(&spi, MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_LOAD_1, MATRIX_LOAD_2);
+	led_matrix.print("12  4/1", 7, ALIGN_CENTER);
 
 
 // =============================================================
