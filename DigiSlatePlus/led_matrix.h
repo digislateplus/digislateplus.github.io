@@ -66,6 +66,20 @@ public:
 	// false if out of range
 	bool cursor(uint8_t cursor);
 
+	// get cursor position
+	uint8_t cursor(void);
+
+	// increment cursor
+	// false if out of range, cursor is set to end
+	bool next(void);
+
+	// increment cursor by steps
+	// false if out of range, cursor is set to end
+	bool next(int8_t steps);
+
+	void invert(void);
+	void invert(bool);
+
 	// print character at cursor position
 	uint8_t print_char(uint8_t c);
 
@@ -83,6 +97,8 @@ public:
 
 	uint8_t length(char* text, uint8_t chars);
 
+	void test(void);
+
 private:
 	void _send(uint8_t start, uint8_t end);
 	void _write(uint8_t load_pin, uint8_t addr, uint8_t opcode, uint8_t data);
@@ -96,6 +112,8 @@ private:
 
 	uint8_t _min;
 	uint8_t _max;
+
+	bool _invert;
 
 	uint8_t _cursor;
 	uint8_t _spidata[16];

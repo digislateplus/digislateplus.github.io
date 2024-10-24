@@ -365,8 +365,17 @@ void setup() {
 
 
 	led_matrix.begin(&spi, MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_LOAD_1, MATRIX_LOAD_2);
-	led_matrix.print("12  4/1", 7, ALIGN_CENTER);
 
+	led_matrix.test();
+	delay(1000);
+
+	led_matrix.invert();
+	led_matrix.test();
+	delay(1000);
+
+	led_matrix.invert(false);
+	led_matrix.clear();
+	led_matrix.print("12  4/1", 7, ALIGN_CENTER);
 
 // =============================================================
 // start real time clock

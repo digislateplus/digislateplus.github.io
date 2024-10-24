@@ -61,12 +61,15 @@ void LED_MATRIX::begin(SPIClass* spi, uint8_t width, uint8_t height, uint8_t loa
 }
 
 
+// =======================================================
 // home cursor
 void LED_MATRIX::home(void) {
-	_cursor = 0;
+
+	cursor(0);
 }
 
 
+// set/get cursor position
 bool LED_MATRIX::cursor(uint8_t pos) {
 	if (pos < _width) {
 		_cursor = pos;
@@ -76,7 +79,106 @@ bool LED_MATRIX::cursor(uint8_t pos) {
 	return false;
 }
 
+// get cursor position
+uint8_t LED_MATRIX::cursor(void) {
+	return _cursor;
+}
 
+// increment cursor position
+bool LED_MATRIX::next(void) {
+	return next(1);
+}
+
+// increment cursor by steps
+bool LED_MATRIX::next(int8_t steps) {
+
+	if ((_cursor + steps) < 0) {
+		_cursor = 0;
+
+		return false;
+	}
+
+	else if ((_cursor + steps) < _width) {
+		_cursor += steps;
+
+		return true;
+	}
+
+	_cursor = _width - 1;
+
+	return false;
+}
+
+
+// invert character output
+void LED_MATRIX::invert(void) {
+	invert(!_invert);
+}
+
+void LED_MATRIX::invert(bool status) {
+	_invert = status;
+}
+
+
+// =======================================================
+// PRINT CHARACTER
+// print at cursor position
+uint8_t LED_MATRIX::print_char(uint8_t c) {
+
+	uint8_t col;
+	uint8_t pos = cursor();
+
+	uint16_t offset = c * 9;
+	uint8_t kerning = charTable[offset] & 0x0F;
+	uint8_t spacing = (charTable[offset] / 16) & 0x0F;
+
+	#ifdef DEBUG
+		Serial.print("char ");
+		Serial.print(c);
+		Serial.print(" at cursor ");
+		Serial.print(cursor());
+		Serial.print(" kerning ");
+		Serial.print(kerning);
+		Serial.print(" spacing ");
+		Serial.println(spacing);
+
+	#endif
+
+	// write character into display
+	for (col = 0; col < kerning; col++) {
+
+		// check for display end > end output
+		if (cursor() >= _width) {
+			break;
+		}
+
+		uint8_t data = pgm_read_byte(charTable + offset + col + 1);
+
+		// save in buffer
+		if (_invert) {
+			_buffer[cursor()] = data ^ 0xFF;
+		}
+
+		else {
+			_buffer[cursor()] = data;
+		}
+
+		// increment cursor
+		next();
+	}
+
+	// next(-1);
+
+	// add space after character
+	next(spacing);
+
+	_send(pos, cursor());
+
+	return spacing;
+}
+
+
+// =======================================================
 // print text starting at x = 0
 void LED_MATRIX::print(char* text, uint8_t chars) {
 	print(text, chars, 0);
@@ -117,43 +219,12 @@ void LED_MATRIX::print(char* text, uint8_t chars, int8_t pos) {
 		}
 	}
 
-
-	_cursor = pos;
+	cursor(pos);
 
 	// iterate text
 	for (i = 0;i < chars; i++) {
-
-		uint16_t offset = text[i] * 9;
-		uint8_t kerning = charTable[offset] & 0x0F;
-
-
-		// write character into display
-		for (int col = 0; col < kerning; col++) {
-
-			// check for display end > end output
-			if (_cursor >= _width) {
-				break;
-			}
-
-			uint8_t data = pgm_read_byte(charTable + offset + col + 1);
-
-			// save in buffer
-			_buffer[_cursor] = data;
-
-
-			// increment cursor
-			_cursor ++;
-		}
-
-		// add space after character
-		_cursor ++;
+		print_char(text[i]);
 	}
-
-	// send to display
-	// write only data between start and end
-	end = _cursor - 1;
-
-	_send(pos, end);
 }
 
 
@@ -175,6 +246,7 @@ uint8_t LED_MATRIX::length(char* text, uint8_t length) {
 		l += kerning + spacing;
 	}
 
+	// remove last spacing
 	return l - spacing;
 }
 
@@ -189,7 +261,7 @@ void LED_MATRIX::clear(void) {
 		}
 	}
 
-	_cursor = 0;
+	cursor(0);
 }
 
 
@@ -200,6 +272,18 @@ void LED_MATRIX::clear(uint8_t port, uint8_t address) {
 		_write(port, address, OP_DIGIT0 + i, 0);
 	}
 }
+
+
+// show testpattern
+void LED_MATRIX::test(void) {
+
+	clear();
+
+	for (int i = 0; i < (_width / 8); i++) {
+		print_char(0x7F);
+	}
+}
+
 
 
 // send data
