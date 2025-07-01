@@ -11,6 +11,7 @@ void BUTTON::begin(uint8_t port) {
 
 // get button status
 // set open/close time if status has changed
+// status = false => closed
 bool BUTTON::get(void) {
 
 	_status = digitalRead(_port);
@@ -48,15 +49,17 @@ bool BUTTON::changed(void) {
 }
 
 
+
+
 // is closed for time milliseconds
 bool BUTTON::opened(uint16_t time) {
-	return (!get() && millis() >= (_last_open_time + time));
+	return (!get() && (millis() >= (_last_open_time + time)));
 }
 
 
 // is closed for time milliseconds
 bool BUTTON::closed(uint16_t time) {
-	return (get() && millis() >= (_last_close_time + time));
+	return (get() && (millis() >= (_last_close_time + time)));
 }
 
 

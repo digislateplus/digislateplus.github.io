@@ -60,7 +60,8 @@ public:
 
 	void home(void);
 	void clear(void);
-	void clear(uint8_t, uint8_t);
+	void empty(void);
+	void empty(uint8_t, uint8_t);
 
 	// set cursor position
 	// false if out of range
@@ -83,21 +84,23 @@ public:
 	// print character at cursor position
 	uint8_t print_char(uint8_t c);
 
-	// print text with chars_count characters
-	void print(char* text, uint8_t chars);
+	// print \0 terminated text
+	void print(char* text);
 
 	// print text with chars_count at position
 	// position can be alignment
-	void print(char* text, uint8_t chars, int8_t position);
+	void print(char* text, int8_t position);
 
 	// set printable area
 	// without parameter, reset to full
 	void area(void);
 	void area(uint8_t min, uint8_t max);
 
-	uint8_t length(char* text, uint8_t chars);
+	// get length of text in pixels
+	uint8_t length(char* text);
 
 	void test(void);
+	void pattern(void);
 
 private:
 	void _send(uint8_t start, uint8_t end);

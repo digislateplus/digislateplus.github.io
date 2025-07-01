@@ -72,6 +72,13 @@ public:
 	void minutes(uint8_t);
 	void hours(uint8_t);
 
+	// set/clear decimal point
+	void dp(uint8_t digit, bool status);
+
+	// tick with decimal point
+	void tick(uint8_t digit);
+	
+
 private:
 	uint8_t _load_pin;
 

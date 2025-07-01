@@ -126,6 +126,16 @@ void LED::hours(uint8_t val) {
 }
 
 
+void LED::dp(uint8_t digit, bool status) {
+
+}
+
+
+void LED::tick(uint8_t digit) {
+
+}
+
+
 /*  Write VALUE to register ADDRESS on the MAX7219. */
 void LED::_write(uint8_t op_code, uint8_t value) {
 

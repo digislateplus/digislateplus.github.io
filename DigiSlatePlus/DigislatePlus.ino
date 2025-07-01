@@ -140,6 +140,9 @@ Ai ESP32 Rotary Encoder by Igor Antolic
 #include "flash.h"
 #include "settings.h"
 #include "button.h"
+#include "scene.h"
+
+// #include "pid.h"
 
 
 // =========================================
@@ -151,6 +154,8 @@ SPIClass spi(SPI_BUS);
 
 LED led_tc;
 LED_MATRIX led_matrix;
+
+SCENE scene;
 
 RLED rled;
 RLED dled;
@@ -166,15 +171,30 @@ RotaryEncoder rotaryEncoder(ROTARY_CLK, ROTARY_DATA, ROTARY_SWITCH, -1);
 BUTTON button;
 SETTINGS settings;
 
-
 TC reader_tc;
 
 hw_timer_t* timer1 = NULL;
 
-
 bool run;
 uint32_t claptime;
 uint32_t old_claptime;
+
+
+
+// =========================================
+// PID regulator
+//Define Variables we'll be connecting to
+// double Setpoint, Input, Output;
+
+// //Define the aggressive and conservative Tuning Parameters
+// double aggKp=4, aggKi=0.2, aggKd=1;
+// double consKp=1, consKi=0.05, consKd=0.25;
+
+// //Specify the links and initial tuning parameters
+// PID myPID(&Input, &Output, &Setpoint, consKp, consKi, consKd, DIRECT);
+
+
+
 
 
 // =========================================
@@ -187,6 +207,8 @@ long timertime;
 long lastreadtime;
 
 bool tick;
+
+uint32_t timer_value;
 
 
 // DEBUG
@@ -356,6 +378,7 @@ void setup() {
 
 	led_tc.begin(&spi, LOAD_TC, 1);
 
+
 #ifdef DEBUG
 	Serial.println("88 88 88 88 on timecode display");
 
@@ -367,15 +390,11 @@ void setup() {
 	led_matrix.begin(&spi, MATRIX_WIDTH, MATRIX_HEIGHT, MATRIX_LOAD_1, MATRIX_LOAD_2);
 
 	led_matrix.test();
-	delay(1000);
-
-	led_matrix.invert();
-	led_matrix.test();
-	delay(1000);
-
-	led_matrix.invert(false);
 	led_matrix.clear();
-	led_matrix.print("12  4/1", 7, ALIGN_CENTER);
+
+	// display welcome text
+	led_matrix.print("DigiSlate+\0", ALIGN_CENTER); // , ALIGN_CENTER
+
 
 // =============================================================
 // start real time clock
@@ -424,7 +443,7 @@ void setup() {
 #endif
 
 	tc.begin();
-	tc.set(12, 23, 59, 23);
+	tc.set(0, 0, 0, 0);
 
 
 // =============================================================
@@ -489,6 +508,9 @@ void setup() {
 	led_tc.set(tc.get());
 
 
+	led_matrix.clear();
+	scene.begin(&led_matrix);
+
 	// =============================================================
 	// end INIT sequence
 	rled.off();
@@ -499,6 +521,12 @@ void setup() {
 
 // =============================================================
 // activate interrupts
+
+
+// start pid
+//turn the PID on
+// myPID.SetMode(AUTOMATIC);
+
 
 
 // start reader class
@@ -542,7 +570,6 @@ void setup() {
 void loop() {
 
 	// current timer speed
-	uint64_t current_timer;
 	int32_t delta_time;
 
 	// get clapbar state
@@ -559,132 +586,169 @@ void loop() {
 	if (runMode == RUNMODE) {
 
 
-	// ===================================
-	// mode changed to runMode
-	if (boot || (runMode != lastRunMode)) {
+		// ===================================
+		// mode changed to runMode
+		if (boot || (runMode != lastRunMode)) {
 
-#ifdef DEBUG
-		Serial.println("run mode started");
-#endif
+	#ifdef DEBUG
+			Serial.println("run mode started");
+	#endif
 
-		lcd.clear();
+			lcd.clear();
 
-		lastRunMode = runMode;
-		boot = false;
-		rtc_updated = false;
+			lastRunMode = runMode;
+			boot = false;
+			rtc_updated = false;
 
-		// init runMode
-		// read rtc and set time code
-		if (rtc.status() != false) {
+			// init runMode
+			// read rtc and set time code
+			if (rtc.status() != false) {
 
-		// init time of slate to rtc
-		DateTime time = rtc.get();
-		tc.set(time.hour(), time.minute(), time.second(), 0);
+			// init time of slate to rtc
+			DateTime time = rtc.get();
+			tc.set(time.hour(), time.minute(), time.second(), 0);
 
-		// set date in user bits
-		// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
+			// set date in user bits
+			// tc.ubits((time.year() / 1000) & 0xF, (time.year() / 100) & 0xF, (time.year() % 100) & 0xF, (time.month() / 10) & 0xF, (time.month() % 10) & 0xF, (time.day() / 10) & 0xF, (time.day() % 10) & 0xF);
 
-		// snprintf("%0d:%0d:%0d", tc.ubit[0], tc.ubit[2], tc.ubit[3]);
+			// snprintf("%0d:%0d:%0d", tc.ubit[0], tc.ubit[2], tc.ubit[3]);
 
-		// display date as userbits on LCD
-		// DEBUG uncomment for second row display
-		// lcd.val8(time.day(), 0, 1);
-		// lcd.print(".", 2, 1);
-		// lcd.val8(time.month(), 3, 1);
-		// lcd.print(".", 5, 1);
-		// lcd.val16(time.year(), 6, 1);
+			// display date as userbits on LCD
+			// DEBUG uncomment for second row display
+			// lcd.val8(time.day(), 0, 1);
+			// lcd.print(".", 2, 1);
+			// lcd.val8(time.month(), 3, 1);
+			// lcd.print(".", 5, 1);
+			// lcd.val16(time.year(), 6, 1);
+			}
+
+
+			// ===================
+			// set lc display data
+			lcd.fps(tc.fps());
 		}
 
 
-		// ===================
-		// set lc display data
-		lcd.fps(tc.fps());
-	}
+		// =============================================================
+		// slate just closed (button open)
+		if (button.changed() && clapbar == true) {
+			rled.flash(30);
+			run = false;
+		}
 
 
-	// =============================================================
-	// slate just closed (button open)
-	if (button.changed() && clapbar == true) {
-		rled.flash(30);
-		run = false;
-	}
+		// slate is open or was closed (button open) for CLAP_LONG_CLOSED
+		if (button.closed(CLAP_LONG_CLOSED)) {
+			run = true;
+		}
 
 
-	// slate was closed (button open) for CLAP_LONG_CLOSED
-	if (button.opened(CLAP_LONG_CLOSED)) {
-		// rled.flash(30);
-		run = true;
-	}
+		// =============================================================
+		// update time if timecode has changed
+		if (tc.changed()) {
+			tc.unchange();
 
 
-	// =============================================================
-	// update time if timecode has changed
-	if (tc.changed()) {
-		tc.unchange();
+			// ===================================
+			// slate is closed for CLAP_LONG_CLOSED ms
+			if (run) {
+
+				if (tc.enable()) {
+
+					// #ifdef DEBUG
+					// 	Serial.print(tc.get().h);
+					// 	Serial.print(":");
+					// 	Serial.print(tc.get().m);
+					// 	Serial.print(":");
+					// 	Serial.print(tc.get().s);
+					// 	Serial.print(":");
+					// 	Serial.println(tc.get().f);
+					// #endif
+
+					led_tc.set(tc.get());
+				}
+			}
+
+			// second started
+			// correct timer every second
+			if (tick) {
+
+				tick = false;
 
 
-		// ===================================
-		// slate is closed for CLAP_LONG_CLOSED ms
-		if (run) {
+  // Input = analogRead(PIN_INPUT);
 
-			if (tc.enable()) {
+  // double gap = abs(Setpoint-Input); //distance away from setpoint
+  // if (gap < 10)
+  // {  //we're close to setpoint, use conservative tuning parameters
+  //   myPID.SetTunings(consKp, consKi, consKd);
+  // }
+  // else
+  // {
+  //    //we're far from setpoint, use aggressive tuning parameters
+  //    myPID.SetTunings(aggKp, aggKi, aggKd);
+  // }
 
-				#ifdef DEBUG
-					Serial.print(tc.get().h);
-					Serial.print(":");
-					Serial.print(tc.get().m);
-					Serial.print(":");
-					Serial.print(tc.get().s);
-					Serial.print(":");
-					Serial.println(tc.get().f);
-				#endif
+  // myPID.Compute();
+  // analogWrite(PIN_OUTPUT, Output);
 
-				led_tc.set(tc.get());
+
+				// =========================================
+				// sync timer by rtc
+				// rtc time smaller
+				// speed um timer
+
+				// timer is running
+				if (timertime > 0) {
+
+					// cycletime = RTC second
+					// timertime = time of timer1 interrupt
+
+					// >0 if timer is too slow
+					// reduce timer µs by difference
+					delta_time = cycletime - timertime;
+					timer_value += delta_time / 10;
+
+					// adapt timer
+					// timerWrite(timer1, current_timer + delta_time);
+					timerAlarm(timer1, timer_value, true, 0);
+
+
+
+			Serial.print("current ");
+			Serial.print(timer_value);
+			Serial.print(" timer ");
+			Serial.print(timertime);
+			Serial.print(" rtc ");
+			Serial.print(cycletime);
+			Serial.print(" delta ");
+			Serial.println(delta_time);
+
+					// enable if different is low enough
+					if (abs(cycletime - timertime) < ENABLE_LIMIT) {
+						tc.enable(true);
+					}
+
+					else {
+						tc.enable(false);
+					}
+				}
 			}
 		}
 
-		// second started
-		// correct timer every second
-		if (tick) {
 
-		tick = false;
+		// show status
+		if (tc.enable()) {
 
-		// =========================================
-		// sync timer by rtc
-		// rtc time smaller
-		// speed um timer
-		current_timer = timerRead(timer1);
-
-		// >0 if timer is too slow
-		// reduce timer µs by difference
-		delta_time = cycletime - timertime;
-
-
-		// adapt timer
-		timerWrite(timer1, current_timer + delta_time);
-
-
-		// enable if different is low enough
-		if (abs(cycletime - timertime) < ENABLE_LIMIT) {
-			tc.enable(true);
+			if (run) {
+				lcd.status(" run");
+			}
+			else {
+				lcd.status("clap");
+			}
 		} else {
-			tc.enable(false);
+			lcd.status("init");
 		}
-		}
-	}
-
-
-	// show status
-	if (tc.enable()) {
-
-		if (run) {
-		lcd.status(" run");
-		} else {
-		lcd.status("clap");
-		}
-	} else {
-		lcd.status("init");
-	}
 	}
 	// =============================================================
 	// END OF RUN MODE
@@ -716,9 +780,9 @@ void loop() {
 		Serial.println("read mode started");
 #endif
 
-		reader.reset();
-		lastRunMode = runMode;
-		lcd.clear();
+			reader.reset();
+			lastRunMode = runMode;
+			lcd.clear();
 		}
 
 
@@ -730,66 +794,71 @@ void loop() {
 		// check if reader is in sync
 		if (reader.sync()) {
 
-		// a timecode value is available
-		if (reader.available()) {
+			// a timecode value is available
+			if (reader.available()) {
 
 
-			// get read timecode
-			reader_tc.set(reader.get());
+				// get read timecode
+				reader_tc.set(reader.get());
 
-			led_tc.set(reader_tc.get());
+				led_tc.set(reader_tc.get());
 
 
-			// =====================
-			// display new framerate
-			if (reader.fps_changed()) {
-			lcd.fps(reader_tc.fps() + 1);
+				// =====================
+				// display new framerate
+				if (reader.fps_changed()) {
+					lcd.fps(reader_tc.fps() + 1);
+				}
+
+
+				// =======================================
+				// if just booted -> write timecode to rtc
+				if (boot) {
+
+	#ifdef DEBUG
+				Serial.println("jam > write read timecode to rtc");
+	#endif
+
+					lcd.status(" jam");
+					lcd.print("offset ", 0, 1);
+					lcd.val8(reader_tc.offset(), 7, 1);
+
+					// rtc not jet updated > do it
+					if (!rtc_updated) {
+
+						// get current rtc settings
+						DateTime rtc_time = rtc.get();
+						DateTime new_time;
+
+						// set new time to rtc
+						rtc.set(reader_tc.get().h, reader_tc.get().m, reader_tc.get().s, rtc_time.day(), rtc_time.month(), rtc_time.year());
+
+						// write flags to flash store
+						flash.write(reader_tc.get());
+
+						// timecode update completed
+						rtc_updated = true;
+					}
+				}
+
+				else {
+					lcd.status("sync");
+					lcd.val8(reader_tc.offset(), 0, 1);
+				}
+			}
 			}
 
-
-			// =======================================
-			// if just booted -> write timecode to rtc
-			if (boot) {
-
-#ifdef DEBUG
-			Serial.println("jam > write read timecode to rtc");
-#endif
-
-			lcd.status(" jam");
-			lcd.print("offset ", 0, 1);
-			lcd.val8(reader_tc.offset(), 7, 1);
-
-			// rtc not jet updated > do it
-			if (!rtc_updated) {
-
-				// get current rtc settings
-				DateTime rtc_time = rtc.get();
-				DateTime new_time;
-
-				// set new time to rtc
-				rtc.set(reader_tc.get().h, reader_tc.get().m, reader_tc.get().s, rtc_time.day(), rtc_time.month(), rtc_time.year());
-
-				// write flags to flash store
-				flash.write(reader_tc.get());
-
-				// timecode update completed
-				rtc_updated = true;
-			}
-			}
-
+			// not synced
 			else {
-			lcd.status("sync");
-			lcd.val8(reader_tc.offset(), 0, 1);
+			lcd.status("read");
 			}
 		}
-		}
+	}
 
-		// not synced
-		else {
-		lcd.status("read");
-		}
-	}
-	}
+// delay(2000);
+// lcd.clear();
+// delay(2000);
+
 	// =============================================================
 	// END OF READ MODE
 	// =============================================================
@@ -811,23 +880,26 @@ void start_timer1(uint8_t fps) {
 
 	// =========================================
 	// 25 * 80 Hz Interrupt
-	timer1 = timerBegin(1000000);
+	timer1 = timerBegin(16000000);
 	timerAttachInterrupt(timer1, &clockISR);
+
+	timer_value = 0;
 
 
 	// set inital cmr by framerate
 	switch (fps) {
 	case 24:
-		timerAlarm(timer1, TIMER_24, true, 0);
+		timer_value = TIMER_24;
 		break;
 	case 25:
-		timerAlarm(timer1, TIMER_25, true, 0);
+		timer_value = TIMER_25;
 		break;
 	case 30:
-		timerAlarm(timer1, TIMER_30, true, 0);
+		timer_value = TIMER_30;
 		break;
 	}
 
+	timerAlarm(timer1, timer_value, true, 0);
 	timerStart(timer1);
 }
 
@@ -844,7 +916,7 @@ void stop_timer1(void) {
 // RTC interrupt every exact second
 void syncISR() {
 
-	// sync timecode frames to second start
+	// sync timecode frames to rtc second start
 	reader_tc.sync();
 
 	tick = true;
@@ -853,6 +925,8 @@ void syncISR() {
 	realtime = micros();
 	cycletime = realtime - old_realtime;
 	old_realtime = realtime;
+
+// digitalWrite(DOTS_LED, !digitalRead(DOTS_LED));
 }
 
 
@@ -881,7 +955,7 @@ void readISR(void) {
 void clockISR(void) {
 
 	// tick signals the second from the rtc
-	// the timecode can run in an frame offset
+	// the timecode can run in a frame offset
 	timertime = tc.inc(tick);
 }
 

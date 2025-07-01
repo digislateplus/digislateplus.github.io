@@ -34,6 +34,8 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 #define DEBUG 1
 
 
+#include <Arduino.h>
+
 // framerates
 #define DEFAULT_FRAMERATE 25
 static const uint8_t framerates[3] = {24,25,30};
@@ -83,9 +85,9 @@ static const char* status_text[SETTINGS_MAX_STATI] = {"hour  ","minute","second"
 
 #define READ_TIMEOUT 500		// time without input to switch to run mode
 
-#define TIMER_24 4166			// basic timer setting for 24 fps
-#define TIMER_25 4000			// basic timer setting for 25 fps
-#define TIMER_30 3332			// basic timer setting for 30 fps
+#define TIMER_24 4566			// basic timer setting for 24 fps
+#define TIMER_25 4400			// basic timer setting for 25 fps
+#define TIMER_30 3530			// basic timer setting for 30 fps
 
 
 // IO ESP32S3 definitions

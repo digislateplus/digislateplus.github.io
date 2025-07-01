@@ -44,7 +44,7 @@ void LED_MATRIX::begin(SPIClass* spi, uint8_t width, uint8_t height, uint8_t loa
 			_write(_port[contr], module, OP_DECODEMODE, 0x00);  //disable onboard bit decode
 
 			// displaytest
-			_write(_port[contr], module, OP_DISPLAYTEST, 0x01);
+			// _write(_port[contr], module, OP_DISPLAYTEST, 0x01);
 
 			// end display test
 			// delay(500/8);
@@ -57,6 +57,8 @@ void LED_MATRIX::begin(SPIClass* spi, uint8_t width, uint8_t height, uint8_t loa
 		}
 	}
 
+	// set area to max and clear
+	area();
 	clear();
 }
 
@@ -71,6 +73,7 @@ void LED_MATRIX::home(void) {
 
 // set/get cursor position
 bool LED_MATRIX::cursor(uint8_t pos) {
+
 	if (pos < _width) {
 		_cursor = pos;
 		return true;
@@ -132,17 +135,16 @@ uint8_t LED_MATRIX::print_char(uint8_t c) {
 	uint8_t kerning = charTable[offset] & 0x0F;
 	uint8_t spacing = (charTable[offset] / 16) & 0x0F;
 
-	#ifdef DEBUG
-		Serial.print("char ");
-		Serial.print(c);
-		Serial.print(" at cursor ");
-		Serial.print(cursor());
-		Serial.print(" kerning ");
-		Serial.print(kerning);
-		Serial.print(" spacing ");
-		Serial.println(spacing);
-
-	#endif
+	// #ifdef DEBUG
+	// 	Serial.print("char ");
+	// 	Serial.print(c);
+	// 	Serial.print(" at cursor ");
+	// 	Serial.print(cursor());
+	// 	Serial.print(" kerning ");
+	// 	Serial.print(kerning);
+	// 	Serial.print(" spacing ");
+	// 	Serial.println(spacing);
+	// #endif
 
 	// write character into display
 	for (col = 0; col < kerning; col++) {
@@ -180,70 +182,87 @@ uint8_t LED_MATRIX::print_char(uint8_t c) {
 
 // =======================================================
 // print text starting at x = 0
-void LED_MATRIX::print(char* text, uint8_t chars) {
-	print(text, chars, 0);
+void LED_MATRIX::print(char* text) {
+	print(text, 0);
 }
 
 
-// print text starting at position (0-64)
-void LED_MATRIX::print(char* text, uint8_t chars, int8_t pos) {
+// print text starting at position
+// in area defined by min-max settings
+// pos=0 at min
+void LED_MATRIX::print(char* text, int8_t pos) {
 
-	uint8_t start = pos;
-	uint8_t end = pos;
+	uint8_t c;
 	uint8_t i;
 	uint8_t pixels;
-
 
 	// position is alignment
 	if (pos < 0) {
 
 		// ALIGN LEFT = default
 		if (pos == ALIGN_LEFT) {
-			pos = 0;
+			pos = _min;
 		}
 
-		// get width and align
+		// get width of text and align
 		else {
 
-			pixels = length(text, chars);
+			pixels = length(text);
 
 			// ALIGN RIGHT
 			if (pos == ALIGN_RIGHT) {
-				pos = _width - pixels;
+				pos = _max - pixels + 1;
 			}
 
 			// ALIGN CENTER
 			else {
-				pos = (_width - pixels) / 2;
+				pos = _min + (_max - _min - pixels + 1) / 2;
 			}
 		}
 	}
 
+	// set cursor to start
 	cursor(pos);
 
-	// iterate text
-	for (i = 0;i < chars; i++) {
-		print_char(text[i]);
+// Serial.print("pixels ");
+// Serial.print(pixels);
+// Serial.print(" min ");
+// Serial.print(_min);
+// Serial.print(" max ");
+// Serial.print(_max);
+// Serial.print(" pos ");
+// Serial.println(cursor());
+
+	// print characters of text
+	i = 0;
+	while ((c = text[i]) != 0) {
+		print_char(text[i++]);
 	}
 }
 
 
 // get text length
-uint8_t LED_MATRIX::length(char* text, uint8_t length) {
+uint8_t LED_MATRIX::length(char* text) {
 
+	uint8_t c;
 	uint8_t kerning;
 	uint8_t spacing;
 	uint8_t l = 0;
 
-	// iterate characters
+	// iterate characters to \0
 	// add sizes
-	for (uint8_t i = 0; i < length; i++) {
+	uint8_t i = 0;
 
-		uint16_t offset = text[i] * 9;
+	while ((c = text[i]) != 0) {
+
+		uint16_t offset = c * 9;
+
 		kerning = pgm_read_byte(charTable + offset) & 0x0F;
 		spacing = pgm_read_byte(charTable + offset) > 4;
 
 		l += kerning + spacing;
+
+		i++;
 	}
 
 	// remove last spacing
@@ -252,30 +271,82 @@ uint8_t LED_MATRIX::length(char* text, uint8_t length) {
 
 
 // clear all arrays
+// restrict to _min and max
 void LED_MATRIX::clear(void) {
+
+	uint8_t c = 0;
 
 	for (int contr = 0; contr < _controller_count; contr++) {
 
 		for (int module = 0; module < _count; module++) {
-			clear(_port[contr], module);
+
+			for (int i = 0; i < 8; i++) {
+
+				if (c >= _min && c <= _max);
+				_write(_port[contr], module, OP_DIGIT0 + i, 0);
+
+				c++;
+			}
 		}
 	}
 
+	empty(_min, _max);
 	cursor(0);
 }
 
 
-// clear display with module
-void LED_MATRIX::clear(uint8_t port, uint8_t address) {
+// reset print area
+void LED_MATRIX::area(void) {
+	area(0, _width);
+}
 
-	for (int i = 0; i < 8; i++) {
-		_write(port, address, OP_DIGIT0 + i, 0);
+
+// set print area
+void LED_MATRIX::area(uint8_t min, uint8_t max)  {
+	_min = min;
+	_max = max;
+}
+
+
+// empty buffer
+void LED_MATRIX::empty(void) {
+
+	empty(0, _width);
+}
+
+
+// empty buffer
+// from to
+void LED_MATRIX::empty(uint8_t start, uint8_t end) {
+
+	if (end >= _width) {
+		end = _width;
+	}
+
+	for (int i = start; i < end; i++) {
+		_buffer[i] = 0;
 	}
 }
 
 
-// show testpattern
+
+// test display
 void LED_MATRIX::test(void) {
+
+	pattern();
+	delay(150);
+
+	invert();
+	pattern();
+	delay(150);
+
+	invert(false);
+
+}
+
+
+// show testpattern
+void LED_MATRIX::pattern(void) {
 
 	clear();
 
@@ -289,13 +360,13 @@ void LED_MATRIX::test(void) {
 // send data
 void LED_MATRIX::_send(uint8_t start, uint8_t end) {
 
-	#ifdef DEBUG
-		Serial.print("send data to display (");
-		Serial.print(start);
-		Serial.print("-");
-		Serial.print(end);
-		Serial.println(")");
-	#endif
+	// #ifdef DEBUG
+	// 	Serial.print("send data to display (");
+	// 	Serial.print(start);
+	// 	Serial.print("-");
+	// 	Serial.print(end);
+	// 	Serial.println(")");
+	// #endif
 
 
 	uint8_t pos = 0;
