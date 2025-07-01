@@ -11,3 +11,6 @@ The 7-segment LED displays for the time code, scenes and take numbers are locate
 The real-time clock has its own battery, which enables a long running time when the DigiSlate+ is switched off.
 
 A 3.5mm jack is used for the input and output of the timecode. The DigiSlate+ can be powered via a 5.5x2.5mm DC plug. The DigiSlate can be supplied with a voltage between 8 volts and 24 volts via a 5.5 x 2.5 mm DC plug and the internal battery can be charged.
+
+* [download]({{ site.baseurl }}{% link DigitSlate+ Schematics.pdf %})
+* [download]({{ site.baseurl }}{% link DigitSlatePlus__Assembly.pdf %})
