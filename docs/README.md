@@ -2,6 +2,7 @@
 
 - [Hardware](hardware.md)
 - [Functions](function.md)
+- [[ToDos]](todos.md)
 - [Code](https://github.com/digislateplus/digislateplus.github.io)
 
 
